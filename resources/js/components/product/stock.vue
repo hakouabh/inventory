@@ -93,7 +93,7 @@
  
   methods:{
     allProduct(){
-      axios.get('/api/product/')
+      axios.get('/api/stock/all')
       .then(({data}) => (this.products = data))
       .catch()
     }   

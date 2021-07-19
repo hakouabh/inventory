@@ -4207,6 +4207,100 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
     if (!User.loggedIn()) {
@@ -4221,7 +4315,8 @@ __webpack_require__.r(__webpack_exports__);
       income: '',
       due: '',
       expense: '',
-      products: ''
+      products: '',
+      stats: {}
     };
   },
   mounted: function mounted() {
@@ -4230,6 +4325,7 @@ __webpack_require__.r(__webpack_exports__);
     this.TodayDue();
     this.TodayExpense();
     this.StockOut();
+    this.GetStats();
   },
   methods: {
     TodaySell: function TodaySell() {
@@ -4271,6 +4367,16 @@ __webpack_require__.r(__webpack_exports__);
         var data = _ref5.data;
         return _this5.products = data;
       })["catch"]();
+    },
+    GetStats: function GetStats() {
+      var _this6 = this;
+
+      axios.get('/api/order/satat').then(function (_ref6) {
+        var data = _ref6.data;
+        _this6.stats = data;
+        console.log(_this6.stats.currentWeekOrders);
+        localStorage.setItem("currentWeekOrders", _this6.stats.currentWeekOrders);
+      })["catch"](console.log('error'));
     }
   }
 });
@@ -5075,16 +5181,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 }), _defineProperty(_created$created$data, "methods", {
   // Cart Methods Here
   AddToCart: function AddToCart(id) {
-    axios.get('/api/addToCart/' + id).then(function () {
-      Reload.$emit('AfterAdd');
-      Notification.cart_success();
+    axios.get('/api/addToCart/' + id).then(function (_ref) {
+      var data = _ref.data;
+
+      if (data) {
+        Notification.cart_faild();
+      } else {
+        Reload.$emit('AfterAdd');
+        Notification.cart_success();
+      }
     })["catch"]();
   },
   cartProduct: function cartProduct() {
     var _this4 = this;
 
-    axios.get('/api/cart/product/').then(function (_ref) {
-      var data = _ref.data;
+    axios.get('/api/cart/product/').then(function (_ref2) {
+      var data = _ref2.data;
       return _this4.carts = data;
     })["catch"]();
   },
@@ -5095,9 +5207,16 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     })["catch"]();
   },
   increment: function increment(id) {
-    axios.get('/api/increment/' + id).then(function () {
-      Reload.$emit('AfterAdd');
-      Notification.success();
+    axios.get('/api/increment/' + id).then(function (_ref3) {
+      var data = _ref3.data;
+
+      if (data) {
+        console.log(data);
+        Reload.$emit('AfterAdd');
+        Notification.success();
+      } else {
+        Notification.cart_faild();
+      }
     })["catch"]();
   },
   decrement: function decrement(id) {
@@ -5109,8 +5228,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   vat: function vat() {
     var _this5 = this;
 
-    axios.get('/api/vats/').then(function (_ref2) {
-      var data = _ref2.data;
+    axios.get('/api/vats/').then(function (_ref4) {
+      var data = _ref4.data;
       return _this5.vats = data;
     })["catch"]();
   },
@@ -5140,32 +5259,32 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   allProduct: function allProduct() {
     var _this7 = this;
 
-    axios.get('/api/product/').then(function (_ref3) {
-      var data = _ref3.data;
+    axios.get('/api/product/').then(function (_ref5) {
+      var data = _ref5.data;
       return _this7.products = data;
     })["catch"]();
   },
   allCategory: function allCategory() {
     var _this8 = this;
 
-    axios.get('/api/category/').then(function (_ref4) {
-      var data = _ref4.data;
+    axios.get('/api/category/').then(function (_ref6) {
+      var data = _ref6.data;
       return _this8.categories = data;
     })["catch"]();
   },
   allCustomer: function allCustomer() {
     var _this9 = this;
 
-    axios.get('/api/customer/').then(function (_ref5) {
-      var data = _ref5.data;
+    axios.get('/api/customer/').then(function (_ref7) {
+      var data = _ref7.data;
       return _this9.customers = data;
     })["catch"](console.log('error'));
   },
   subproduct: function subproduct(id) {
     var _this10 = this;
 
-    axios.get('/api/getting/product/' + id).then(function (_ref6) {
-      var data = _ref6.data;
+    axios.get('/api/getting/product/' + id).then(function (_ref8) {
+      var data = _ref8.data;
       return _this10.getproducts = data;
     })["catch"]();
   }
@@ -6104,7 +6223,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allProduct: function allProduct() {
       var _this2 = this;
 
-      axios.get('/api/product/').then(function (_ref) {
+      axios.get('/api/stock/all').then(function (_ref) {
         var data = _ref.data;
         return _this2.products = data;
       })["catch"]();
@@ -7512,6 +7631,16 @@ var Notification = /*#__PURE__*/function () {
         type: 'success',
         layout: 'topRight',
         text: 'Successfully Add to Cart !',
+        timeout: 1000
+      }).show();
+    }
+  }, {
+    key: "cart_faild",
+    value: function cart_faild() {
+      new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: 'out of stock !',
         timeout: 1000
       }).show();
     }
@@ -57027,11 +57156,11 @@ var render = function() {
                 )
               ]
             )
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "card-footer" })
+          ])
         ])
-      ])
+      ]),
+      _vm._v(" "),
+      _vm._m(11)
     ])
   ])
 }
@@ -57185,6 +57314,343 @@ var staticRenderFns = [
         _c("th", [_vm._v("Status")]),
         _vm._v(" "),
         _c("th", [_vm._v("Quantity")])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "row mb-3" }, [
+      _c("div", { staticClass: "col-xl-9 col-lg-8" }, [
+        _c("div", { staticClass: "card mb-4" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+            },
+            [
+              _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
+                _vm._v("Monthly Recap Report")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "dropdown no-arrow" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "dropdown-toggle",
+                    attrs: {
+                      href: "#",
+                      role: "button",
+                      id: "dropdownMenuLink",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [
+                    _c("i", {
+                      staticClass: "fas fa-ellipsis-v fa-sm fa-fw text-gray-400"
+                    })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "dropdown-menu dropdown-menu-right shadow animated--fade-in",
+                    staticStyle: {
+                      position: "absolute",
+                      "will-change": "transform",
+                      top: "0px",
+                      left: "0px",
+                      transform: "translate3d(17px, 19px, 0px)"
+                    },
+                    attrs: {
+                      "aria-labelledby": "dropdownMenuLink",
+                      "x-placement": "bottom-end"
+                    }
+                  },
+                  [
+                    _c("div", { staticClass: "dropdown-header" }, [
+                      _vm._v("Dropdown Header:")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Action")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Another action")]
+                    ),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "dropdown-divider" }),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Something else here")]
+                    )
+                  ]
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "chart-area" }, [
+              _c("div", { staticClass: "chartjs-size-monitor" }, [
+                _c("div", { staticClass: "chartjs-size-monitor-expand" }, [
+                  _c("div", {})
+                ]),
+                _c("div", { staticClass: "chartjs-size-monitor-shrink" }, [
+                  _c("div", {})
+                ])
+              ]),
+              _vm._v(" "),
+              _c("canvas", {
+                staticClass: "chartjs-render-monitor",
+                staticStyle: {
+                  display: "block",
+                  width: "1051px",
+                  height: "320px"
+                },
+                attrs: { id: "myAreaChart", width: "1051", height: "320" }
+              })
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-xl-3 col-lg-4" }, [
+        _c("div", { staticClass: "card mb-4" }, [
+          _c(
+            "div",
+            {
+              staticClass:
+                "card-header py-3 d-flex flex-row align-items-center justify-content-between"
+            },
+            [
+              _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
+                _vm._v("Products Sold")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "dropdown no-arrow" }, [
+                _c(
+                  "a",
+                  {
+                    staticClass: "dropdown-toggle btn btn-primary btn-sm",
+                    attrs: {
+                      href: "#",
+                      role: "button",
+                      id: "dropdownMenuLink",
+                      "data-toggle": "dropdown",
+                      "aria-haspopup": "true",
+                      "aria-expanded": "false"
+                    }
+                  },
+                  [
+                    _vm._v("\n                      Month "),
+                    _c("i", { staticClass: "fas fa-chevron-down" })
+                  ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "div",
+                  {
+                    staticClass:
+                      "dropdown-menu dropdown-menu-right shadow animated--fade-in",
+                    attrs: { "aria-labelledby": "dropdownMenuLink" }
+                  },
+                  [
+                    _c("div", { staticClass: "dropdown-header" }, [
+                      _vm._v("Select Periode")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Today")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("Week")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      {
+                        staticClass: "dropdown-item active",
+                        attrs: { href: "#" }
+                      },
+                      [_vm._v("Month")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "a",
+                      { staticClass: "dropdown-item", attrs: { href: "#" } },
+                      [_vm._v("This Year")]
+                    )
+                  ]
+                )
+              ])
+            ]
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("div", { staticClass: "mb-3" }, [
+              _c("div", { staticClass: "small text-gray-500" }, [
+                _vm._v("Oblong T-Shirt\n                      "),
+                _c("div", { staticClass: "small float-right" }, [
+                  _c("b", [_vm._v("600 of 800 Items")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "progress", staticStyle: { height: "12px" } },
+                [
+                  _c("div", {
+                    staticClass: "progress-bar bg-warning",
+                    staticStyle: { width: "80%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "80",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-3" }, [
+              _c("div", { staticClass: "small text-gray-500" }, [
+                _vm._v("Gundam 90'Editions\n                      "),
+                _c("div", { staticClass: "small float-right" }, [
+                  _c("b", [_vm._v("500 of 800 Items")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "progress", staticStyle: { height: "12px" } },
+                [
+                  _c("div", {
+                    staticClass: "progress-bar bg-success",
+                    staticStyle: { width: "70%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "70",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-3" }, [
+              _c("div", { staticClass: "small text-gray-500" }, [
+                _vm._v("Rounded Hat\n                      "),
+                _c("div", { staticClass: "small float-right" }, [
+                  _c("b", [_vm._v("455 of 800 Items")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "progress", staticStyle: { height: "12px" } },
+                [
+                  _c("div", {
+                    staticClass: "progress-bar bg-danger",
+                    staticStyle: { width: "55%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "55",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-3" }, [
+              _c("div", { staticClass: "small text-gray-500" }, [
+                _vm._v("Indomie Goreng\n                      "),
+                _c("div", { staticClass: "small float-right" }, [
+                  _c("b", [_vm._v("400 of 800 Items")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "progress", staticStyle: { height: "12px" } },
+                [
+                  _c("div", {
+                    staticClass: "progress-bar bg-info",
+                    staticStyle: { width: "50%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "50",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "mb-3" }, [
+              _c("div", { staticClass: "small text-gray-500" }, [
+                _vm._v("Remote Control Car Racing\n                      "),
+                _c("div", { staticClass: "small float-right" }, [
+                  _c("b", [_vm._v("200 of 800 Items")])
+                ])
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "progress", staticStyle: { height: "12px" } },
+                [
+                  _c("div", {
+                    staticClass: "progress-bar bg-success",
+                    staticStyle: { width: "30%" },
+                    attrs: {
+                      role: "progressbar",
+                      "aria-valuenow": "30",
+                      "aria-valuemin": "0",
+                      "aria-valuemax": "100"
+                    }
+                  })
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-footer text-center" }, [
+            _c(
+              "a",
+              {
+                staticClass: "m-0 small text-primary card-link",
+                attrs: { href: "#" }
+              },
+              [
+                _vm._v("View More "),
+                _c("i", { staticClass: "fas fa-chevron-right" })
+              ]
+            )
+          ])
+        ])
       ])
     ])
   }
@@ -57885,8 +58351,11 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c(
-                    "a",
-                    { staticClass: "btn btn-sm btn-info" },
+                    "router-link",
+                    {
+                      staticClass: "btn btn-sm btn-info",
+                      attrs: { to: "/store-customer" }
+                    },
                     [
                       _c("font", { attrs: { color: "#ffffff" } }, [
                         _vm._v("Add Customer")
@@ -57894,7 +58363,8 @@ var render = function() {
                     ],
                     1
                   )
-                ]
+                ],
+                1
               ),
               _vm._v(" "),
               _c(

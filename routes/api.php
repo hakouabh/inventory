@@ -22,6 +22,8 @@ Route::apiResource('/product', 'Api\ProductController');
 Route::apiResource('/expense', 'Api\ExpenseController');
 Route::apiResource('/customer', 'Api\CustomerController');
 
+Route::Get('/product/stock', 'Api\ProductController@stock');
+
 Route::Post('/salary/paid/{id}', 'Api\SalaryController@Paid');
 Route::Get('/salary', 'Api\SalaryController@AllSalary');
 
@@ -30,6 +32,7 @@ Route::Get('/edit/salary/{id}', 'Api\SalaryController@EditSalary');
 Route::Post('/salary/update/{id}', 'Api\SalaryController@SalaryUpdate');
 
 Route::Post('/stock/update/{id}', 'Api\ProductController@StockUpdate');
+Route::Get('/stock/all', 'Api\ProductController@StockAll');
 
 Route::Get('/getting/product/{id}', 'Api\PosController@GetProduct');
 
@@ -49,6 +52,8 @@ Route::Post('/orderdone', 'Api\PosController@OrderDone');
 Route::Get('/orders', 'Api\OrderController@TodayOrder');
 Route::Get('/order/details/{id}', 'Api\OrderController@OrderDetails');
 Route::Get('/order/orderdetails/{id}', 'Api\OrderController@OrderDetailsAll');
+
+Route::Get('/order/satat', 'Api\OrderController@stats');
 
 Route::Post('/search/order', 'Api\PosController@SearchOrderDate');
 

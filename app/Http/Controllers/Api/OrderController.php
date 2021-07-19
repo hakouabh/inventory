@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use Carbon\Carbon;
 
 class OrderController extends Controller
 {
@@ -33,5 +34,49 @@ class OrderController extends Controller
         ->where('order_details.order_id',$id)
         ->select('products.product_name','products.product_code','products.image','order_details.*')->get();
         return response()->json($details);
+    }
+    public function stats(){
+      $weeks = [0,1,2,3,4,5,6];
+      $datenow1 = Carbon::now();
+      $datenow2 = Carbon::now();
+
+      //$lt = Carbon::now()->subWeek()->isoFormat('DD/MM/YYYY'); last week result
+      //start of week in algeria
+      $startOfWeek = $datenow1->startOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
+      $endOfWeek = $datenow2->endOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
+
+      $currentWeekOrders = DB::table('orders')
+      ->whereBetween('order_date', [
+        $startOfWeek,
+        $endOfWeek
+      ])->get();
+
+      $mapToZero = function($v) {
+        return 0;
+      };
+      
+      $graph = (object) [
+        'currentWeekOrders' => (array) array_map($mapToZero, $weeks)
+      ];
+
+      foreach ($weeks as $index) {
+        foreach ($currentWeekOrders as $current) {
+          
+          //$curdate = $dt->startOfWeek()->addDays($index + 1);
+          //$dbdate = Carbon::createFromFormat('Y-m-d H:i:s', $current->created_at)->format('Y-m-d');
+
+          $current_date = Carbon::now()->startOfWeek()->addDays($index-1);
+          
+          $current_dateformat=$current_date->isoFormat('DD/MM/YYYY');
+          
+          if($current_dateformat === $current->order_date) {  
+            $revenue = $current->total;
+            $graph->currentWeekOrders[$current_date->dayOfWeek] += $revenue;
+          }
+        }
+        // last week
+      }
+      return response()->json($graph);
+
     }
 }

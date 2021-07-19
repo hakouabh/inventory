@@ -190,4 +190,15 @@ class ProductController extends Controller
         DB::table('products')->where('id',$id)->update($data);
         
     }
+    public function StockAll()
+    {
+        $product = DB::table('products')
+                     ->join('categories','products.category_id','categories.id')
+                     ->join('suppliers','products.supplier_id','suppliers.id')
+                     ->select('categories.category_name','suppliers.name','products.*')
+                     ->orderBy('products.product_quantity','ASC')
+                     ->get();
+        return response()->json($product);
+
+    }
 }

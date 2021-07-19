@@ -19,7 +19,7 @@
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">Expense Insert</h6>
-         <a class="btn btn-sm btn-info"><font color="#ffffff">Add Customer</font></a>         
+         <router-link class="btn btn-sm btn-info" to="/store-customer"><font color="#ffffff">Add Customer</font></router-link>         
                   
                 </div>
                 
@@ -294,9 +294,14 @@
     // Cart Methods Here
   AddToCart(id){
    axios.get('/api/addToCart/'+id)
-      .then(() => {
+      .then(({data}) => {
+        if(data){
+          Notification.cart_faild() 
+        }else{
         Reload.$emit('AfterAdd');
         Notification.cart_success()
+        }
+        
       })
       .catch()
   },
@@ -315,9 +320,15 @@
   },
   increment(id){
   axios.get('/api/increment/'+id)
-      .then(() => {
-        Reload.$emit('AfterAdd');
+      .then(({data}) => {
+         if(data){
+           console.log(data)
+          Reload.$emit('AfterAdd');
         Notification.success()
+        }else{
+        Notification.cart_faild()
+        }
+        
       })
       .catch()
   },

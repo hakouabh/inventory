@@ -53,6 +53,15 @@ cart_success(){
 
     }).show();
 }
+cart_faild(){
+    new Noty({
+        type:'error',
+        layout:'topRight',
+        text: 'out of stock !',
+        timeout: 1000,
+
+    }).show();
+}
 cart_delete(){
     new Noty({
         type:'success',

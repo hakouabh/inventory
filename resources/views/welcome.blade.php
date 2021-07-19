@@ -8,7 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="{{ asset('backend/img/logo/logo.png')}}" rel="icon">
-  <title>Easy Learning Invertory - Dashboard</title>
+  <title>Invertory - Dashboard</title>
  <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css')}}">
 
   <link href="{{ asset('backend/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
@@ -30,7 +30,7 @@
         <div class="sidebar-brand-icon">
           <img src="{{ asset('backend/img/logo/logo2.png')}}">
         </div>
-        <div class="sidebar-brand-text mx-3">Easy Inventory</div>
+        <div class="sidebar-brand-text mx-3">Inventory</div>
       </a>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">
@@ -219,18 +219,10 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true"
-          aria-controls="collapseTable">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Reports</span>
-        </a>
-        <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            
-            <a class="collapse-item" href="simple-tables.html">Report One</a>
-            <a class="collapse-item" href="datatables.html">Report Two</a>
-          </div>
-        </div>
+        <router-link class="nav-link" to="/alert">
+          <i class="fab fa-fw fa-wpforms"></i>
+          <span>Alerts</span>
+        </router-link>
       </li>
        
       <hr class="sidebar-divider">
@@ -444,21 +436,6 @@
         </div>
         <!---Container Fluid-->
       </div>
-
-  <!-- Footer -->
-      <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>copyright &copy; <script> document.write(new Date().getFullYear()); </script> - developed by
-              <b><a href="https://www.easylearningbd.com/" target="_blank">Easy Learning</a></b>
-            </span>
-          </div>
-        </div>
-      </footer>
-      <!-- Footer -->
-
-
-
     </div> 
 
   </div>

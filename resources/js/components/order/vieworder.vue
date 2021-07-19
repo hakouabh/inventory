@@ -176,7 +176,7 @@
        
       errors:{},
       orders:{},
-      details:{},
+      details:{}
     }
   },
   created(){
@@ -187,7 +187,7 @@
 
     axios.get('/api/order/orderdetails/'+id)
     .then(({data}) => (this.details = data))
-    .catch(console.log('error'))
+    .catch(console.log('error'))  
  
 
   },
