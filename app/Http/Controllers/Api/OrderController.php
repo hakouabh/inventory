@@ -40,10 +40,16 @@ class OrderController extends Controller
       $datenow1 = Carbon::now();
       $datenow2 = Carbon::now();
 
+      $lw1 = Carbon::now()->subWeek();
+      $lw2 = Carbon::now()->subWeek();
+
       //$lt = Carbon::now()->subWeek()->isoFormat('DD/MM/YYYY'); last week result
       //start of week in algeria
       $startOfWeek = $datenow1->startOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
       $endOfWeek = $datenow2->endOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
+      
+      $lwstartOfWeek = $lw1->startOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
+      $lwendOfWeek = $lw2->endOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
 
       $currentWeekOrders = DB::table('orders')
       ->whereBetween('order_date', [
@@ -51,20 +57,23 @@ class OrderController extends Controller
         $endOfWeek
       ])->get();
 
+      $lastWeekOrders = DB::table('orders')
+      ->whereBetween('order_date', [
+        $lwstartOfWeek,
+        $lwendOfWeek
+      ])->get();
+
       $mapToZero = function($v) {
         return 0;
       };
       
       $graph = (object) [
-        'currentWeekOrders' => (array) array_map($mapToZero, $weeks)
+        'currentWeekOrders' => (array) array_map($mapToZero, $weeks),
+        'lastWeekOrders' => (array) array_map($mapToZero, $weeks)
       ];
 
       foreach ($weeks as $index) {
         foreach ($currentWeekOrders as $current) {
-          
-          //$curdate = $dt->startOfWeek()->addDays($index + 1);
-          //$dbdate = Carbon::createFromFormat('Y-m-d H:i:s', $current->created_at)->format('Y-m-d');
-
           $current_date = Carbon::now()->startOfWeek()->addDays($index-1);
           
           $current_dateformat=$current_date->isoFormat('DD/MM/YYYY');
@@ -72,6 +81,16 @@ class OrderController extends Controller
           if($current_dateformat === $current->order_date) {  
             $revenue = $current->total;
             $graph->currentWeekOrders[$current_date->dayOfWeek] += $revenue;
+          }
+        }
+        foreach ($lastWeekOrders as $last) {
+          $last_date = Carbon::now()->subWeek()->startOfWeek()->addDays($index-1);
+          
+          $last_dateformat=$last_date->isoFormat('DD/MM/YYYY');
+          
+          if($last_dateformat === $last->order_date) {  
+            $revenue = $last->total;
+            $graph->lastWeekOrders[$last_date->dayOfWeek] += $revenue;
           }
         }
         // last week

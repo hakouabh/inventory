@@ -54,6 +54,7 @@ class ProductController extends Controller
             'selling_price' => 'required',
             'buying_date' => 'required',
             'product_quantity' => 'required',
+            'min_quantity' => 'required'
    
            ]);
            if ($request->image) {
@@ -72,11 +73,11 @@ class ProductController extends Controller
             $product->supplier_id = $request->supplier_id;
             $product->product_name = $request->product_name;
             $product->product_code = $request->product_code;
-            $product->root = $request->root;
             $product->buying_price = $request->buying_price;
             $product->selling_price = $request->selling_price;
             $product->buying_date= $request->buying_date;
             $product->product_quantity = $request->product_quantity;
+            $product->min_quantity = $request->min_quantity;
             $product->image = $image_url;
             $product->save(); 
         }else{
@@ -85,11 +86,11 @@ class ProductController extends Controller
             $product->supplier_id = $request->supplier_id;
             $product->product_name = $request->product_name;
             $product->product_code = $request->product_code;
-            $product->root = $request->root;
             $product->buying_price = $request->buying_price;
             $product->selling_price = $request->selling_price;
             $product->buying_date= $request->buying_date;
             $product->product_quantity = $request->product_quantity;
+            $product->min_quantity = $request->min_quantity;
             
             $product->save(); 
    
@@ -133,11 +134,11 @@ class ProductController extends Controller
          $data['product_code'] = $request->product_code;
          $data['category_id'] = $request->category_id;
          $data['supplier_id'] = $request->supplier_id;
-         $data['root'] = $request->root;
          $data['buying_price'] = $request->buying_price;
          $data['selling_price'] = $request->selling_price;
          $data['buying_date'] = $request->buying_date;
          $data['product_quantity'] = $request->product_quantity;
+         $data['min_quantity'] = $request->min_quantity;
          $image = $request->newimage;
  
          if ($image) {

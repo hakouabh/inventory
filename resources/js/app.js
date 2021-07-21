@@ -47,13 +47,12 @@ const router = new VueRouter({
   routes,
   mode: 'history' 
 })
-
-
-
-
-
+import topbar from './components/shared/topBar.vue'
 
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    components:{
+      topbar
+    }
 });

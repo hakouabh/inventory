@@ -76,9 +76,9 @@
 
           <div class="form-row">
             <div class="col-md-4">
-              <label for="exampleFormControlSelect1">Product Root</label>
-         <input type="text" class="form-control" id="exampleInputFirstName"  v-model="form.root">
-       <small class="text-danger" v-if="errors.root"> {{ errors.root[0] }} </small>
+              <label for="exampleFormControlSelect1">Buying Date</label>
+         <input type="date" class="form-control" id="exampleInputFirstName" v-model="form.buying_date">
+  <small class="text-danger" v-if="errors.buying_date"> {{ errors.buying_date[0] }} </small>
             </div>
 
 
@@ -109,17 +109,18 @@
         <div class="form-group">
 
           <div class="form-row">
-            <div class="col-md-6">
-              <label for="exampleFormControlSelect1">Buying Date</label>
-         <input type="date" class="form-control" id="exampleInputFirstName" v-model="form.buying_date">
-  <small class="text-danger" v-if="errors.buying_date"> {{ errors.buying_date[0] }} </small>
-            </div>
+            
 
 
      <div class="col-md-6">
       <label for="exampleFormControlSelect1">Product Quantity</label>
          <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Quantity" v-model="form.product_quantity">
          <small class="text-danger" v-if="errors.product_quantity"> {{ errors.product_quantity[0] }} </small>
+            </div>
+      <div class="col-md-6">
+      <label for="exampleFormControlSelect1">Minimal Quantity</label>
+         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Quantity" v-model="form.min_quantity">
+         <small class="text-danger" v-if="errors.min_quantity"> {{ errors.min_quantity[0] }} </small>
             </div>     
             
           </div>
@@ -193,12 +194,13 @@
         product_code: null,
         category_id: null,
         supplier_id: null,
-        root: null,
         buying_price: null,
         selling_price: null,
         buying_date: null,
         image: null,
-        product_quantity: null
+        product_quantity: null,
+        min_quantity: null
+
       },
       errors:{},
       categories:{},

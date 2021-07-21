@@ -18,13 +18,13 @@ class CreateProductsTable extends Migration
             $table->integer('category_id');
             $table->string('product_name');
             $table->string('product_code')->nullable();
-            $table->string('root')->nullable();
             $table->string('buying_price')->nullable();
             $table->string('selling_price');
             $table->integer('supplier_id')->nullable();
             $table->string('buying_date')->nullable();
             $table->string('image')->nullable();
             $table->string('product_quantity');
+            $table->string('min_quantity');
             $table->timestamps();
         });
     }

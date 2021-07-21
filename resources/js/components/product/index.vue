@@ -31,7 +31,6 @@
                         <th>Category</th>
                         <th>Buying Price</th>
                         <th>Selling Price</th>
-                        <th>Root</th>
                         <th>Action</th>
                       </tr>
                     </thead>
@@ -43,7 +42,6 @@
                         <td>{{ product.category_name }}</td>
                         <td>{{ product.buying_price }}</td>
                         <td>{{ product.selling_price }}</td>
-                         <td>{{ product.root }}</td>
             <td>
    <router-link :to="{name: 'edit-product', params:{id:product.id}}" class="btn btn-sm btn-primary">Edit</router-link>
 

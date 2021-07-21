@@ -66,3 +66,7 @@ Route::Get('/today/expense', 'Api\PosController@TodayExpense');
 Route::Get('/today/stockout', 'Api\PosController@Stockout');
 
 
+// Add to alert Route
+Route::Get('/AddAlert/{id}', 'Api\AlertController@AddAlert');
+Route::Get('/alert/product', 'Api\AlertController@AlertProduct');
+Route::Get('/remove/alert/{id}', 'Api\AlertController@removeAlert');

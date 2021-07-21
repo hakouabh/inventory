@@ -352,9 +352,17 @@
     axios.post('/api/orderdone',data)
        .then(() => {
           Notification.success()
+          this.checkAlert();
          this.$router.push({name: 'home'})
        }) 
 
+  },
+  checkAlert(){
+    for(let i=0;i < this.carts.length;i++){
+      axios.get('/api/AddAlert/'+this.carts[i].pro_id)
+      .then()
+      .catch()
+    }
   },
    
     // End Cart Methods 

@@ -138,15 +138,15 @@
             <div class="col-xl-9 col-lg-8">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Monthly Recap Report</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">weekly Recap Report</h6>
                   <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(17px, 19px, 0px);">
-                      <div class="dropdown-header">Dropdown Header:</div>
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
+                      <div class="dropdown-header"></div>
+                      <a class="dropdown-item">Current Week</a>
+                      <a class="dropdown-item">Last Week</a>
                       <div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Something else here</a>
                     </div>
@@ -297,14 +297,11 @@
     axios.get('/api/order/satat')
     .then(({data}) => {
       this.stats = data
-      console.log(this.stats.currentWeekOrders)
       localStorage.setItem("currentWeekOrders", this.stats.currentWeekOrders);
       })
     .catch(console.log('error'))
      }
-
    }
-
   } 
 </script>
 

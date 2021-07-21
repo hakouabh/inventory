@@ -47,7 +47,7 @@ var myLineChart = new Chart(ctx, {
       pointHoverBorderColor: "rgba(78, 115, 223, 1)",
       pointHitRadius: 10,
       pointBorderWidth: 2,
-      data: [0, currentWeekOrdersformat[1], currentWeekOrdersformat[2]
+      data: [currentWeekOrdersformat[0], currentWeekOrdersformat[1], currentWeekOrdersformat[2]
       , currentWeekOrdersformat[3], currentWeekOrdersformat[4], 
       currentWeekOrdersformat[5], currentWeekOrdersformat[6]],
     }],

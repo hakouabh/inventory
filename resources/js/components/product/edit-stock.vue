@@ -97,11 +97,16 @@
   },
 
   methods:{
-    
+  AlertUpdate(id){
+  axios.get('/api/remove/alert/'+id)
+      .then(({data}) => console.log(data))
+      .catch()
+  },  
   StockUpdate(){
   	  let id = this.$route.params.id
        axios.post('/api/stock/update/'+id,this.form)
        .then(() => {
+         this.AlertUpdate(id);
         this.$router.push({ name: 'stock'})
         Notification.success()
        })
