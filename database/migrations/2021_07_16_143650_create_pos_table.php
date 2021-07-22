@@ -19,6 +19,7 @@ class CreatePosTable extends Migration
             $table->string('pro_name')->nullable();
             $table->string('pro_quantity')->nullable();
             $table->string('product_price')->nullable();
+            $table->string('product_discount')->nullable();
             $table->string('sub_total')->nullable();
             $table->timestamps();
         });

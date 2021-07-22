@@ -33,6 +33,7 @@
                       <tr>
                         <th>Name</th>
                         <th>Qty</th>
+                        <th>Discount</th>
                         <th>Unit</th>
                         <th>Total</th>
                         <th>Action</th>
@@ -48,6 +49,9 @@
    <button class="btn btn-sm btn-danger" v-else="" disabled="">-</button>
 
             </td>
+            <td>
+              <button  @click.prevent="discount(cart)" class="btn btn-sm btn-danger">%</button>
+            </td>
             <td>{{ cart.product_price  }}</td>
             <td>{{ cart.sub_total }}</td>
    <td><a @click="removeItem(cart.id)" class="btn btn-sm btn-primary"><font color="#ffffff">X</font></a></td>
@@ -62,15 +66,11 @@
   <li class="list-group-item d-flex justify-content-between align-items-center">Total Quantity:
   <strong>{{ qty }}</strong>
    </li>
-     <li class="list-group-item d-flex justify-content-between align-items-center">Sub Total:
-  <strong>{{ subtotal }} $</strong>
-   </li>
-
-     <li class="list-group-item d-flex justify-content-between align-items-center">Vat:
-  <strong>{{ vats.vat }} %</strong>
+    <li class="list-group-item d-flex justify-content-between align-items-center">Total Discount:
+  <strong>{{ total_discount }} $</strong>
    </li>
      <li class="list-group-item d-flex justify-content-between align-items-center">Total :
-  <strong>{{ subtotal*vats.vat /100 + subtotal}} $</strong>
+  <strong>{{ subtotal }} $</strong>
    </li> 
               
             </ul>   
@@ -86,9 +86,6 @@
            <label>Pay</label>
            <input type="text" class="form-control" required="" v-model="pay">
 
-           <label>Due</label>
-           <input type="text" class="form-control" required="" v-model="due">
-
           <label>Pay By</label>
           <select class="form-control" v-model="payby">
                  <option value="HandCash">Hand Cash </option>
@@ -100,17 +97,7 @@
            <button type="submit" class="btn btn-success">Submit</button>
 
         </form>    
-
-
-
                 </div>
-             
-
-
-
-
-
-
               </div>
             </div>
             <!-- Pie Chart -->
@@ -236,7 +223,6 @@
     this.allCategory();
     this.allCustomer();
     this.cartProduct();
-    this.vat();
     Reload.$on('AfterAdd',() =>{
       this.cartProduct();
     })
@@ -246,9 +232,7 @@
       return{
        customer_id:'',
        pay:'',
-       due:'',
        payby:'',
-
         products:[],
         categories:'',
         getproducts:[],
@@ -257,7 +241,6 @@
         customers:'',
         errors:'',
         carts:[],
-        vats:''
 
       }
     },
@@ -279,10 +262,17 @@
         }
         return sum;
    },
+   total_discount(){
+    let sum = 0;
+    for(let i = 0; i < this.carts.length; i++){
+          sum += (parseFloat(this.carts[i].product_discount)*parseFloat(this.carts[i].pro_quantity));      
+        }
+        return sum;
+   },
    subtotal(){
     let sum = 0;
     for(let i = 0; i < this.carts.length; i++){
-    sum += (parseFloat(this.carts[i].pro_quantity) * parseFloat(this.carts[i].product_price));      
+    sum += (parseFloat(this.carts[i].pro_quantity) * (parseFloat(this.carts[i].product_price)-parseFloat(this.carts[i].product_discount)));      
         }
        return sum;
 
@@ -339,15 +329,32 @@
         Notification.success()
       })
       .catch() 
-  }, 
-  vat(){
-       axios.get('/api/vats/')
-      .then(({data}) => (this.vats = data))
-      .catch()
   },
+  async discount(cart){
+	
+const { value: text } = await Swal.fire({
+  title: 'Discount',
+  input: 'number',
+  inputLabel: 'Value'
+  })
+
+if (text) {
+  var data ={
+    id:cart.id,
+    discount:text
+  }
+  Swal.fire(`Disount : ${text}`)
+  axios.post('/api/discount/',data)
+      .then(() => {
+        Reload.$emit('AfterAdd');
+      })
+      .catch() 
+
+}
+  }, 
   orderdone(){
-    let total = this.subtotal*this.vats.vat /100 + this.subtotal;
-    var data = {qty:this.qty, subtotal:this.subtotal, customer_id:this.customer_id, payby:this.payby, pay:this.pay, due:this.due, vat:this.vats.vat, total:total }
+    let total = this.subtotal;
+    var data = {qty:this.qty, subtotal:this.subtotal, customer_id:this.customer_id, payby:this.payby,total_discount:this.total_discount ,pay:this.pay, total:total }
 
     axios.post('/api/orderdone',data)
        .then(() => {

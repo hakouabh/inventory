@@ -27,9 +27,14 @@
         <div class="form-group">
 
           <div class="form-row">
-            <div class="col-md-12">
-        <label for="exampleFormControlTextarea1"><b>Search By Date </b></label>
-      <input type="date" class="form-control" id="exampleInputFirstName" required="" v-model="date">
+            <div class="col-md-6">
+        <label for="exampleFormControlTextarea1"><b>Date From </b></label>
+      <input type="date" class="form-control" id="exampleInputFirstName" required="" v-model="date_from">
+     
+            </div> 
+            <div class="col-md-6">
+        <label for="exampleFormControlTextarea1"><b>Date To </b></label>
+      <input type="date" class="form-control" id="exampleInputFirstName" required="" v-model="date_to">
      
             </div> 
             
@@ -70,22 +75,26 @@
                       <tr>
                         <th>Product Name</th>
                         <th>Qty</th>
-                        <th>SubTotal</th>
-                        <th>Vat</th>
+                        <th>Date</th>
                         <th>Total </th>
                         <th>Pay </th>
-                         <th>Due </th>
+                        <th>Action</th>
+                        
+
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="order in orders">
                         <td>{{ order.name }}</td>
                         <td>{{ order.qty }}</td>
-                        <td>{{ order.sub_total }}</td>
-                        <td>{{ order.vat }}</td>
+                        <td>{{ order.order_date }}</td>
                        <td>{{ order.total }} $</td>
                        <td>{{ order.pay }} $</td>
-                       <td>{{ order.due }} $</td>
+                       <td>
+   <router-link :to="{name: 'view-order', params:{id:order.id}}" class="btn btn-sm btn-primary">View</router-link>
+
+ 
+            </td>
                       </tr>
                        
                     </tbody>
@@ -95,17 +104,6 @@
               </div>
             </div>
           </div>
-
-
-
-
-
-
-
-
-
-
-
       </div>
     </div>
   </div>
@@ -126,7 +124,8 @@
 
     data(){
     return {
-      date:'',
+      date_from:'',
+      date_to:'',
       orders:{}     
       
     }
@@ -135,7 +134,7 @@
   methods:{
     
   searchDate(){ 
-      var data = {date:this.date}
+      var data = {date_from:this.date_from,date_to:this.date_to}
        axios.post('/api/search/order/',data)
         .then(({data}) => (this.orders = data))
         .catch(error =>this.errors = error.response.data.errors)

@@ -21,7 +21,7 @@ class CartController extends Controller
                 }else{
                     DB::table('pos')->where('pro_id',$id)->increment('pro_quantity');
                     $product = DB::table('pos')->where('pro_id',$id)->first();
-                    $subtotal = $product->pro_quantity * $product->product_price;
+                    $subtotal = $product->pro_quantity * ($product->product_price-$product->product_discount);
                     DB::table('pos')->where('pro_id',$id)->update(['sub_total'=>$subtotal]);
                 } 
             }else{
@@ -31,6 +31,7 @@ class CartController extends Controller
                 $data['pro_name'] = $product->product_name;
                 $data['pro_quantity'] = 1;
                 $data['product_price'] = $product->selling_price;
+                $data['product_discount'] =0;
                 $data['sub_total'] = $product->selling_price;        
                 DB::table('pos')->insert($data);
             }
@@ -60,7 +61,7 @@ class CartController extends Controller
 
             $quantity = DB::table('pos')->where('id',$id)->increment('pro_quantity');
             $product = DB::table('pos')->where('id',$id)->first();
-            $subtotal = $product->pro_quantity * $product->product_price;
+            $subtotal = $product->pro_quantity * ($product->product_price - $product->product_discount);
             DB::table('pos')->where('id',$id)->update(['sub_total'=>$subtotal]);
             return response('ok');
         }
@@ -71,14 +72,17 @@ class CartController extends Controller
 
         $quantity = DB::table('pos')->where('id',$id)->decrement('pro_quantity');
         $product = DB::table('pos')->where('id',$id)->first();
-        $subtotal = $product->pro_quantity * $product->product_price;
+        $subtotal = $product->pro_quantity * ($product->product_price-$product->discount);
         DB::table('pos')->where('id',$id)->update(['sub_total'=>$subtotal]);
         return response('OK');
     }
 
-    public function Vats(){
-
-        $vat = DB::table('extra')->first();
-        return response()->json($vat);
+    public function discount(Request $request){
+        $product = DB::table('pos')->where('id',$request->id)->first();
+        $subtotal = $product->pro_quantity * ($product->product_price-$request->discount);
+        DB::table('pos')->where('id',$request->id)->update(['product_discount'=>$request->discount,'sub_total'=>$subtotal]);
+            return response('ok');
     }
+
+
 }

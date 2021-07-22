@@ -45,7 +45,6 @@ Route::Get('/remove/cart/{id}', 'Api\CartController@removeCart');
 Route::Get('/increment/{id}', 'Api\CartController@increment');
 Route::Get('/decrement/{id}', 'Api\CartController@decrement');
 
-Route::Get('/vats', 'Api\CartController@Vats');
 
 Route::Post('/orderdone', 'Api\PosController@OrderDone');
 
@@ -61,7 +60,6 @@ Route::Post('/search/order', 'Api\PosController@SearchOrderDate');
 
 Route::Get('/today/sell', 'Api\PosController@TodaySell');
 Route::Get('/today/income', 'Api\PosController@TodayIncome');
-Route::Get('/today/due', 'Api\PosController@TodayDue');
 Route::Get('/today/expense', 'Api\PosController@TodayExpense');
 Route::Get('/today/stockout', 'Api\PosController@Stockout');
 
@@ -70,3 +68,4 @@ Route::Get('/today/stockout', 'Api\PosController@Stockout');
 Route::Get('/AddAlert/{id}', 'Api\AlertController@AddAlert');
 Route::Get('/alert/product', 'Api\AlertController@AlertProduct');
 Route::Get('/remove/alert/{id}', 'Api\AlertController@removeAlert');
+Route::Post('/discount', 'Api\CartController@discount');

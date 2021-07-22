@@ -11,7 +11,7 @@ class AlertController extends Controller
 {
     public function AddAlert(Request $request,$id){
         $product = DB::table('products')->where('id',$id)->first();
-        if($product->product_quantity <= $product->product_quantity){
+        if($product->product_quantity <= $product->min_quantity){
             $alert = new Alert;
             $alert->product_id = $id;
             $alert->save();
@@ -26,7 +26,7 @@ class AlertController extends Controller
        } 
     public function removeAlert($id){
         $product = DB::table('products')->where('id',$id)->first();
-        if ($product->product_quantity > $product->product_quantity){
+        if ($product->product_quantity > $product->min_quantity){
             DB::table('alerts')->where('product_id',$id)->delete();
             return response('OK');
         }

@@ -29,10 +29,8 @@ class PosController extends Controller
     $data['customer_id'] = $request->customer_id;
     $data['qty'] = $request->qty;
     $data['sub_total'] = $request->subtotal;
-    $data['vat'] = $request->vat;
     $data['total'] = $request->total;
     $data['pay'] = $request->pay;
-    $data['due'] = $request->due;
     $data['payby'] = $request->payby;
     $data['order_date'] = date('d/m/Y');
     $data['order_month'] = date('F');
@@ -47,6 +45,7 @@ class PosController extends Controller
     $odata['product_id'] = $content->pro_id;
     $odata['pro_quantity'] = $content->pro_quantity;
     $odata['product_price'] = $content->product_price;
+    $odata['discount'] = $request->total_discount;
     $odata['sub_total'] = $content->sub_total;
     DB::table('order_details')->insert($odata); 
 
@@ -63,15 +62,20 @@ class PosController extends Controller
  
 
   public function SearchOrderDate(Request $request){
-    $orderdate = $request->date;
-    $newdate = new DateTime($orderdate);
-    $done = $newdate->format('d/m/Y'); 
+    $orderdate_from = $request->date_from;
+    $orderdate_to = $request->date_to;
+    $newdate_from = new DateTime($orderdate_from);
+    $newdate_to = new DateTime($orderdate_to);
+    $done_from = $newdate_from->format('d/m/Y'); 
+    $done_to = $newdate_to->format('d/m/Y'); 
 
     $order = DB::table('orders')
         ->join('customers','orders.customer_id','customers.id')
         ->select('customers.name','orders.*')
-        ->where('orders.order_date',$done)
-        ->get();
+        ->whereBetween('orders.order_date', [
+          $done_from,
+          $done_to
+        ])->get();
 
     return response()->json($order);
 
@@ -91,12 +95,7 @@ class PosController extends Controller
      return response()->json($income);
    }
 
-    public function TodayDue(){
-     $date = date('d/m/Y');
-     $todaydue = DB::table('orders')->where('order_date',$date)->sum('due');
-     return response()->json($todaydue);
-   }
-
+  
 
    public function TodayExpense(){
     $date = date('d/m/Y');
@@ -110,6 +109,4 @@ class PosController extends Controller
   return response()->json($product);
 
  }
-
-
 }
