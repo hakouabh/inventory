@@ -6,7 +6,7 @@
 
  
 <br>
-   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
+   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" v-bind:placeholder="$t('form.placeholder.search')">
 
 
 <br>
@@ -16,17 +16,17 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Today Orders</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{$t('table.name.orders')}}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Name</th>
-                        <th>Total Amount </th>
-                        <th>Pay</th>
-                        <th>PayBy</th>
-                         <th>Action</th>
+                        <th>{{$t('table.feild.name')}}</th>
+                        <th>{{$t('table.feild.total_amount')}}</th>
+                        <th>{{$t('table.feild.pay')}}</th>
+                        <th>{{$t('table.feild.payby')}}</th>
+                         <th>{{$t('table.feild.action')}}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -37,7 +37,7 @@
                         <td> {{ order.payby }} </td>
                        
             <td>
-   <router-link :to="{name: 'view-order', params:{id:order.id}}" class="btn btn-sm btn-primary">View</router-link>
+   <router-link :to="{name: 'view-order', params:{id:order.id}}" class="btn btn-sm btn-primary">{{$t('table.button.view')}}</router-link>
 
  
             </td>

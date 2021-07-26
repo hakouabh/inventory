@@ -5,11 +5,11 @@
   <div>
 
  <div class="row">
-  <router-link to="/store-employee" class="btn btn-primary">Add Employee </router-link>
+  <router-link to="/store-employee" class="btn btn-primary">{{$t('router.add_employee')}}</router-link>
    
  </div>
 <br>
-   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
+   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" v-bind:placeholder="$t('form.placeholder.search')">
 
 
 <br>
@@ -19,18 +19,18 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Employee List</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{$t('table.name.employee')}}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Name</th>
-                        <th>Photo</th>
-                        <th>Phone</th>
-                        <th>Sallery</th>
-                        <th>Joining Date</th>
-                        <th>Action</th>
+                        <th>{{$t('table.feild.name')}}</th>
+                        <th>{{$t('table.feild.photo')}}</th>
+                        <th>{{$t('table.feild.phone')}}</th>
+                        <th>{{$t('table.feild.sallery')}}</th>
+                        <th>{{$t('table.feild.joininig_date')}}</th>
+                        <th>{{$t('table.feild.action')}}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -41,9 +41,9 @@
                         <td>{{ employee.sallery }}</td>
                         <td>{{ employee.joining_date }}</td>
             <td>
-   <router-link :to="{name: 'edit-employee', params:{id:employee.id}}" class="btn btn-sm btn-primary">Edit</router-link>
+   <router-link :to="{name: 'edit-employee', params:{id:employee.id}}" class="btn btn-sm btn-primary">{{$t('table.button.edit')}}</router-link>
 
- <a @click="deleteEmployee(employee.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
+ <a @click="deleteEmployee(employee.id)" class="btn btn-sm btn-danger"><font color="#ffffff">{{$t('table.button.delete')}}</font></a>
             </td>
                       </tr>
                     

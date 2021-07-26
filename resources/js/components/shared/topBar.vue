@@ -35,7 +35,7 @@
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header">
-                  Alerts Center
+                  {{ $t('shared.alert_center') }}
                 </h6>
                 <div v-for="alert in alerts" :key="alert.id">
                     <a class="dropdown-item d-flex align-items-center" href="#">
@@ -46,73 +46,43 @@
                   </div>
                   <div>
                     <div class="small text-gray-500">December 12, 2019</div>
-                    <span class="font-weight-bold">This product 
+                    <span class="font-weight-bold">{{ $t('shared.alert') }} 
                         <router-link :to="{name: 'edit-stock', params:{id:alert.product_id}}" class="m-0 font-weight-bold text-primary">
                             {{alert.product_name}}
-                        </router-link>  is out of stock!</span>
+                        </router-link>  {{ $t('shared.suit') }}</span>
                   </div>
                     </a>
-                </div>
-                
-                <!--<a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 7, 2019</div>
-                    $290.29 has been deposited into your account!
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                      <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="small text-gray-500">December 2, 2019</div>
-                    Spending Alert: We've noticed unusually high spending for your account.
-                  </div>
-                </a>-->
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                </div>                
+                <router-link class="dropdown-item text-center small text-gray-500" to="/alert">{{ $t('shared.view') }}</router-link>
               </div>
             </li>
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-envelope fa-fw"></i>
+                <i class="fas fa-globe fa-fw"></i>
                 <span class="badge badge-warning badge-counter">2</span>
               </a>
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                 aria-labelledby="messagesDropdown">
                 <h6 class="dropdown-header">
-                  Message Center
+                  {{ $t('language') }}
                 </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a class="dropdown-item d-flex align-items-center" @click="langChanged('fr')">
                   <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/man.png" style="max-width: 60px" alt="">
-                    <div class="status-indicator bg-success"></div>
+                    <img class="rounded-circle" :src="'backend/img/french.png'" style="max-width: 60px" alt="">
                   </div>
                   <div class="font-weight-bold">
-                    <div class="text-truncate">Hi there! I am wondering if you can help me with a problem I've been
-                      having.</div>
-                    <div class="small text-gray-500">Udin Cilok · 58m</div>
+                    <div class="text-truncate"><h5> {{$t('fr')}} </h5> </div>
                   </div>
                 </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
+                <a class="dropdown-item d-flex align-items-center"  @click="langChanged('en')">
                   <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="img/girl.png" style="max-width: 60px" alt="">
-                    <div class="status-indicator bg-default"></div>
+                    <img class="rounded-circle" :src="'backend/img/english.png'" style="max-width: 60px" alt="">
                   </div>
-                  <div>
-                    <div class="text-truncate">Am I a good boy? The reason I ask is because someone told me that people
-                      say this to all dogs, even if they aren't good...</div>
-                    <div class="small text-gray-500">Jaenab · 2w</div>
+                  <div class="font-weight-bold">
+                    <div class="text-truncate"><h5> {{$t('en')}} </h5> </div>
                   </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                </a>               
               </div>
             </li>
             <li class="nav-item dropdown no-arrow mx-1">
@@ -184,7 +154,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  <router-link to="/logout" class="ml-2 d-none d-lg-inline text-400">Logout</router-link>
+                  <router-link to="/logout" class="ml-2 d-none d-lg-inline text-400">{{ $t('shared.logout') }}</router-link>
                 </a>
               </div>
             </li>
@@ -198,6 +168,9 @@
       if (!User.loggedIn()) {
         this.$router.push({name: '/'})
       }
+    },
+    mounted(){
+    if(localStorage.getItem("Lang")!=null) this.$i18n.locale=localStorage.getItem("Lang");
     },
     created(){
         this.AlertProduct();
@@ -216,6 +189,10 @@
                 
             })
             .catch()
+        },
+        langChanged(lang){
+          localStorage.setItem("Lang",lang);
+          this.$i18n.locale=lang;         
         }
     }
   }

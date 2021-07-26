@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/order" class="btn btn-primary">Go Back </router-link>
+  <router-link to="/order" class="btn btn-primary">{{$t('router.back')}}</router-link>
    
  </div>
 
@@ -19,7 +19,7 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4"> Order Details </h1>
+                    <h1 class="h4 text-gray-900 mb-4">{{$t('table.name.orders_details')}}</h1>
                   </div>
 
        
@@ -29,16 +29,16 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Order Details </h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{$t('table.name.orders_details')}}</h6>
                 </div>
                 <div class="table-responsive">
                    
         <ul class="list-group">
-          <li class="list-group-item"><b>Name :</b> {{ orders.name }} </li>
-          <li class="list-group-item"><b>Phone :</b> {{ orders.phone }}</li>
-          <li class="list-group-item"><b>Address :</b> {{ orders.address }}</li>
-          <li class="list-group-item"><b>Date :</b> {{ orders.order_date }}</li>
-          <li class="list-group-item"><b>Pay Through :</b> {{ orders.payby }}</li>
+          <li class="list-group-item"><b>{{$t('table.feild.name')}} :</b> {{ orders.name }} </li>
+          <li class="list-group-item"><b>{{$t('table.feild.phone')}} :</b> {{ orders.phone }}</li>
+          <li class="list-group-item"><b>{{$t('table.feild.address')}} :</b> {{ orders.address }}</li>
+          <li class="list-group-item"><b>{{$t('table.feild.date')}} :</b> {{ orders.order_date }}</li>
+          <li class="list-group-item"><b>{{$t('table.feild.through')}} :</b> {{ orders.payby }}</li>
         </ul>
 
                   
@@ -54,15 +54,15 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Order Details</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{$t('table.name.orders_details')}}</h6>
                 </div>
                 <div class="table-responsive">
 
 
           <ul class="list-group">
-          <li class="list-group-item"><b>Sub Total :</b> {{ orders.sub_total }} $ </li>
-          <li class="list-group-item"><b>Total :</b> {{ orders.total }} $</li>
-          <li class="list-group-item"><b>Pay Amount :</b> {{ orders.pay }} $</li>
+          <li class="list-group-item"><b>{{$t('table.feild.sub_total')}} :</b> {{ orders.sub_total }} $ </li>
+          <li class="list-group-item"><b>{{$t('table.feild.total')}} :</b> {{ orders.total }} $</li>
+          <li class="list-group-item"><b>{{$t('table.feild.pay_amount')}} :</b> {{ orders.pay }} $</li>
         </ul>
 
 
@@ -71,47 +71,24 @@
                 <div class="card-footer"></div>
               </div>
             </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
           </div>
-
-
-
-
-
 <div class="row">
             <div class="col-lg-12 mb-4">
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Order Details</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{$t('table.name.orders_details')}}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Product Name</th>
-                        <th>Product Code</th>
-                        <th>Image</th>
-                        <th>Qty</th>
-                        <th>Unit Price </th>
-                        <th>Total </th>
+                        <th>{{$t('table.feild.product')}}</th>
+                        <th>{{$t('table.feild.sku')}}</th>
+                        <th>{{$t('table.feild.image')}}</th>
+                        <th>{{$t('table.feild.quantity')}}</th>
+                        <th>{{$t('table.feild.price')}}</th>
+                        <th>{{$t('table.feild.total')}} </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -131,18 +108,8 @@
               </div>
             </div>
           </div>
-
-
-
-
-
- 
-
-
                   <hr>
                   <div class="text-center">
-  
-  
                   </div>
                   <div class="text-center">
                   </div>

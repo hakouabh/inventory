@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/order" class="btn btn-primary">Today Order </router-link>
+  <router-link to="/order" class="btn btn-primary">{{$t('table.name.orders')}}</router-link>
    
  </div>
 
@@ -19,7 +19,7 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Search Order</h1>
+                    <h1 class="h4 text-gray-900 mb-4">{{$t('form.label.search_order')}}</h1>
                   </div>
 
       <form class="user" @submit.prevent="searchDate">
@@ -28,12 +28,12 @@
 
           <div class="form-row">
             <div class="col-md-6">
-        <label for="exampleFormControlTextarea1"><b>Date From </b></label>
+        <label for="exampleFormControlTextarea1"><b>{{$t('form.label.datefrom')}}</b></label>
       <input type="date" class="form-control" id="exampleInputFirstName" required="" v-model="date_from">
      
             </div> 
             <div class="col-md-6">
-        <label for="exampleFormControlTextarea1"><b>Date To </b></label>
+        <label for="exampleFormControlTextarea1"><b>{{$t('form.label.dateto')}}</b></label>
       <input type="date" class="form-control" id="exampleInputFirstName" required="" v-model="date_to">
      
             </div> 
@@ -42,7 +42,7 @@
         </div> 
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Search</button>
+          <button type="submit" class="btn btn-primary btn-block">{{$t('table.button.search')}}</button>
         </div>
         
       </form>
@@ -67,18 +67,18 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Order Details</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{$t('table.name.orders_details')}}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Product Name</th>
-                        <th>Qty</th>
-                        <th>Date</th>
-                        <th>Total </th>
-                        <th>Pay </th>
-                        <th>Action</th>
+                        <th>{{$t('table.feild.product')}}</th>
+                        <th>{{$t('table.feild.quantity')}}</th>
+                        <th>{{$t('table.feild.date')}}</th>
+                        <th>{{$t('table.feild.total')}} </th>
+                        <th>{{$t('table.feild.pay')}} </th>
+                        <th>{{$t('table.feild.action')}}</th>
                         
 
                       </tr>
@@ -91,7 +91,7 @@
                        <td>{{ order.total }} $</td>
                        <td>{{ order.pay }} $</td>
                        <td>
-   <router-link :to="{name: 'view-order', params:{id:order.id}}" class="btn btn-sm btn-primary">View</router-link>
+   <router-link :to="{name: 'view-order', params:{id:order.id}}" class="btn btn-sm btn-primary">{{$t('table.button.view')}}</router-link>
 
  
             </td>

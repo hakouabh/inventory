@@ -2,10 +2,10 @@
 <template>
 	<div>
 	<div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 class="h3 mb-0 text-gray-800">{{ $t('dashboard') }}</h1>
             <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="./">Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+              <li class="breadcrumb-item"><a href="./">{{ $t('home') }}</a></li>
+              <li class="breadcrumb-item active" aria-current="page">{{ $t('dashboard') }}</li>
             </ol>
           </div>
 
@@ -16,12 +16,12 @@
                 <div class="card-body">
                   <div class="row align-items-center">
                     <div class="col mr-2">
-        <div class="text-xs font-weight-bold text-uppercase mb-1">Today Sell Amount</div>
+        <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('shared.today_sell') }}</div>
  <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ todaysell }}</div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
+                      <!--<div class="mt-2 mb-0 text-muted text-xs">
                         <span class="text-success mr-2"><i class="fa fa-arrow-up"></i> 3.48%</span>
                         <span>Since last month</span>
-                      </div>
+                      </div>-->
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-calendar fa-2x text-primary"></i>
@@ -36,12 +36,12 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                      <div class="text-xs font-weight-bold text-uppercase mb-1">Today Income</div>
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('shared.income') }}</div>
         <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ income }} </div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
+                     <!-- <div class="mt-2 mb-0 text-muted text-xs">
                         <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 12%</span>
                         <span>Since last years</span>
-                      </div>
+                      </div>-->
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-shopping-cart fa-2x text-success"></i>
@@ -56,12 +56,12 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-   <div class="text-xs font-weight-bold text-uppercase mb-1">Today Due</div>
+   <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('shared.today_due') }}</div>
       <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">$ 0 </div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
+                    <!--  <div class="mt-2 mb-0 text-muted text-xs">
                         <span class="text-success mr-2"><i class="fas fa-arrow-up"></i> 20.4%</span>
                         <span>Since last month</span>
-                      </div>
+                      </div>-->
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-users fa-2x text-info"></i>
@@ -76,12 +76,12 @@
                 <div class="card-body">
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-  <div class="text-xs font-weight-bold text-uppercase mb-1">Today Expense</div>
+  <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('shared.today_expense') }}</div>
     <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ expense }} </div>
-                      <div class="mt-2 mb-0 text-muted text-xs">
+                      <!--<div class="mt-2 mb-0 text-muted text-xs">
                         <span class="text-danger mr-2"><i class="fas fa-arrow-down"></i> 1.10%</span>
                         <span>Since yesterday</span>
-                      </div>
+                      </div>-->
                     </div>
                     <div class="col-auto">
                       <i class="fas fa-comments fa-2x text-warning"></i>
@@ -96,17 +96,16 @@
             <div class="col-xl-9 col-lg-8">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">weekly Recap Report</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{ $t('shared.repport') }}</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink" x-placement="bottom-end" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(17px, 19px, 0px);">
                       <div class="dropdown-header"></div>
-                      <a class="dropdown-item">Current Week</a>
-                      <a class="dropdown-item">Last Week</a>
+                      <a class="dropdown-item">{{ $t('shared.current') }}</a>
+                      <a class="dropdown-item">{{ $t('shared.last') }}</a>
                       <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="#">Something else here</a>
                     </div>
                   </div>
                 </div>
@@ -121,7 +120,7 @@
             <div class="col-xl-3 col-lg-4">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Products Sold</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{ $t('shared.product') }}</h6>
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle btn btn-primary btn-sm" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Month <i class="fas fa-chevron-down"></i>
@@ -188,18 +187,18 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-       <h6 class="m-0 font-weight-bold text-primary">Out Of Stock Product</h6>
+       <h6 class="m-0 font-weight-bold text-primary">{{ $t('shared.out_stock') }}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Name</th>
-                        <th>Code</th>
-                        <th>Photo</th>                       
-                        <th>Buying Price</th>
-                        <th>Status</th>
-                        <th>Quantity</th>
+                        <th>{{ $t('table.feild.name') }}</th>
+                        <th>{{ $t('table.feild.sku') }}</th>
+                        <th>{{ $t('table.feild.photo') }}</th>                       
+                        <th>{{ $t('table.feild.buying_price') }}</th>
+                        <th>{{ $t('table.feild.status') }}</th>
+                        <th>{{ $t('table.feild.quantity') }}</th>
                         
                       </tr>
                     </thead>
@@ -210,8 +209,8 @@
                         <td><img :src="product.image" id="em_photo"></td>
                         
                         <td>{{ product.buying_price }}</td>
-  <td v-if="product.product_quantity  >= 1 "><span class="badge badge-success">Available </span></td>
-   <td v-else=" "><span class="badge badge-danger">Stock Out </span></td>
+  <td v-if="product.product_quantity  >= 1 "><span class="badge badge-success"> {{ $t('available') }} </span></td>
+   <td v-else=" "><span class="badge badge-danger"> {{ $t('stock_out') }} </span></td>
                          <td>{{ product.product_quantity }}</td>
              
                       </tr>

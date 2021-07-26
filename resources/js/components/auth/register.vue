@@ -11,38 +11,38 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Register</h1>
+                    <h1 class="h4 text-gray-900 mb-4">{{ $t("router.register") }}</h1>
                   </div>
       <form class="user" @submit.prevent="signup">
         <div class="form-group">
          
-          <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Full Name" v-model="form.name">
+          <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder="$t('form.placeholder.name')" v-model="form.name">
         </div>
        
         <div class="form-group">
          
           <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
-            placeholder="Enter Email Address" v-model="form.email">
+            v-bind:placeholder=" $t('form.placeholder.email') " v-model="form.email">
         </div>
         <div class="form-group">
          
-          <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password" v-model="form.password">
+          <input type="password" class="form-control" id="exampleInputPassword" v-bind:placeholder=" $t('form.placeholder.password') " v-model="form.password">
         </div>
 
         <div class="form-group">
          
           <input type="password" class="form-control" id="exampleInputPasswordRepeat"
-            placeholder="Confirm Password" v-model="form.password_confirmation">
+            v-bind:placeholder="$t('form.placeholder.confirm_password')" v-model="form.password_confirmation">
         </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Register</button>
+          <button type="submit" class="btn btn-primary btn-block">{{ $t("button.register") }}</button>
         </div>
         
       </form>
                   <hr>
                   <div class="text-center">
   
-  <router-link to="/" class="font-weight-bold small">Already have an account?</router-link>
+  <router-link to="/" class="font-weight-bold small">{{ $t("router.account") }}</router-link>
                   </div>
                   <div class="text-center">
                   </div>

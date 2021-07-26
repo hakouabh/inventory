@@ -15,32 +15,31 @@
       <form class="user" @submit.prevent="login">
         <div class="form-group">
           <input type="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp"
-            placeholder="Enter Email Address" v-model="form.email">
+            v-bind:placeholder="$t('form.placeholder.email')" v-model="form.email">
     <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>        
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" id="exampleInputPassword" placeholder="Password" v-model="form.password">
+          <input type="password" class="form-control" id="exampleInputPassword" v-bind:placeholder="$t('form.placeholder.password')" v-model="form.password">
  <small class="text-danger" v-if="errors.password"> {{ errors.password[0] }} </small>
         </div>
         <div class="form-group">
           <div class="custom-control custom-checkbox small" style="line-height: 1.5rem;">
             <input type="checkbox" class="custom-control-input" id="customCheck">
-            <label class="custom-control-label" for="customCheck">Remember
-              Me</label>
+            <label class="custom-control-label" for="customCheck">{{$t("form.remember") }}</label>
           </div>
         </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Login </button>
+          <button type="submit" class="btn btn-primary btn-block">{{ $t("form.button.login") }} </button>
         </div>
         <hr>
         
       </form>
                   <hr>
                   <div class="text-center">
- <router-link to="/register" class="font-weight-bold small">Create an Account!</router-link>
+ <router-link to="/register" class="font-weight-bold small">{{ $t("router.create_account") }}</router-link>
                   </div>
                   <div class="text-center">
-    <router-link to="/forget" class="font-weight-bold small">Forget Password</router-link>
+    <router-link to="/forget" class="font-weight-bold small">{{ $t("router.auth_forget") }}</router-link>
                   </div>
                 </div>
               </div>

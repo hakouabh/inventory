@@ -5,6 +5,8 @@ require('./bootstrap');
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import i18n from './src/i18n'
+
 Vue.use(VueRouter)
 
  // Router Imported
@@ -52,6 +54,7 @@ import topbar from './components/shared/topBar.vue'
 const app = new Vue({
     el: '#app',
     router,
+    i18n,
     components:{
       topbar
     }

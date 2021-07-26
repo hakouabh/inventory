@@ -5,11 +5,11 @@
   <div>
 
  <div class="row">
-  <router-link to="/given-salary" class="btn btn-primary">Pay Salary </router-link>
+  <router-link to="/given-salary" class="btn btn-primary">{{ $t('router.pay_salary') }}</router-link>
    
  </div>
 <br>
-   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
+   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" v-bind:placeholder=" $t('form.placeholder.search') ">
 
 
 <br>
@@ -19,14 +19,14 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">All Salary Details</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{ $t('table.name.sallary_details') }}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Month Name</th>
-                        <th>Datails</th>
+                        <th>{{ $t('form.label.month') }}</th>
+                        <th>{{ $t('table.feild.details') }}</th>
                        
                       </tr>
                     </thead>
@@ -35,7 +35,7 @@
                         <td> {{ salary.salary_month }} </td>
                         
             <td>
-   <router-link :to="{name: 'view-salary', params:{id:salary.salary_month}}" class="btn btn-sm btn-primary">View Salary</router-link> 
+   <router-link :to="{name: 'view-salary', params:{id:salary.salary_month}}" class="btn btn-sm btn-primary">{{ $t('table.button.view') }}</router-link> 
             </td>
                       </tr>
                     

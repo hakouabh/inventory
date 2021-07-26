@@ -5,11 +5,11 @@
   <div>
 
  <div class="row">
-  <router-link to="/store-product" class="btn btn-primary">Add Product </router-link>
+  <router-link to="/store-product" class="btn btn-primary">{{ $t('router.add_product') }}</router-link>
    
  </div>
 <br>
-   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
+   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" v-bind:placeholder=" $t('form.placeholder.search') ">
 
 
 <br>
@@ -19,20 +19,20 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Stock</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{ $t('table.name.stock') }}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Name</th>
-                        <th>Code</th>
-                        <th>Photo</th>
-                        <th>Category</th>
-                        <th>Buying Price</th>
-                        <th>Status</th>
-                        <th>Quantity</th>
-                        <th>Action</th>
+                        <th>{{ $t('table.feild.name') }}</th>
+                        <th>{{ $t('table.feild.sku') }}</th>
+                        <th>{{ $t('table.feild.photo') }}</th>
+                        <th>{{ $t('table.feild.category') }}</th>
+                        <th>{{ $t('table.feild.buying_price') }}</th>
+                        <th>{{ $t('table.feild.status') }}</th>
+                        <th>{{ $t('table.feild.quantity') }}</th>
+                        <th>{{ $t('table.feild.action') }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -42,11 +42,11 @@
                         <td><img :src="product.image" id="em_photo"></td>
                         <td>{{ product.category_name }}</td>
                         <td>{{ product.buying_price }}</td>
-  <td v-if="product.product_quantity  >= 1 "><span class="badge badge-success">Available </span></td>
-   <td v-else=" "><span class="badge badge-danger">Stock Out </span></td>
+  <td v-if="product.product_quantity  >= 1 "><span class="badge badge-success">{{ $t('available') }} </span></td>
+   <td v-else=" "><span class="badge badge-danger">{{ $t('stock_out') }} </span></td>
                          <td>{{ product.product_quantity }}</td>
             <td>
-   <router-link :to="{name: 'edit-stock', params:{id:product.id}}" class="btn btn-sm btn-primary">Edit</router-link>
+   <router-link :to="{name: 'edit-stock', params:{id:product.id}}" class="btn btn-sm btn-primary">{{ $t('table.button.edit') }}</router-link>
  
             </td>
                       </tr>

@@ -5,11 +5,11 @@
   <div>
 
  <div class="row">
-  <router-link to="/store-expense" class="btn btn-primary">Add Expense </router-link>
+  <router-link to="/store-expense" class="btn btn-primary">{{$t('router.add_expense')}}</router-link>
    
  </div>
 <br>
-   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" placeholder="Search Here">
+   <input type="text" v-model="searchTerm" class="form-control" style="width: 300px;" v-bind:placeholder="$t('form.placeholder.search')">
 
 
 <br>
@@ -25,10 +25,10 @@
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Details</th>
-                        <th>Amount </th>
-                        <th>Date</th>
-                          <th>Action</th>
+                        <th>{{$t('table.feild.details')}}</th>
+                        <th>{{$t('table.feild.amount')}}</th>
+                        <th>{{$t('table.feild.date')}}</th>
+                          <th>{{$t('table.feild.action')}}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -38,9 +38,9 @@
                         <td> {{ expense.expense_date }} </td>
                        
             <td>
-   <router-link :to="{name: 'edit-expense', params:{id:expense.id}}" class="btn btn-sm btn-primary">Edit</router-link>
+   <router-link :to="{name: 'edit-expense', params:{id:expense.id}}" class="btn btn-sm btn-primary">{{$t('table.button.edit')}}</router-link>
 
- <a @click="deleteExpense(expense.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
+ <a @click="deleteExpense(expense.id)" class="btn btn-sm btn-danger"><font color="#ffffff">{{$t('table.button.delete')}}</font></a>
             </td>
                       </tr>
                     

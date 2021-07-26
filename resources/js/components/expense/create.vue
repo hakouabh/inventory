@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/expense" class="btn btn-primary">All Expense </router-link>
+  <router-link to="/expense" class="btn btn-primary">{{$t('router.all_expense')}}</router-link>
    
  </div>
 
@@ -19,7 +19,7 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Add Expense</h1>
+                    <h1 class="h4 text-gray-900 mb-4">{{$t('router.add_expense')}}</h1>
                   </div>
 
       <form class="user" @submit.prevent="expenseInsert">
@@ -28,14 +28,14 @@
 
           <div class="form-row">
             <div class="col-md-12">
-         <label for="exampleFormControlTextarea1"><b>Expense Details</b></label>
+         <label for="exampleFormControlTextarea1"><b>{{$t('form.label.expense_details')}}</b></label>
       <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" v-model="form.details"></textarea>
   <small class="text-danger" v-if="errors.details"> {{ errors.details[0] }} </small> 
             </div> 
 
  <div class="col-md-12"><br>
- 	<label for="exampleFormControlTextarea1"><b>Expense Amount</b></label>
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Amount" v-model="form.amount">
+ 	<label for="exampleFormControlTextarea1"><b>{{$t('form.label.expense_amount')}}</b></label>
+         <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder="$t('form.placeholder.amount')" v-model="form.amount">
   <small class="text-danger" v-if="errors.amount"> {{ errors.amount[0] }} </small> 
             </div> 
 
@@ -49,7 +49,7 @@
 
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          <button type="submit" class="btn btn-primary btn-block">{{$t('button.submit')}}</button>
         </div>
         
       </form>

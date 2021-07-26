@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/category" class="btn btn-primary">All Category </router-link>
+  <router-link to="/category" class="btn btn-primary">{{$t("router.all_category") }}</router-link>
    
  </div>
 
@@ -19,7 +19,7 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Add Category</h1>
+                    <h1 class="h4 text-gray-900 mb-4">{{$t("form.name.category") }}</h1>
                   </div>
 
       <form class="user" @submit.prevent="categoryInsert">
@@ -28,7 +28,7 @@
 
           <div class="form-row">
             <div class="col-md-12">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Category Name" v-model="form.category_name">
+         <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder="$t('form.placeholder.category_name')" v-model="form.category_name">
   <small class="text-danger" v-if="errors.category_name"> {{ errors.category_name[0] }} </small>
            
 
@@ -42,7 +42,7 @@
 
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Submit</button>
+          <button type="submit" class="btn btn-primary btn-block">{{$t("button.submit") }}</button>
         </div>
         
       </form>

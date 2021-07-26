@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/supplier" class="btn btn-primary">All Supplier </router-link>
+  <router-link to="/supplier" class="btn btn-primary">{{ $t('router.all_supplier') }}</router-link>
    
  </div>
 
@@ -19,7 +19,7 @@
               <div class="col-lg-12">
                 <div class="login-form">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4"> Supplier Update</h1>
+                    <h1 class="h4 text-gray-900 mb-4">{{ $t('form.name.update_supplier') }}</h1>
                   </div>
 
       <form class="user" @submit.prevent="supplierUpdate" enctype="multipart/form-data">
@@ -28,13 +28,13 @@
 
           <div class="form-row">
             <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Full Name" v-model="form.name">
+         <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder=" $t('form.placeholder.name') " v-model="form.name">
        <small class="text-danger" v-if="errors.name"> {{ errors.name[0] }} </small>
             </div>
 
 
      <div class="col-md-6">
-         <input type="email" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Email" v-model="form.email">
+         <input type="email" class="form-control" id="exampleInputFirstName" v-bind:placeholder=" $t('form.placeholder.email') " v-model="form.email">
          <small class="text-danger" v-if="errors.email"> {{ errors.email[0] }} </small>
             </div>     
             
@@ -46,13 +46,13 @@
 
           <div class="form-row">
             <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Address" v-model="form.address">
+         <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder=" $t('form.placeholder.address') " v-model="form.address">
          <small class="text-danger" v-if="errors.address"> {{ errors.address[0] }} </small>
             </div>
 
 
      <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your Sallery" v-model="form.shopname">
+         <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder=" $t('form.placeholder.shop_name') " v-model="form.shopname">
          <small class="text-danger" v-if="errors.shopname"> {{ errors.shopname[0] }} </small>
             </div>     
             
@@ -67,7 +67,7 @@
 
           <div class="form-row">
             <div class="col-md-6">
-         <input type="text" class="form-control" id="exampleInputFirstName" placeholder="Enter Your phone Number" v-model="form.phone">
+         <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder=" $t('form.placeholder.phone') " v-model="form.phone">
          <small class="text-danger" v-if="errors.phone"> {{ errors.phone[0] }} </small>
             </div>
 
@@ -87,7 +87,7 @@
    <input type="file" class="custom-file-input" id="customFile" @change="onFileSelected">
 
   <small class="text-danger" v-if="errors.photo"> {{ errors.photo[0] }} </small>
-       <label class="custom-file-label" for="customFile">Choose file</label>
+       <label class="custom-file-label" for="customFile">{{ $t('form.label.choose_file') }}</label>
             </div>
 
 
@@ -102,7 +102,7 @@
 
 
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">Update</button>
+          <button type="submit" class="btn btn-primary btn-block">{{ $t('button.update') }}</button>
         </div>
         
       </form>

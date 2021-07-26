@@ -5,7 +5,7 @@
   <div>
 
  <div class="row">
-  <router-link to="/store-product" class="btn btn-primary">Add Product </router-link>
+  <router-link to="/store-product" class="btn btn-primary"> {{$t('router.add_product')}} </router-link>
    
  </div>
 <br>
@@ -19,19 +19,19 @@
               <!-- Simple Tables -->
               <div class="card">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                  <h6 class="m-0 font-weight-bold text-primary">Product List</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">{{ $t('table.name.product') }}</h6>
                 </div>
                 <div class="table-responsive">
                   <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                       <tr>
-                        <th>Name</th>
-                        <th>Code</th>
-                        <th>Photo</th>
-                        <th>Category</th>
-                        <th>Buying Price</th>
-                        <th>Selling Price</th>
-                        <th>Action</th>
+                        <th>{{ $t('table.feild.name') }}</th>
+                        <th>{{ $t('table.feild.sku') }}</th>
+                        <th>{{ $t('table.feild.photo') }}</th>
+                        <th>{{ $t('table.feild.category') }}</th>
+                        <th>{{ $t('table.feild.buying_price') }}</th>
+                        <th>{{ $t('table.feild.selling_price') }}</th>
+                        <th>{{ $t('table.feild.action') }}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -43,9 +43,9 @@
                         <td>{{ product.buying_price }}</td>
                         <td>{{ product.selling_price }}</td>
             <td>
-   <router-link :to="{name: 'edit-product', params:{id:product.id}}" class="btn btn-sm btn-primary">Edit</router-link>
+   <router-link :to="{name: 'edit-product', params:{id:product.id}}" class="btn btn-sm btn-primary"> {{ $t('table.button.edit') }} </router-link>
 
- <a @click="deleteProduct(product.id)" class="btn btn-sm btn-danger"><font color="#ffffff">Delete</font></a>
+ <a @click="deleteProduct(product.id)" class="btn btn-sm btn-danger"><font color="#ffffff">{{ $t('table.button.delete') }}</font></a>
             </td>
                       </tr>
                     
