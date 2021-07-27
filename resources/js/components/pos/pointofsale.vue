@@ -15,7 +15,7 @@
             
 
             <!-- Area Chart -->
-            <div class="col-xl-5 col-lg-5">
+            <div class="col-xl-6 col-lg-6">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
          <router-link class="btn btn-sm btn-info" to="/store-customer"><font color="#ffffff">{{ $t('router.add_customer') }}</font></router-link>         
@@ -95,10 +95,7 @@
               </div>
             </div>
             <!-- Pie Chart -->
-
-
-
-            <div class="col-xl-7 col-lg-7">
+            <div class="col-xl-6 col-lg-6">
               <div class="card mb-4">
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                   <h6 class="m-0 font-weight-bold text-primary">{{ $t('product') }}</h6>
@@ -109,20 +106,18 @@
   <li class="nav-item">
     <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">{{ $t('router.all_product') }}</a>
   </li>
-  
-
   <li class="nav-item" v-for="category in categories" :key="category.id">
-    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false" @click="subproduct(category.id)" >{{ category.category_name }}</a>
-  </li>
-
-
-   
+    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" 
+    role="tab" aria-controls="profile" 
+    aria-selected="false" @click="subproduct(category.id)" >{{ category.category_name }}</a>
+  </li>   
 </ul>
 <div class="tab-content" id="myTabContent">
-  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+  <div class="tab-pane fade show active" id="home" role="tabpanel" 
+  aria-labelledby="home-tab">
 
 <div class="card-body">
- <input type="text" v-model="searchTerm" class="form-control" style="width: 560px;" v-bind:placeholder=" $t('form.placeholder.search') ">
+ <input type="text" v-model="searchTerm" class="form-control" v-bind:placeholder=" $t('form.placeholder.search') ">
 
      <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-6" v-for="product in filtersearch" :key="product.id">
@@ -144,16 +139,9 @@
 
 
   </div>  <!--  End TBAS HOME -->
-
-
-
- 
-
   <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-
-
-<input type="text" v-model="getsearchTerm" class="form-control" style="width: 560px;" v-bind:placeholder=" $t('form.placeholder.search') ">
-
+    <br>
+<input type="text" v-model="getsearchTerm" class="form-control" v-bind:placeholder=" $t('form.placeholder.search') ">
      <div class="row">
       <div class="col-lg-3 col-md-3 col-sm-6 col-6" v-for="getproduct in getfiltersearch" :key="getproduct.id">
             <button class="btn btn-sm" @click.prevent="AddToCart(getproduct.id)">
@@ -169,10 +157,6 @@
           
         </div>        
       </div>
-
-
-
-
   </div>
   
 </div>
@@ -186,13 +170,7 @@
            
           </div>
           <!--Row-->
-
-           
-
         </div> 
-  </div>
-
-
 </template>
 
 
