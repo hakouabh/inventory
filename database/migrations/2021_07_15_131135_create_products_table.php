@@ -25,6 +25,8 @@ class CreateProductsTable extends Migration
             $table->string('image')->nullable();
             $table->string('product_quantity');
             $table->string('min_quantity');
+            $table->uuid('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

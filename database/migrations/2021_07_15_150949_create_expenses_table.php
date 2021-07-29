@@ -18,6 +18,8 @@ class CreateExpensesTable extends Migration
             $table->text('details');
             $table->string('amount');
             $table->string('expense_date')->nullable();
+            $table->uuid('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users'); 
             $table->timestamps();
         });
     }

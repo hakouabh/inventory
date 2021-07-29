@@ -21,6 +21,8 @@ class CreatePosTable extends Migration
             $table->string('product_price')->nullable();
             $table->string('product_discount')->nullable();
             $table->string('sub_total')->nullable();
+            $table->uuid('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users'); 
             $table->timestamps();
         });
     }

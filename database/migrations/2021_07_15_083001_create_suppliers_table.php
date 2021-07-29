@@ -21,6 +21,8 @@ class CreateSuppliersTable extends Migration
             $table->string('address');
             $table->string('photo')->nullable();
             $table->string('shopname')->nullable();
+            $table->uuid('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users'); 
             $table->timestamps();
         });
     }

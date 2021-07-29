@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use DB;
+use App\User;
 
 class AuthController extends Controller
 {
@@ -53,7 +54,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(Auth::check());
     }
 
     /**
@@ -88,12 +89,11 @@ class AuthController extends Controller
        'password' => 'required|min:6|confirmed'
 
      ]);
-
-     $data = array();
-     $data['name'] = $request->name;
-     $data['email'] = $request->email;
-     $data['password'] = Hash::make($request->password);
-     DB::table('users')->insert($data);
+    $user = User::create([
+        'name' => $request->input('name'),
+        'email' => $request->input('email'),
+        'password' => bcrypt($request->input('password')),
+    ]);
 
      return $this->login($request);
 

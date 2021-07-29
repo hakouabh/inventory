@@ -24,6 +24,8 @@ class CreateOrdersTable extends Migration
             $table->string('order_date')->nullable();
             $table->string('order_month')->nullable();
             $table->string('order_year')->nullable();
+            $table->uuid('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users'); 
             $table->timestamps();
         });
     }

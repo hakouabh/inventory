@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Category;
+use Illuminate\Support\Facades\Auth;
+
 
 use DB;
 
@@ -35,10 +37,17 @@ class CategoryController extends Controller
             'category_name' => 'required|unique:categories|max:255'
    
            ]);
-           $category = new Category;
-           $category->category_name = $request->category_name;
+        //    $category = new Category;
+        //    $category->category_name = $request->category_name;
 
-           $category->save();
+        //    $category->save();
+        try {
+             
+            return response()->json(Auth::check());
+        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
+            // do something
+            return response()->json('error');
+        }
     }
 
     /**

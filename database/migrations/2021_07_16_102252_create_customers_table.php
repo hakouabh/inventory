@@ -20,6 +20,8 @@ class CreateCustomersTable extends Migration
             $table->string('phone');
             $table->string('address');
             $table->string('photo')->nullable();
+            $table->uuid('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users'); 
             $table->timestamps();
         });
     }
