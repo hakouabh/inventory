@@ -88,7 +88,7 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/category/'+id)
+  	axios.get('/api/categories/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
   },
@@ -97,7 +97,7 @@
     
   categoryUpdate(){
   	  let id = this.$route.params.id
-       axios.patch('/api/category/'+id,this.form)
+       axios.post('/api/categories/update/'+id,this.form)
        .then(() => {
         this.$router.push({ name: 'category'})
         Notification.success()

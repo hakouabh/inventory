@@ -1,23 +1,78 @@
 <?php
+use Illuminate\Http\Request;
 
-Route::group([
+// Route::group([
 
-    'middleware' => 'api',
-    'prefix' => 'auth'
+//     'middleware' => 'api',
+//     'prefix' => 'auth'
 
-], function ($router) {
+// ], function ($router) {
 
-    Route::post('login', 'AuthController@login');
-    Route::post('logout', 'AuthController@logout');
-    Route::post('signup', 'AuthController@signup');
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+//     Route::post('login', 'AuthController@login');
+//     Route::post('logout', 'AuthController@logout');
+//     Route::post('signup', 'AuthController@signup');
+//     Route::post('refresh', 'AuthController@refresh');
+//     Route::post('me', 'AuthController@me');
 
+// });
+
+Route::middleware('auth:api')->group(function () {
+  Route::get('/user', function (Request $request) {
+      return $request->user();
+  });
+});
+
+Route::group(['prefix' => 'auth'], function()
+{
+  
+  Route::post('login', [
+    'as' => 'api.auth.login',
+    'uses' => 'AuthController@login',
+  ]);
+  Route::post('/register', [
+    'as' => 'api.auth.register',
+    'uses' => 'AuthController@register',
+  ]);
+  Route::post('/logout', [
+    'as' => 'api.auth.logout',
+    'middleware' => 'auth:api',
+    'uses' => 'AuthController@logout',
+  ]);
+  Route::get('/me', [
+    'as' => 'api.auth.me',
+    'middleware' => 'auth:api',
+    'uses' => 'AuthController@me',
+  ]);
+});
+
+// Categories API
+Route::group(['prefix' => 'categories'], function()
+{
+  Route::post('/store', [
+    'as' => 'api.categories.store',
+    'uses' => 'Api\CategoryController@store',
+  ]);
+  Route::get('/index/{user_id}', [
+    'as' => 'api.categories.index',
+    'uses' => 'Api\CategoryController@index',
+  ]);
+  Route::get('/show/{id}', [
+    'as' => 'api.categories.show',
+    'uses' => 'Api\CategoryController@show',
+  ]);
+  Route::put('/update/{id}', [
+    'as' => 'api.categories.update',
+    'uses' => 'Api\CategoryController@update',
+  ]);
+  Route::get('/destroy/{id}', [
+    'as' => 'api.categories.destroy',
+    'uses' => 'Api\CategoryController@destroy',
+  ]);
 });
 
 Route::apiResource('/employee', 'Api\EmployeeController');
 Route::apiResource('/supplier', 'Api\SupplierController');
-Route::apiResource('/category', 'Api\CategoryController');
+// Route::apiResource('/category', 'Api\CategoryController');
 Route::apiResource('/product', 'Api\ProductController');
 Route::apiResource('/expense', 'Api\ExpenseController');
 Route::apiResource('/customer', 'Api\CustomerController');

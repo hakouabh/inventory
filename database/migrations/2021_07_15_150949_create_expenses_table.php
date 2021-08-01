@@ -14,7 +14,7 @@ class CreateExpensesTable extends Migration
     public function up()
     {
         Schema::create('expenses', function (Blueprint $table) {
-            $table->id('id');
+            $table->uuid('id');
             $table->text('details');
             $table->string('amount');
             $table->string('expense_date')->nullable();

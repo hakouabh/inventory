@@ -82,7 +82,7 @@
   }, 
   methods:{
     signup(){
-      axios.post('/api/auth/signup',this.form)
+      axios.post('/api/auth/register',this.form)
       .then(res => {
         User.responseAfterLogin(res)
         Toast.fire({

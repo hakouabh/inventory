@@ -79,8 +79,8 @@
     data(){
     return {
       form:{
-        category_name: null
-        
+        category_name: null,
+        user_id:null
       },
       errors:{}
     }
@@ -89,7 +89,8 @@
   methods:{
     
   categoryInsert(){
-       axios.post('/api/category',this.form)
+      this.form.user_id = localStorage.getItem('user_id');
+       axios.post('/api/categories/store/',this.form)
        .then(() => {
         this.$router.push({ name: 'category'})
         Notification.success()

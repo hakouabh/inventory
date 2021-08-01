@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="form-group">
-          <button type="submit" class="btn btn-primary btn-block">{{ $t("form.button.login") }} </button>
+          <button type="submit" class="btn btn-primary btn-block">{{ $t("button.login") }} </button>
         </div>
         <hr>
         
@@ -76,6 +76,7 @@
     login(){
       axios.post('/api/auth/login',this.form)
       .then(res => {
+        console.log(res)
         User.responseAfterLogin(res)
         Toast.fire({
           icon: 'success',

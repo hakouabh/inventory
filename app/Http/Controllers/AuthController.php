@@ -18,7 +18,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('JWT', ['except' => ['login','signup']]);
+        
     }
 
     // 
@@ -81,7 +81,7 @@ class AuthController extends Controller
 
 
 
-    public function signup(Request $request){
+    public function register(Request $request){
      
      $validateData = $request->validate([
        'email' => 'required|unique:users|max:255',
@@ -113,22 +113,15 @@ class AuthController extends Controller
      */
     protected function respondWithToken($token)
     {
+        $user=Auth::user();
         return response()->json([
-            'access_token' => $token,
+            'access_token' => $user->createToken('API')->accessToken,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 60,
-            'name' => auth()->user()->name,
-            'user_id' => auth()->user()->id,
-            'email' => auth()->user()->email,
+            'expires_in' => 31536000,
+            'name' => $user->name,
+            'user_id' => $user->id,
+            'email' => $user->email,
         ]);
     }
-
-
-
-
-
-
-
-
 }
  

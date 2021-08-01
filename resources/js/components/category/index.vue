@@ -82,7 +82,7 @@
  
   methods:{
     allCategory(){
-      axios.get('/api/category/')
+      axios.get('/api/categories/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.categories = data))
       .catch()
     },
@@ -97,7 +97,7 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                axios.delete('/api/category/'+id)
+                axios.get('/api/categories/destroy/'+id)
                .then(() => {
                 this.categories = this.categories.filter(category => {
                   return category.id != id

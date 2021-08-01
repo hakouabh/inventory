@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule; 
 
 
 use DB;
@@ -17,9 +18,9 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
-        $category = Category::all();
+        $category = DB::table('categories')->where('user_id',$user_id)->get();
         return response()->json($category);
     }
 
@@ -34,20 +35,14 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-            'category_name' => 'required|unique:categories|max:255'
-   
-           ]);
-        //    $category = new Category;
-        //    $category->category_name = $request->category_name;
+            'category_name' => ['required',Rule::unique('categories')->where('user_id',$request->user_id),'max:255']
+           ]); 
+           $category = Category::create([
+            'category_name' => $request->input('category_name'),
+            'user_id' => $request->user_id
+          ]);
+            return response()->json('ok');
 
-        //    $category->save();
-        try {
-             
-            return response()->json(Auth::check());
-        } catch (\Tymon\JWTAuth\Exceptions\UserNotDefinedException $e) {
-            // do something
-            return response()->json('error');
-        }
     }
 
     /**
@@ -86,6 +81,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        DB::table('categories')->where('id',$id)->delete();
+        // DB::table('categories')->where('id',$id)->delete();
+        $category = Category::find($id);
+        
+        $category->delete();
     }
 }
