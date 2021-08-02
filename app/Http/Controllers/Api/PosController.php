@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use DateTime;
+use App\Model\Order;
+use App\Model\OrderDetails;
+use App\Model\Product;
 
 class PosController extends Controller
 {
@@ -25,37 +28,40 @@ class PosController extends Controller
       'payby' => 'required',
    	 ]);
    
-    $data = array();
-    $data['customer_id'] = $request->customer_id;
-    $data['qty'] = $request->qty;
-    $data['sub_total'] = $request->subtotal;
-    $data['total'] = $request->total;
-    $data['pay'] = $request->pay;
-    $data['payby'] = $request->payby;
-    $data['order_date'] = date('d/m/Y');
-    $data['order_month'] = date('F');
-    $data['order_year'] = date('Y');
-    $order_id = DB::table('orders')->insertGetId($data);
+    $order = new Order;
+    $order->customer_id = $request->customer_id;
+    $order->qty = $request->qty;
+    $order->sub_total = $request->subtotal;
+    $order->total = $request->total;
+    $order->pay = $request->pay;
+    $order->payby = $request->payby;
+    $order->order_date = date('d/m/Y');
+    $order->order_month = date('F');
+    $order->order_year = date('Y');
+    $order->user_id = $request->user_id;
+    $order->save();
+    $_id = $order->id;
 
     $contents = DB::table('pos')->get();
 
-    $odata = array();
     foreach ($contents as $content) {
-    $odata['order_id'] = $order_id;
-    $odata['product_id'] = $content->pro_id;
-    $odata['pro_quantity'] = $content->pro_quantity;
-    $odata['product_price'] = $content->product_price;
-    $odata['discount'] = $request->total_discount;
-    $odata['sub_total'] = $content->sub_total;
-    DB::table('order_details')->insert($odata); 
+    $order_details = new OrderDetails;
+    $order_details->order_id = $_id;
+    $order_details->product_id = $content->pro_id;
+    $order_details->pro_quantity = $content->pro_quantity;
+    $order_details->product_price = $content->product_price;
+    $order_details->discount = $request->total_discount;
+    $order_details->sub_total = $content->sub_total;
+    
+    $order_details->save(); 
 
        
-        DB::table('products')
-        	->where('id',$content->pro_id)
-        	->update(['product_quantity' => DB::raw('product_quantity -' .$content->pro_quantity)]);
+        Product::where('id',$content->pro_id)
+        	->update(['product_quantity' => DB::raw('product_quantity -' .$content->pro_quantity),
+        ]);
 
     }
-    DB::table('pos')->delete();
+    DB::table('pos')->where('user_id',$request->user_id)->delete();
     return response('Done'); 
 
    }
@@ -75,7 +81,9 @@ class PosController extends Controller
         ->whereBetween('orders.order_date', [
           $done_from,
           $done_to
-        ])->get();
+        ])
+        ->where('orders.user_id',$request->user_id)
+        ->get();
 
     return response()->json($order);
 
@@ -83,29 +91,40 @@ class PosController extends Controller
 
 
 
-   public function TodaySell(){
+   public function TodaySell($user_id){
      $date = date('d/m/Y');
-     $sell = DB::table('orders')->where('order_date',$date)->sum('total');
+     $sell = DB::table('orders')
+     ->where('order_date',$date)
+     ->where('user_id',$user_id)
+     ->sum('total');
      return response()->json($sell);
    }
 
-   public function TodayIncome(){
+   public function TodayIncome($user_id){
      $date = date('d/m/Y');
-     $income = DB::table('orders')->where('order_date',$date)->sum('pay');
+     $income = DB::table('orders')
+     ->where('order_date',$date)
+     ->where('user_id',$user_id)
+     ->sum('pay');
      return response()->json($income);
    }
 
   
 
-   public function TodayExpense(){
+   public function TodayExpense($user_id){
     $date = date('d/m/Y');
-     $expense = DB::table('expenses')->where('expense_date',$date)->sum('amount');
+     $expense = DB::table('expenses')
+     ->where('expense_date',$date)
+     ->where('user_id',$user_id)
+     ->sum('amount');
      return response()->json($expense);
    }
 
- public function Stockout(){
+ public function Stockout($user_id){
 
-  $product = DB::table('products')->where('product_quantity','<','1')->get();
+  $product = DB::table('products')
+  ->where('user_id',$user_id)
+  ->where('product_quantity','<','1')->get();
   return response()->json($product);
 
  }

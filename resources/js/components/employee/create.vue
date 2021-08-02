@@ -165,7 +165,8 @@
         address: null,
         photo: null,
         nid: null,
-        joining_date: null
+        joining_date: null,
+        user_id:null 
       },
       errors:{}
     }
@@ -187,7 +188,8 @@
 
     },
   employeeInsert(){
-       axios.post('/api/employee',this.form)
+        this.form.user_id = localStorage.getItem('user_id');
+       axios.post('/api/employees/store',this.form)
        .then(() => {
         this.$router.push({ name: 'employee'})
         Notification.success()

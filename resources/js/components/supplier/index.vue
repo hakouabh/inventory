@@ -89,7 +89,7 @@
  
   methods:{
     allSupplier(){
-      axios.get('/api/supplier/')
+      axios.get('/api/suppliers/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.suppliers = data))
       .catch()
     },
@@ -104,7 +104,7 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                axios.delete('/api/supplier/'+id)
+                axios.get('/api/suppliers/destroy/'+id)
                .then(() => {
                 this.suppliers = this.suppliers.filter(supplier => {
                   return supplier.id != id

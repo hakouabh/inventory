@@ -14,9 +14,9 @@ class ExpenseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
-        $expense = Expense::all();
+        $expense = DB::table('expenses')->where('user_id',$user_id)->get();
         return response()->json($expense);
     }
 
@@ -39,7 +39,8 @@ class ExpenseController extends Controller
          $expense->details = $request->details;
          $expense->amount = $request->amount;
          $expense->expense_date = date('d/m/y');
-         
+         $expense->user_id = $request->user_id;
+
          $expense->save(); 
     }
 
@@ -80,6 +81,8 @@ class ExpenseController extends Controller
      */
     public function destroy($id)
     {
-       DB::table('expenses')->where('id',$id)->delete();
+        $expense = Expense::find($id);
+        
+        $expense->delete();
     }
 }

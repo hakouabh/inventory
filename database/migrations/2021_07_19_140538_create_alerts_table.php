@@ -15,7 +15,8 @@ class CreateAlertsTable extends Migration
     {
         Schema::create('alerts', function (Blueprint $table) {
             $table->uuid('id');
-            $table->integer('product_id');
+            $table->uuid('product_id');
+            $table->uuid('user_id');
             $table->timestamps();
         });
     }

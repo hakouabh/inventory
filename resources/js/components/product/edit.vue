@@ -191,16 +191,16 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/product/'+id)
+  	axios.get('/api/products/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
 
 // Category Collected 
- axios.get('/api/category/')
+      axios.get('/api/categories/index/'+localStorage.getItem('user_id'))
     .then(({data}) => (this.categories = data))
 
 // Supplier Collected 
-    axios.get('/api/supplier/')
+      axios.get('/api/suppliers/index/'+localStorage.getItem('user_id'))
     .then(({data}) => (this.suppliers = data)) 
 
   },
@@ -222,7 +222,7 @@
     },
   ProductUpdate(){
   	  let id = this.$route.params.id
-       axios.patch('/api/product/'+id,this.form)
+       axios.put('/api/products/update/'+id,this.form)
        .then(() => {
         this.$router.push({ name: 'product'})
         Notification.success()

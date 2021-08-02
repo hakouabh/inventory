@@ -15,9 +15,9 @@ class SupplierController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
-        $supplier = Supplier::all();
+        $supplier = DB::table('suppliers')->where('user_id',$user_id)->get();
         return response()->json($supplier);
     }
 
@@ -31,7 +31,7 @@ class SupplierController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-         'name' => 'required|unique:suppliers|max:255',
+         'name' => 'required|max:255',
          'email' => 'required',
          'phone' => 'required|unique:suppliers',
 
@@ -55,6 +55,8 @@ class SupplierController extends Controller
          $supplier->shopname = $request->shopname;
          $supplier->address = $request->address;
          $supplier->photo = $image_url;
+         $supplier->user_id = $request->user_id;
+
          $supplier->save(); 
      }else{
          $supplier = new Supplier;
@@ -63,7 +65,8 @@ class SupplierController extends Controller
          $supplier->phone = $request->phone;
          $supplier->shopname = $request->shopname;
          $supplier->address = $request->address;
-        
+         $supplier->user_id = $request->user_id;
+
          $supplier->save(); 
 
      } 
@@ -136,7 +139,7 @@ class SupplierController extends Controller
      */
     public function destroy($id)
     {
-       $supplier = DB::table('suppliers')->where('id',$id)->first();
+       $supplier = Supplier::find($id);
        $photo = $supplier->photo;
        if ($photo) {
          unlink($photo);

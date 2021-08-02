@@ -85,13 +85,13 @@
         this.$router.push({ name: 'home'})
       })
 
-       .catch(error =>this.errors = error.response.data.errors)
-       .catch(
-            Toast.fire({
+       .catch(error =>{
+         this.errors = error.response.data.errors
+                     Toast.fire({
               icon: 'warning',
               title: 'Invalid Email or Password'
-            })        
-        )
+            })
+         })
     }
   }
 

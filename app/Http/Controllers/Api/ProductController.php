@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use DB;
 use Image;
 use App\Model\Product;
+use Illuminate\Validation\Rule; 
+
 
 class ProductController extends Controller
 {
@@ -15,12 +17,13 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
         $product = DB::table('products')
                      ->join('categories','products.category_id','categories.id')
                      ->join('suppliers','products.supplier_id','suppliers.id')
                      ->select('categories.category_name','suppliers.name','products.*')
+                     ->where('products.user_id',$user_id)
                      ->orderBy('products.id','DESC')
                      ->get();
         return response()->json($product);
@@ -47,7 +50,7 @@ class ProductController extends Controller
     {
         $validateData = $request->validate([
             'product_name' => 'required|max:255',
-            'product_code' => 'required|unique:products|max:255',
+            'product_code' => ['required',Rule::unique('products')->where('user_id',$request->user_id),'max:255'],
             'category_id' => 'required',
             'supplier_id' => 'required',
             'buying_price' => 'required',
@@ -79,6 +82,7 @@ class ProductController extends Controller
             $product->product_quantity = $request->product_quantity;
             $product->min_quantity = $request->min_quantity;
             $product->image = $image_url;
+            $product->user_id = $request->user_id;
             $product->save(); 
         }else{
             $product = new Product;
@@ -91,7 +95,8 @@ class ProductController extends Controller
             $product->buying_date= $request->buying_date;
             $product->product_quantity = $request->product_quantity;
             $product->min_quantity = $request->min_quantity;
-            
+            $product->user_id = $request->user_id;
+
             $product->save(); 
    
         } 
@@ -175,7 +180,7 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        $product = DB::table('products')->where('id',$id)->first();
+        $product = Product::find($id);
        $photo = $product->image;
        if ($photo) {
          unlink($photo);
@@ -191,12 +196,13 @@ class ProductController extends Controller
         DB::table('products')->where('id',$id)->update($data);
         
     }
-    public function StockAll()
+    public function StockAll($user_id)
     {
         $product = DB::table('products')
                      ->join('categories','products.category_id','categories.id')
                      ->join('suppliers','products.supplier_id','suppliers.id')
                      ->select('categories.category_name','suppliers.name','products.*')
+                     ->where('products.user_id',$user_id)
                      ->orderBy('products.product_quantity','ASC')
                      ->get();
         return response()->json($product);

@@ -89,7 +89,7 @@
  
   methods:{
     allCustomer(){
-      axios.get('/api/customer/')
+      axios.get('/api/customers/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.customers = data))
       .catch()
     },
@@ -104,7 +104,7 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                axios.delete('/api/customer/'+id)
+                axios.get('/api/customers/destroy/'+id)
                .then(() => {
                 this.customers = this.customers.filter(customer => {
                   return customer.id != id

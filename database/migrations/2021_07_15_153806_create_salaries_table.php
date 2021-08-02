@@ -15,7 +15,7 @@ class CreateSalariesTable extends Migration
     {
         Schema::create('salaries', function (Blueprint $table) {
             $table->uuid('id');
-            $table->integer('employee_id');
+            $table->uuid('employee_id');
             $table->string('amount')->nullable();
             $table->string('salary_date')->nullable();
             $table->string('salary_month')->nullable();

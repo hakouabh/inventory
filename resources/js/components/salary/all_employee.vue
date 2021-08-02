@@ -89,7 +89,7 @@
  
   methods:{
     allEmployee(){
-      axios.get('/api/employee/')
+      axios.get('/api/employees/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.employees = data))
       .catch()
     },

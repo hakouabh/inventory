@@ -85,7 +85,7 @@
  
   methods:{
     allOrder(){
-      axios.get('/api/orders/')
+      axios.get('/api/orders/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.orders = data))
       .catch()
     },

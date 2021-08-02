@@ -96,7 +96,7 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/expense/'+id)
+  	axios.get('/api/expenses/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
   },
@@ -105,7 +105,7 @@
     
   expenseUpdate(){
   	  let id = this.$route.params.id
-       axios.patch('/api/expense/'+id,this.form)
+       axios.put('/api/expenses/update/'+id,this.form)
        .then(() => {
         this.$router.push({ name: 'expense'})
         Notification.success()

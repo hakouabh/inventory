@@ -144,7 +144,8 @@
         phone: null,
         shopname: null,
         address: null,
-        photo: null
+        photo: null,
+        user_id:null
       },
       errors:{}
     }
@@ -166,7 +167,8 @@
 
     },
   supplierInsert(){
-       axios.post('/api/supplier',this.form)
+        this.form.user_id = localStorage.getItem('user_id');
+       axios.post('/api/suppliers/store',this.form)
        .then(() => {
         this.$router.push({ name: 'supplier'})
         Notification.success()

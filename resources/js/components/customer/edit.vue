@@ -138,7 +138,7 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/customer/'+id)
+  	axios.get('/api/customers/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
   },
@@ -160,7 +160,7 @@
     },
   customerUpdate(){
   	  let id = this.$route.params.id
-       axios.patch('/api/customer/'+id,this.form)
+       axios.put('/api/customers/update/'+id,this.form)
        .then(() => {
         this.$router.push({ name: 'customer'})
         Notification.success()

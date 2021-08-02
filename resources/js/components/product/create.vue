@@ -179,7 +179,8 @@
         buying_date: null,
         image: null,
         product_quantity: null,
-        min_quantity: null
+        min_quantity: null,
+        user_id:''
 
       },
       errors:{},
@@ -204,7 +205,8 @@
 
     },
   ProductInsert(){
-       axios.post('/api/product',this.form)
+      this.form.user_id = localStorage.getItem('user_id');
+       axios.post('/api/products/store',this.form)
        .then(() => {
         this.$router.push({ name: 'product'})
         Notification.success()
@@ -213,10 +215,10 @@
      },
   },
   created(){
-    axios.get('/api/category/')
+      axios.get('/api/categories/index/'+localStorage.getItem('user_id'))
     .then(({data}) => (this.categories = data))
 
-    axios.get('/api/supplier/')
+      axios.get('/api/suppliers/index/'+localStorage.getItem('user_id'))
     .then(({data}) => (this.suppliers = data))
 
   } 

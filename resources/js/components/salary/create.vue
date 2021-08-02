@@ -129,7 +129,7 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/employee/'+id)
+  	axios.get('/api/employees/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
   },

@@ -89,7 +89,7 @@
  
   methods:{
     allEmployee(){
-      axios.get('/api/employee/')
+      axios.get('/api/employees/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.employees = data))
       .catch()
     },
@@ -104,7 +104,7 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                axios.delete('/api/employee/'+id)
+                axios.get('/api/employees/destroy/'+id)
                .then(() => {
                 this.employees = this.employees.filter(employee => {
                   return employee.id != id

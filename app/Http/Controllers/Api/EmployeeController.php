@@ -15,10 +15,10 @@ class EmployeeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
-       $employee = Employee::all();
-       return response()->json($employee);
+      $employee = DB::table('employees')->where('user_id',$user_id)->get();
+      return response()->json($employee);
     }
 
    
@@ -31,7 +31,7 @@ class EmployeeController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-         'name' => 'required|unique:employees|max:255',
+         'name' => 'required|max:255',
          'email' => 'required',
          'phone' => 'required|unique:employees',
 
@@ -57,6 +57,7 @@ class EmployeeController extends Controller
          $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
          $employee->photo = $image_url;
+         $employee->user_id = $request->user_id;
          $employee->save(); 
      }else{
         $employee = new Employee;
@@ -67,6 +68,7 @@ class EmployeeController extends Controller
          $employee->address = $request->address;
          $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
+         $employee->user_id = $request->user_id;
          
          $employee->save(); 
 
@@ -143,7 +145,7 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-       $employee = DB::table('employees')->where('id',$id)->first();
+       $employee = Employee::find($id);
        $photo = $employee->photo;
        if ($photo) {
          unlink($photo);

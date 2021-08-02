@@ -153,7 +153,7 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/supplier/'+id)
+  	axios.get('/api/suppliers/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
   },
@@ -175,7 +175,7 @@
     },
   supplierUpdate(){
   	  let id = this.$route.params.id
-       axios.patch('/api/supplier/'+id,this.form)
+       axios.put('/api/suppliers/update/'+id,this.form)
        .then(() => {
         this.$router.push({ name: 'supplier'})
         Notification.success()

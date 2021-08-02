@@ -281,28 +281,28 @@
  },
   methods:{
     TodaySell(){
-      axios.get('/api/today/sell')
+      axios.get('/api/today/sell/'+localStorage.getItem('user_id'))
         .then(({data}) => (this.todaysell = data))
         .catch()
      },
      TodayIncome(){
-      axios.get('/api/today/income')
+      axios.get('/api/today/income/'+localStorage.getItem('user_id'))
         .then(({data}) => (this.income = data))
         .catch()
      },
      TodayExpense(){
-      axios.get('/api/today/expense')
+      axios.get('/api/today/expense/'+localStorage.getItem('user_id'))
         .then(({data}) => (this.expense = data))
         .catch()
      },
 
      StockOut(){
-      axios.get('/api/today/stockout')
+      axios.get('/api/today/stockout/'+localStorage.getItem('user_id'))
         .then(({data}) => (this.products = data))
         .catch()
      },
      GetStats(){
-    axios.get('/api/order/satat')
+    axios.get('/api/order/satat/'+localStorage.getItem('user_id'))
     .then(({data}) => {
       this.stats = data
       this.CreateChart();

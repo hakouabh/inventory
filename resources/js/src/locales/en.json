@@ -118,6 +118,7 @@
       "email":"Enter Email Address",
       "password":"Password",
       "phone":"Enter The Phone Number",
+      "address":"Enter The Address",
       "shop_name":"Enter The Shop Name",
       "confirm_password":"Confirm Password",
       "name":"Enter Your Full Name",

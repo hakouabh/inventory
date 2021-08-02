@@ -15,7 +15,7 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id');
-            $table->integer('customer_id');
+            $table->uuid('customer_id');
             $table->string('qty')->nullable();
             $table->string('sub_total')->nullable();
             $table->string('total')->nullable();

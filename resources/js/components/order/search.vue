@@ -134,7 +134,7 @@
   methods:{
     
   searchDate(){ 
-      var data = {date_from:this.date_from,date_to:this.date_to}
+      var data = {user_id:localStorage.getItem('user_id'),date_from:this.date_from,date_to:this.date_to}
        axios.post('/api/search/order/',data)
         .then(({data}) => (this.orders = data))
         .catch(error =>this.errors = error.response.data.errors)

@@ -262,7 +262,7 @@
       .catch()
   },
   cartProduct(){
-      axios.get('/api/cart/product/')
+      axios.get('/api/cart/product/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.carts = data))
       .catch()
   },
@@ -320,7 +320,7 @@ if (text) {
   }, 
   orderdone(){
     let total = this.subtotal;
-    var data = {qty:this.qty, subtotal:this.subtotal, customer_id:this.customer_id, payby:this.payby,total_discount:this.total_discount ,pay:this.pay, total:total }
+    var data = {user_id:localStorage.getItem('user_id'),qty:this.qty, subtotal:this.subtotal, customer_id:this.customer_id, payby:this.payby,total_discount:this.total_discount ,pay:this.pay, total:total }
 
     axios.post('/api/orderdone',data)
        .then(() => {
@@ -332,7 +332,11 @@ if (text) {
   },
   checkAlert(){
     for(let i=0;i < this.carts.length;i++){
-      axios.get('/api/AddAlert/'+this.carts[i].pro_id)
+      let data ={
+        product_id:this.carts[i].pro_id,
+        user_id:localStorage.getItem('user_id')
+      }
+      axios.post('/api/AddAlert',data)
       .then()
       .catch()
     }
@@ -340,18 +344,18 @@ if (text) {
    
     // End Cart Methods 
     allProduct(){
-      axios.get('/api/product/')
+      axios.get('/api/products/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.products = data))
       .catch()
     },
      allCategory(){
-      axios.get('/api/category/')
+      axios.get('/api/categories/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.categories = data))
       .catch()
     },
 
     allCustomer(){
-      axios.get('/api/customer/')
+      axios.get('/api/customers/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.customers = data))
       .catch(console.log('error'))
     },
@@ -360,10 +364,7 @@ if (text) {
       .then(({data}) => (this.getproducts = data))
       .catch()
     } 
-   
-
     }  
-
   } 
 
 </script>

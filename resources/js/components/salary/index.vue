@@ -81,7 +81,7 @@
  
   methods:{
     allSalary(){
-      axios.get('/api/salary/')
+      axios.get('/api/salary/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.salaries = data))
       .catch()
     },

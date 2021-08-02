@@ -86,7 +86,7 @@
  
   methods:{
     allExpense(){
-      axios.get('/api/expense/')
+      axios.get('/api/expenses/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.expenses = data))
       .catch()
     },
@@ -101,7 +101,7 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                axios.delete('/api/expense/'+id)
+                axios.get('/api/expenses/destroy/'+id)
                .then(() => {
                 this.expenses = this.expenses.filter(expense => {
                   return expense.id != id

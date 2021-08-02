@@ -1928,7 +1928,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allAlert: function allAlert() {
       var _this = this;
 
-      axios.get('/api/alert/product').then(function (_ref) {
+      axios.get('/api/alert/product/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this.alerts = data;
       })["catch"]();
@@ -2097,11 +2097,12 @@ __webpack_require__.r(__webpack_exports__);
           name: 'home'
         });
       })["catch"](function (error) {
-        return _this.errors = error.response.data.errors;
-      })["catch"](Toast.fire({
-        icon: 'warning',
-        title: 'Invalid Email or Password'
-      }));
+        _this.errors = error.response.data.errors;
+        Toast.fire({
+          icon: 'warning',
+          title: 'Invalid Email or Password'
+        });
+      });
     }
   }
 });
@@ -2780,7 +2781,8 @@ __webpack_require__.r(__webpack_exports__);
         email: null,
         phone: null,
         address: null,
-        photo: null
+        photo: null,
+        user_id: null
       },
       errors: {}
     };
@@ -2807,7 +2809,8 @@ __webpack_require__.r(__webpack_exports__);
     customerInsert: function customerInsert() {
       var _this2 = this;
 
-      axios.post('/api/customer', this.form).then(function () {
+      this.form.user_id = localStorage.getItem('user_id');
+      axios.post('/api/customers/store', this.form).then(function () {
         _this2.$router.push({
           name: 'customer'
         });
@@ -2977,7 +2980,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/customer/' + id).then(function (_ref) {
+  axios.get('/api/customers/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error'));
@@ -3003,7 +3006,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this3 = this;
 
     var id = this.$route.params.id;
-    axios.patch('/api/customer/' + id, this.form).then(function () {
+    axios.put('/api/customers/update/' + id, this.form).then(function () {
       _this3.$router.push({
         name: 'customer'
       });
@@ -3124,7 +3127,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allCustomer: function allCustomer() {
       var _this2 = this;
 
-      axios.get('/api/customer/').then(function (_ref) {
+      axios.get('/api/customers/index/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.customers = data;
       })["catch"]();
@@ -3142,7 +3145,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/customer/' + id).then(function () {
+          axios.get('/api/customers/destroy/' + id).then(function () {
             _this3.customers = _this3.customers.filter(function (customer) {
               return customer.id != id;
             });
@@ -3339,7 +3342,8 @@ __webpack_require__.r(__webpack_exports__);
         address: null,
         photo: null,
         nid: null,
-        joining_date: null
+        joining_date: null,
+        user_id: null
       },
       errors: {}
     };
@@ -3366,7 +3370,8 @@ __webpack_require__.r(__webpack_exports__);
     employeeInsert: function employeeInsert() {
       var _this2 = this;
 
-      axios.post('/api/employee', this.form).then(function () {
+      this.form.user_id = localStorage.getItem('user_id');
+      axios.post('/api/employees/store', this.form).then(function () {
         _this2.$router.push({
           name: 'employee'
         });
@@ -3572,7 +3577,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/employee/' + id).then(function (_ref) {
+  axios.get('/api/employees/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error'));
@@ -3598,7 +3603,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this3 = this;
 
     var id = this.$route.params.id;
-    axios.patch('/api/employee/' + id, this.form).then(function () {
+    axios.put('/api/employees/update/' + id, this.form).then(function () {
       _this3.$router.push({
         name: 'employee'
       });
@@ -3719,7 +3724,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allEmployee: function allEmployee() {
       var _this2 = this;
 
-      axios.get('/api/employee/').then(function (_ref) {
+      axios.get('/api/employees/index/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.employees = data;
       })["catch"]();
@@ -3737,7 +3742,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/employee/' + id).then(function () {
+          axios.get('/api/employees/destroy/' + id).then(function () {
             _this3.employees = _this3.employees.filter(function (employee) {
               return employee.id != id;
             });
@@ -3856,7 +3861,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       form: {
         details: '',
-        amount: ''
+        amount: '',
+        user_id: ''
       },
       errors: {}
     };
@@ -3865,7 +3871,8 @@ __webpack_require__.r(__webpack_exports__);
     expenseInsert: function expenseInsert() {
       var _this = this;
 
-      axios.post('/api/expense', this.form).then(function () {
+      this.form.user_id = localStorage.getItem('user_id');
+      axios.post('/api/expenses/store', this.form).then(function () {
         _this.$router.push({
           name: 'expense'
         });
@@ -3992,7 +3999,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/expense/' + id).then(function (_ref) {
+  axios.get('/api/expenses/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error'));
@@ -4001,7 +4008,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this2 = this;
 
     var id = this.$route.params.id;
-    axios.patch('/api/expense/' + id, this.form).then(function () {
+    axios.put('/api/expenses/update/' + id, this.form).then(function () {
       _this2.$router.push({
         name: 'expense'
       });
@@ -4119,7 +4126,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allExpense: function allExpense() {
       var _this2 = this;
 
-      axios.get('/api/expense/').then(function (_ref) {
+      axios.get('/api/expenses/index/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.expenses = data;
       })["catch"]();
@@ -4137,7 +4144,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/expense/' + id).then(function () {
+          axios.get('/api/expenses/destroy/' + id).then(function () {
             _this3.expenses = _this3.expenses.filter(function (expense) {
               return expense.id != id;
             });
@@ -4458,7 +4465,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     TodaySell: function TodaySell() {
       var _this = this;
 
-      axios.get('/api/today/sell').then(function (_ref) {
+      axios.get('/api/today/sell/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this.todaysell = data;
       })["catch"]();
@@ -4466,7 +4473,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     TodayIncome: function TodayIncome() {
       var _this2 = this;
 
-      axios.get('/api/today/income').then(function (_ref2) {
+      axios.get('/api/today/income/' + localStorage.getItem('user_id')).then(function (_ref2) {
         var data = _ref2.data;
         return _this2.income = data;
       })["catch"]();
@@ -4474,7 +4481,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     TodayExpense: function TodayExpense() {
       var _this3 = this;
 
-      axios.get('/api/today/expense').then(function (_ref3) {
+      axios.get('/api/today/expense/' + localStorage.getItem('user_id')).then(function (_ref3) {
         var data = _ref3.data;
         return _this3.expense = data;
       })["catch"]();
@@ -4482,7 +4489,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     StockOut: function StockOut() {
       var _this4 = this;
 
-      axios.get('/api/today/stockout').then(function (_ref4) {
+      axios.get('/api/today/stockout/' + localStorage.getItem('user_id')).then(function (_ref4) {
         var data = _ref4.data;
         return _this4.products = data;
       })["catch"]();
@@ -4490,7 +4497,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     GetStats: function GetStats() {
       var _this5 = this;
 
-      axios.get('/api/order/satat').then(function (_ref5) {
+      axios.get('/api/order/satat/' + localStorage.getItem('user_id')).then(function (_ref5) {
         var data = _ref5.data;
         _this5.stats = data;
 
@@ -4696,7 +4703,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allOrder: function allOrder() {
       var _this2 = this;
 
-      axios.get('/api/orders/').then(function (_ref) {
+      axios.get('/api/orders/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.orders = data;
       })["catch"]();
@@ -4854,6 +4861,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       var data = {
+        user_id: localStorage.getItem('user_id'),
         date_from: this.date_from,
         date_to: this.date_to
       };
@@ -5335,7 +5343,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   cartProduct: function cartProduct() {
     var _this4 = this;
 
-    axios.get('/api/cart/product/').then(function (_ref2) {
+    axios.get('/api/cart/product/' + localStorage.getItem('user_id')).then(function (_ref2) {
       var data = _ref2.data;
       return _this4.carts = data;
     })["catch"]();
@@ -5408,6 +5416,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
     var total = this.subtotal;
     var data = {
+      user_id: localStorage.getItem('user_id'),
       qty: this.qty,
       subtotal: this.subtotal,
       customer_id: this.customer_id,
@@ -5428,14 +5437,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   checkAlert: function checkAlert() {
     for (var i = 0; i < this.carts.length; i++) {
-      axios.get('/api/AddAlert/' + this.carts[i].pro_id).then()["catch"]();
+      var data = {
+        product_id: this.carts[i].pro_id,
+        user_id: localStorage.getItem('user_id')
+      };
+      axios.post('/api/AddAlert', data).then()["catch"]();
     }
   },
   // End Cart Methods 
   allProduct: function allProduct() {
     var _this6 = this;
 
-    axios.get('/api/product/').then(function (_ref4) {
+    axios.get('/api/products/index/' + localStorage.getItem('user_id')).then(function (_ref4) {
       var data = _ref4.data;
       return _this6.products = data;
     })["catch"]();
@@ -5443,7 +5456,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   allCategory: function allCategory() {
     var _this7 = this;
 
-    axios.get('/api/category/').then(function (_ref5) {
+    axios.get('/api/categories/index/' + localStorage.getItem('user_id')).then(function (_ref5) {
       var data = _ref5.data;
       return _this7.categories = data;
     })["catch"]();
@@ -5451,7 +5464,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   allCustomer: function allCustomer() {
     var _this8 = this;
 
-    axios.get('/api/customer/').then(function (_ref6) {
+    axios.get('/api/customers/index/' + localStorage.getItem('user_id')).then(function (_ref6) {
       var data = _ref6.data;
       return _this8.customers = data;
     })["catch"](console.log('error'));
@@ -5661,7 +5674,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         buying_date: null,
         image: null,
         product_quantity: null,
-        min_quantity: null
+        min_quantity: null,
+        user_id: ''
       },
       errors: {},
       categories: {},
@@ -5690,7 +5704,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     ProductInsert: function ProductInsert() {
       var _this2 = this;
 
-      axios.post('/api/product', this.form).then(function () {
+      this.form.user_id = localStorage.getItem('user_id');
+      axios.post('/api/products/store', this.form).then(function () {
         _this2.$router.push({
           name: 'product'
         });
@@ -5704,11 +5719,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 }, "created", function created() {
   var _this3 = this;
 
-  axios.get('/api/category/').then(function (_ref) {
+  axios.get('/api/categories/index/' + localStorage.getItem('user_id')).then(function (_ref) {
     var data = _ref.data;
     return _this3.categories = data;
   });
-  axios.get('/api/supplier/').then(function (_ref2) {
+  axios.get('/api/suppliers/index/' + localStorage.getItem('user_id')).then(function (_ref2) {
     var data = _ref2.data;
     return _this3.suppliers = data;
   });
@@ -5808,7 +5823,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/product/' + id).then(function (_ref) {
+  axios.get('/api/products/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error'));
@@ -5823,7 +5838,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this2 = this;
 
     var id = this.$route.params.id;
-    axios.post('/api/stock/update/' + id, this.form).then(function () {
+    axios.put('/api/products/stock/update/' + id, this.form).then(function () {
       _this2.AlertUpdate(id);
 
       _this2.$router.push({
@@ -6047,17 +6062,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/product/' + id).then(function (_ref) {
+  axios.get('/api/products/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error')); // Category Collected 
 
-  axios.get('/api/category/').then(function (_ref2) {
+  axios.get('/api/categories/index/' + localStorage.getItem('user_id')).then(function (_ref2) {
     var data = _ref2.data;
     return _this.categories = data;
   }); // Supplier Collected 
 
-  axios.get('/api/supplier/').then(function (_ref3) {
+  axios.get('/api/suppliers/index/' + localStorage.getItem('user_id')).then(function (_ref3) {
     var data = _ref3.data;
     return _this.suppliers = data;
   });
@@ -6083,7 +6098,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this3 = this;
 
     var id = this.$route.params.id;
-    axios.patch('/api/product/' + id, this.form).then(function () {
+    axios.put('/api/products/update/' + id, this.form).then(function () {
       _this3.$router.push({
         name: 'product'
       });
@@ -6206,7 +6221,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allProduct: function allProduct() {
       var _this2 = this;
 
-      axios.get('/api/product/').then(function (_ref) {
+      axios.get('/api/products/index/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.products = data;
       })["catch"]();
@@ -6224,7 +6239,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/product/' + id).then(function () {
+          axios.get('/api/products/destroy/' + id).then(function () {
             _this3.products = _this3.products.filter(function (product) {
               return product.id != id;
             });
@@ -6355,7 +6370,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allProduct: function allProduct() {
       var _this2 = this;
 
-      axios.get('/api/stock/all').then(function (_ref) {
+      axios.get('/api/products/stock/all/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.products = data;
       })["catch"]();
@@ -6474,7 +6489,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allEmployee: function allEmployee() {
       var _this2 = this;
 
-      axios.get('/api/employee/').then(function (_ref) {
+      axios.get('/api/employees/index/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.employees = data;
       })["catch"]();
@@ -6632,7 +6647,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/employee/' + id).then(function (_ref) {
+  axios.get('/api/employees/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error'));
@@ -6930,7 +6945,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allSalary: function allSalary() {
       var _this2 = this;
 
-      axios.get('/api/salary/').then(function (_ref) {
+      axios.get('/api/salary/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.salaries = data;
       })["catch"]();
@@ -7263,7 +7278,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   AlertProduct: function AlertProduct() {
     var _this = this;
 
-    axios.get('/api/alert/product/').then(function (_ref) {
+    axios.get('/api/alert/product/' + localStorage.getItem('user_id')).then(function (_ref) {
       var data = _ref.data;
       _this.alerts = data;
     })["catch"]();
@@ -7432,7 +7447,8 @@ __webpack_require__.r(__webpack_exports__);
         phone: null,
         shopname: null,
         address: null,
-        photo: null
+        photo: null,
+        user_id: null
       },
       errors: {}
     };
@@ -7459,7 +7475,8 @@ __webpack_require__.r(__webpack_exports__);
     supplierInsert: function supplierInsert() {
       var _this2 = this;
 
-      axios.post('/api/supplier', this.form).then(function () {
+      this.form.user_id = localStorage.getItem('user_id');
+      axios.post('/api/suppliers/store', this.form).then(function () {
         _this2.$router.push({
           name: 'supplier'
         });
@@ -7644,7 +7661,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/supplier/' + id).then(function (_ref) {
+  axios.get('/api/suppliers/show/' + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
   })["catch"](console.log('error'));
@@ -7670,7 +7687,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var _this3 = this;
 
     var id = this.$route.params.id;
-    axios.patch('/api/supplier/' + id, this.form).then(function () {
+    axios.put('/api/suppliers/update/' + id, this.form).then(function () {
       _this3.$router.push({
         name: 'supplier'
       });
@@ -7791,7 +7808,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allSupplier: function allSupplier() {
       var _this2 = this;
 
-      axios.get('/api/supplier/').then(function (_ref) {
+      axios.get('/api/suppliers/index/' + localStorage.getItem('user_id')).then(function (_ref) {
         var data = _ref.data;
         return _this2.suppliers = data;
       })["catch"]();
@@ -7809,7 +7826,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         confirmButtonText: 'Yes, delete it!'
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/supplier/' + id).then(function () {
+          axios.get('/api/suppliers/destroy/' + id).then(function () {
             _this3.suppliers = _this3.suppliers.filter(function (supplier) {
               return supplier.id != id;
             });
@@ -82432,7 +82449,7 @@ Vue.compile = compileToFunctions;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashboard","home":"Home","pos":"pos","language":"Language Center","fr":"French","en":"English","product":"Products Sold","available":"Available","stock_out":"Stock Out","paybay":{"HandCash":"Hand Cash","Cheaque":"Cheque","GiftCard":"Gift Card"},"shared":{"today_sell":"Today Sell Amount","income":"Today Income","today_due":"Today Due","today_expense":"Today Expense","repport":"weekly Recap Report","current":"Current Week","last":"Last Week","product":"Products Sold","out_stock":"Out Of Stock Product","alert_center":"Alerts Center","alert":"This product","suit":"is out of stock!","view":"Show All Alerts","logout":"Logout"},"months":{"January":"January","February":"February","March":"March","April":"April","May":"May","Jun":"Jun","July":"July","August":"August","September":"September","October":"October","November":"November","December":"December"},"router":{"expense_insert":"Expense Insert","add_category":"Add Category","all_category":"All Category","all_customer":"All Customer","add_customer":"Add Customer","all_product":"All Product","add_product":"Add Product","all_employee":"All Employee","all_supplier":"All Supplier","add_supplier":"Add Supplier","add_employee":"Add Employee","all_expense":"All Expense","add_expense":"Add Expense","alert":"Alerts","pay_salary":"Pay Salary","auth_forget":"Forget Password","create_account":"Create an Account!","login":"Login","back":"Go Back","register":"Register","account":"Already have an account?"},"cart":{"total_qty":"Total Quantity","total_discount":"Total Discount"},"form":{"label":{"product":"Product Name","employee":"Employee Name","month":"Months","employee_email":"Email","product_code":"Product Code","product_category":"Product Category","product_supplier":"Product Supplier","buying_date":"Buying Date","buying_price":"Buying Price","selling_price":"Selling Price","product_quantity":"Product Quantity","product_stock":"Product Stock","min_quantity":"Minimal Quantity","customer_name":"Customer Name","customer_email":"Customer Email","customer_address":"Customer Address","customer_phone":"Customer Phone","choose_file":"Choose File","expense_details":"Expense Details","expense_amount":"Expense Amount","search_order":"Search Order","datefrom":"Date From","dateto":"Date To","salary":"Salary","amount":"Amount"},"name":{"category":"Add Category","update_category":"Category Update","update_customer":"Customer Update","update_employee":"Employee Update","update_expense":"Expense Update","update_stock":"Stock Update","update_product":"Product Update","update_supplier":"Supplier Update","update_salary":"Update Salary"},"placeholder":{"product":"Enter The Product Name","product_code":"Enter The Product Code","email_forget":"Enter Existing Email Address","email":"Enter Email Address","password":"Password","phone":"Enter The Phone Number","shop_name":"Enter The Shop Name","confirm_password":"Confirm Password","name":"Enter Your Full Name","category_name":"Enter Your Category Name","search":"Search Here","customer_name":"Enter The Customer Name","customer_email":"Enter The Customer Email","customer_address":"Enter The Customer Adresse","customer_phone":"Enter The Customer Phone","employee_name":"Enter The Employee Name","employee_email":"Enter The Employee Email","employee_phone":"Enter The Employee Phone Number","amount":"Enter Your Amount","employee_address":"Enter The Employee Adresse","employee_salary":"Enter The Employee Salary","employee_joining_date":"Enter The Joining Date","employee_nid":"Enter The NID"},"remember":"Remember Me"},"table":{"name":{"category":"Category List","customer":"Customer List","employee":"Employee List","product":"Product List","supplier":"Supplier List","orders":"Today Orders","orders_details":"Order Details","stock":"Stock","sallary_details":"All Salary Details","sallary_employee":"Employee Salary Details"},"feild":{"category_name":"Category Name","action":"Action","photo":"Photo","image":"Image","name":"Name","email":"Email","sku":"Sku","shop_name":"Shop Name","month":"Month","discount":"Discount","address":"Address","quantity":"Quantity","phone":"Phone","status":"Status","joininig_date":"Joining Date","sallery":"Sallery","details":"Details","amount":"Amount","date":"Date","total_amount":"Total Amount","total":"Total ","pay":"Pay","product":"Product Name","payby":"Pay By","through":"Pay Through","sub_total":"Sub Total","pay_amount":"Pay Amount","category":"Category","buying_price":"Buying Price","selling_price":"Selling Price","price":"Unit Price"},"button":{"edit":"Edit","edit_salary":"Edit Salary","delete":"Delete","view":"View","search":"Search","pay_salary":"Pay Salary"}},"button":{"auth_forget":"Forget Password","back_login":"Back to Login!","login":"Login","register":"Register","submit":"Submit","update":"Update","paynow":"Pay Now"}}');
+module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashboard","home":"Home","pos":"pos","language":"Language Center","fr":"French","en":"English","product":"Products Sold","available":"Available","stock_out":"Stock Out","paybay":{"HandCash":"Hand Cash","Cheaque":"Cheque","GiftCard":"Gift Card"},"shared":{"today_sell":"Today Sell Amount","income":"Today Income","today_due":"Today Due","today_expense":"Today Expense","repport":"weekly Recap Report","current":"Current Week","last":"Last Week","product":"Products Sold","out_stock":"Out Of Stock Product","alert_center":"Alerts Center","alert":"This product","suit":"is out of stock!","view":"Show All Alerts","logout":"Logout"},"months":{"January":"January","February":"February","March":"March","April":"April","May":"May","Jun":"Jun","July":"July","August":"August","September":"September","October":"October","November":"November","December":"December"},"router":{"expense_insert":"Expense Insert","add_category":"Add Category","all_category":"All Category","all_customer":"All Customer","add_customer":"Add Customer","all_product":"All Product","add_product":"Add Product","all_employee":"All Employee","all_supplier":"All Supplier","add_supplier":"Add Supplier","add_employee":"Add Employee","all_expense":"All Expense","add_expense":"Add Expense","alert":"Alerts","pay_salary":"Pay Salary","auth_forget":"Forget Password","create_account":"Create an Account!","login":"Login","back":"Go Back","register":"Register","account":"Already have an account?"},"cart":{"total_qty":"Total Quantity","total_discount":"Total Discount"},"form":{"label":{"product":"Product Name","employee":"Employee Name","month":"Months","employee_email":"Email","product_code":"Product Code","product_category":"Product Category","product_supplier":"Product Supplier","buying_date":"Buying Date","buying_price":"Buying Price","selling_price":"Selling Price","product_quantity":"Product Quantity","product_stock":"Product Stock","min_quantity":"Minimal Quantity","customer_name":"Customer Name","customer_email":"Customer Email","customer_address":"Customer Address","customer_phone":"Customer Phone","choose_file":"Choose File","expense_details":"Expense Details","expense_amount":"Expense Amount","search_order":"Search Order","datefrom":"Date From","dateto":"Date To","salary":"Salary","amount":"Amount"},"name":{"category":"Add Category","update_category":"Category Update","update_customer":"Customer Update","update_employee":"Employee Update","update_expense":"Expense Update","update_stock":"Stock Update","update_product":"Product Update","update_supplier":"Supplier Update","update_salary":"Update Salary"},"placeholder":{"product":"Enter The Product Name","product_code":"Enter The Product Code","email_forget":"Enter Existing Email Address","email":"Enter Email Address","password":"Password","phone":"Enter The Phone Number","address":"Enter The Address","shop_name":"Enter The Shop Name","confirm_password":"Confirm Password","name":"Enter Your Full Name","category_name":"Enter Your Category Name","search":"Search Here","customer_name":"Enter The Customer Name","customer_email":"Enter The Customer Email","customer_address":"Enter The Customer Adresse","customer_phone":"Enter The Customer Phone","employee_name":"Enter The Employee Name","employee_email":"Enter The Employee Email","employee_phone":"Enter The Employee Phone Number","amount":"Enter Your Amount","employee_address":"Enter The Employee Adresse","employee_salary":"Enter The Employee Salary","employee_joining_date":"Enter The Joining Date","employee_nid":"Enter The NID"},"remember":"Remember Me"},"table":{"name":{"category":"Category List","customer":"Customer List","employee":"Employee List","product":"Product List","supplier":"Supplier List","orders":"Today Orders","orders_details":"Order Details","stock":"Stock","sallary_details":"All Salary Details","sallary_employee":"Employee Salary Details"},"feild":{"category_name":"Category Name","action":"Action","photo":"Photo","image":"Image","name":"Name","email":"Email","sku":"Sku","shop_name":"Shop Name","month":"Month","discount":"Discount","address":"Address","quantity":"Quantity","phone":"Phone","status":"Status","joininig_date":"Joining Date","sallery":"Sallery","details":"Details","amount":"Amount","date":"Date","total_amount":"Total Amount","total":"Total ","pay":"Pay","product":"Product Name","payby":"Pay By","through":"Pay Through","sub_total":"Sub Total","pay_amount":"Pay Amount","category":"Category","buying_price":"Buying Price","selling_price":"Selling Price","price":"Unit Price"},"button":{"edit":"Edit","edit_salary":"Edit Salary","delete":"Delete","view":"View","search":"Search","pay_salary":"Pay Salary"}},"button":{"auth_forget":"Forget Password","back_login":"Back to Login!","login":"Login","register":"Register","submit":"Submit","update":"Update","paynow":"Pay Now"}}');
 
 /***/ }),
 
@@ -82443,7 +82460,7 @@ module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashb
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"pos_dashboard":"Tableau de bord POS ","dashboard":"Tableau de bord","home":"Accueil","pos":"pos","language":"Centre de langue","fr":"français","en":"Anglais","product":"Produits vendus","available":"Disponible","stock_out":"Rupture de stock","paybay":{"HandCash":"En espèces","Cheaque":"Chèque","GiftCard":"Carte cadeau"},"shared":{"today_sell":"Total de vente aujourd\'hui","income":"Revenu d\'aujourd\'hui","today_due":"Today Due","today_expense":"Dépenses d\'aujourd\'hui","repport":"rapport de la semaine","current":"Cette semaine","last":"La semaine dernière","product":"Produits vendus","out_stock":"Produit en rupture de stock","alert_center":"Centre d\'alertes","alert":"Ce produit","suit":"Est en rupture de stock!","view":"Afficher toutes les alertes","logout":"Se déconnecter"},"months":{"January":"Janvier","February":"Février","March":"Mars","April":"Avril","May":"May","Jun":"Juin","July":"Juillet","August":"Aout","September":"Séptembre","October":"Octobre","November":"Novembre","December":"Décembre"},"router":{"expense_insert":"Insérer des dépenses","add_category":"Ajouter une Catégorie","all_category":"Toutes les catégories","all_customer":"Toutes les Clients","add_customer":"Ajouter un Client","all_product":"Toutes les Produits","add_product":"Ajouter un Produit","all_employee":"Tous les employés","all_supplier":"Tous les fournisseurs","add_supplier":"Ajouter un fournisseur","add_employee":"Ajouter un employé","all_expense":"Toutes les dépenses","add_expense":"Ajouter une dépense","alert":"Alertes","pay_salary":"Payer le salaire","auth_forget":"Mot de passe oublié","create_account":"Créer un compte!","login":"Se Connecter","back":"Retourner","register":"S\'inscrire","account":"Vous avez déjà un compte?"},"cart":{"total_qty":"la Quantité totale","total_discount":"Remise totale"},"form":{"label":{"product":"Nom du produit","employee":"Nom de l\'employé","month":"Mois","employee_email":"E-mail","product_code":"Code du produit","product_category":"Catégorie de produit","product_supplier":"Fournisseur de produits","buying_date":"Date d\'achat","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de Vente","product_quantity":"Quantité","product_stock":"Stock de produits","min_quantity":"Quantité minimale","customer_name":"Nom du client","customer_email":"E-mail","customer_address":"Adresse du client","customer_phone":"Téléphone du client","choose_file":"Importer le fichier","expense_details":"Détails des dépenses","expense_amount":"Montant","search_order":"Rechercher la commande","datefrom":"Date de","dateto":"Date à","salary":"Salaire","amount":"Montant"},"name":{"category":"Ajouter une catégorie","update_category":"Mettre à jour la catégorie","update_customer":"Mettre à jour le Client","update_employee":"Mettre à jour l\'employée","update_expense":"Mettre à jour la dépense","update_stock":"Mise à jour de stocks","update_product":"Mettre à jour le Produit","update_supplier":"Mettre à jour le fourniseur","update_salary":"Mettre à jour le salaire"},"placeholder":{"product":"Entrez le nom du produit","product_code":"Entrez le Code-barres","email_forget":"Entrez l\'adresse e-mail existante","email":"Entrer l\'adresse e-mail","password":"Mot de passe","phone":"Entrez le numéro de téléphone","shop_name":"Entrez le nom de la boutique","confirm_password":"Confirmez le mot de passe","name":"Entrez votre nom complet","category_name":"Entrez le nom de la catégorie","search":"Cherche ici","customer_name":"Entrez le nom du client","customer_email":"Entrez E-mail du client","customer_address":"Entrez l\'adresse du client","customer_phone":"Entrez le téléphone du client","employee_name":"Entrez le nom de l\'employé","employee_email":"Entrez E-mail de l\'employé","employee_phone":"Entrez le téléphone de l\'employé","amount":"Entrez votre montant","employee_address":"Entrez l\'adresse de l\'employé","employee_salary":"Entrez le salaire de l\'employé","employee_joining_date":"Entrez la date d\'adhésion","employee_nid":"Entrez le NID"},"remember":"Rester connecté"},"table":{"name":{"category":"Liste des catégories","customer":"Liste des Client","employee":"Liste des Employées","product":"Liste des Produits","supplier":"Liste des founiseures","orders":"Vente d\'aujourd\'hui","orders_details":"détails de la commande","stock":"Stock","sallary_details":"Tous les détails du salaire","sallary_employee":"Détails du salaire des employés"},"feild":{"category_name":"Nom de catégorie","action":"Action","photo":"Photo","image":"Image","name":"Nom","email":"E-mail","sku":"Code-Barre","shop_name":"Nom de la boutique","month":"Mois","discount":"Remise","address":"Addresse","quantity":"Quantité","phone":"Téléphone","status":"Status","joininig_date":"Date d\'adhésion","sallery":"Salaires","details":"Détails","amount":"Montant","date":"Date","total_amount":"Montant total","total":"Total ","pay":"Payer","product":"Nom du produit","payby":"Payer Par","through":"Paiement via","sub_total":"SubTotal","pay_amount":"Montant du paiement","category":"Catégorie","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de vente","price":"Prix ​​unitaire"},"button":{"edit":"Modifier","edit_salary":"Modifier le salaire","delete":"Supprimer","view":"Afficher","search":"Rechercher","pay_salary":"Payer le salaire"}},"button":{"auth_forget":"Mot de passe oublié","back_login":"connectez!","login":"connectez","register":"S\'inscrire","submit":"Valider","update":"Modifier","paynow":"Payez maintenant"}}');
+module.exports = JSON.parse('{"pos_dashboard":"Tableau de bord POS ","dashboard":"Tableau de bord","home":"Accueil","pos":"pos","language":"Centre de langue","fr":"français","en":"Anglais","product":"Produits vendus","available":"Disponible","stock_out":"Rupture de stock","paybay":{"HandCash":"En espèces","Cheaque":"Chèque","GiftCard":"Carte cadeau"},"shared":{"today_sell":"Total de vente aujourd\'hui","income":"Revenu d\'aujourd\'hui","today_due":"Today Due","today_expense":"Dépenses d\'aujourd\'hui","repport":"rapport de la semaine","current":"Cette semaine","last":"La semaine dernière","product":"Produits vendus","out_stock":"Produit en rupture de stock","alert_center":"Centre d\'alertes","alert":"Ce produit","suit":"Est en rupture de stock!","view":"Afficher toutes les alertes","logout":"Se déconnecter"},"months":{"January":"Janvier","February":"Février","March":"Mars","April":"Avril","May":"May","Jun":"Juin","July":"Juillet","August":"Aout","September":"Séptembre","October":"Octobre","November":"Novembre","December":"Décembre"},"router":{"expense_insert":"Insérer des dépenses","add_category":"Ajouter une Catégorie","all_category":"Toutes les catégories","all_customer":"Toutes les Clients","add_customer":"Ajouter un Client","all_product":"Toutes les Produits","add_product":"Ajouter un Produit","all_employee":"Tous les employés","all_supplier":"Tous les fournisseurs","add_supplier":"Ajouter un fournisseur","add_employee":"Ajouter un employé","all_expense":"Toutes les dépenses","add_expense":"Ajouter une dépense","alert":"Alertes","pay_salary":"Payer le salaire","auth_forget":"Mot de passe oublié","create_account":"Créer un compte!","login":"Se Connecter","back":"Retourner","register":"S\'inscrire","account":"Vous avez déjà un compte?"},"cart":{"total_qty":"la Quantité totale","total_discount":"Remise totale"},"form":{"label":{"product":"Nom du produit","employee":"Nom de l\'employé","month":"Mois","employee_email":"E-mail","product_code":"Code du produit","product_category":"Catégorie de produit","product_supplier":"Fournisseur de produits","buying_date":"Date d\'achat","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de Vente","product_quantity":"Quantité","product_stock":"Stock de produits","min_quantity":"Quantité minimale","customer_name":"Nom du client","customer_email":"E-mail","customer_address":"Adresse du client","customer_phone":"Téléphone du client","choose_file":"Importer le fichier","expense_details":"Détails des dépenses","expense_amount":"Montant","search_order":"Rechercher la commande","datefrom":"Date de","dateto":"Date à","salary":"Salaire","amount":"Montant"},"name":{"category":"Ajouter une catégorie","update_category":"Mettre à jour la catégorie","update_customer":"Mettre à jour le Client","update_employee":"Mettre à jour l\'employée","update_expense":"Mettre à jour la dépense","update_stock":"Mise à jour de stocks","update_product":"Mettre à jour le Produit","update_supplier":"Mettre à jour le fourniseur","update_salary":"Mettre à jour le salaire"},"placeholder":{"product":"Entrez le nom du produit","product_code":"Entrez le Code-barres","email_forget":"Entrez l\'adresse e-mail existante","email":"Entrer l\'adresse e-mail","password":"Mot de passe","phone":"Entrez le numéro de téléphone","address":"Entrez L\'address","shop_name":"Entrez le nom de la boutique","confirm_password":"Confirmez le mot de passe","name":"Entrez votre nom complet","category_name":"Entrez le nom de la catégorie","search":"Cherche ici","customer_name":"Entrez le nom du client","customer_email":"Entrez E-mail du client","customer_address":"Entrez l\'adresse du client","customer_phone":"Entrez le téléphone du client","employee_name":"Entrez le nom de l\'employé","employee_email":"Entrez E-mail de l\'employé","employee_phone":"Entrez le téléphone de l\'employé","amount":"Entrez votre montant","employee_address":"Entrez l\'adresse de l\'employé","employee_salary":"Entrez le salaire de l\'employé","employee_joining_date":"Entrez la date d\'adhésion","employee_nid":"Entrez le NID"},"remember":"Rester connecté"},"table":{"name":{"category":"Liste des catégories","customer":"Liste des Client","employee":"Liste des Employées","product":"Liste des Produits","supplier":"Liste des founiseures","orders":"Vente d\'aujourd\'hui","orders_details":"détails de la commande","stock":"Stock","sallary_details":"Tous les détails du salaire","sallary_employee":"Détails du salaire des employés"},"feild":{"category_name":"Nom de catégorie","action":"Action","photo":"Photo","image":"Image","name":"Nom","email":"E-mail","sku":"Code-Barre","shop_name":"Nom de la boutique","month":"Mois","discount":"Remise","address":"Addresse","quantity":"Quantité","phone":"Téléphone","status":"Status","joininig_date":"Date d\'adhésion","sallery":"Salaires","details":"Détails","amount":"Montant","date":"Date","total_amount":"Montant total","total":"Total ","pay":"Payer","product":"Nom du produit","payby":"Payer Par","through":"Paiement via","sub_total":"SubTotal","pay_amount":"Montant du paiement","category":"Catégorie","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de vente","price":"Prix ​​unitaire"},"button":{"edit":"Modifier","edit_salary":"Modifier le salaire","delete":"Supprimer","view":"Afficher","search":"Rechercher","pay_salary":"Payer le salaire"}},"button":{"auth_forget":"Mot de passe oublié","back_login":"connectez!","login":"connectez","register":"S\'inscrire","submit":"Valider","update":"Modifier","paynow":"Payez maintenant"}}');
 
 /***/ }),
 

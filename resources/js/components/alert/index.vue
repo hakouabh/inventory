@@ -66,7 +66,7 @@
     }, 
   methods:{
     allAlert(){
-      axios.get('/api/alert/product')
+      axios.get('/api/alert/product/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.alerts = data))
       .catch()
     }   

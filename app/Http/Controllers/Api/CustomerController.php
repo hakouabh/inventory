@@ -15,9 +15,9 @@ class CustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($user_id)
     {
-       $customer = DB::table('customers')->orderBy('id','DESC')->get();
+       $customer = DB::table('customers')->where('user_id',$user_id)->orderBy('id','DESC')->get();
        return response()->json($customer);
     }
 
@@ -31,7 +31,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $validateData = $request->validate([
-         'name' => 'required|unique:customers|max:255',
+         'name' => 'required|max:255',
          'email' => 'required',
          'phone' => 'required|unique:customers',
 
@@ -54,6 +54,7 @@ class CustomerController extends Controller
          $customer->phone = $request->phone;
          $customer->address = $request->address;
          $customer->photo = $image_url;
+         $customer->user_id = $request->user_id;
          $customer->save(); 
      }else{
          $customer = new Customer;
@@ -61,7 +62,8 @@ class CustomerController extends Controller
          $customer->email = $request->email;
          $customer->phone = $request->phone;
          $customer->address = $request->address;
-        
+         $customer->user_id = $request->user_id;
+
          $customer->save(); 
 
      } 
@@ -133,14 +135,14 @@ class CustomerController extends Controller
      */
     public function destroy($id)
     {
-        $customer = DB::table('customers')->where('id',$id)->first();
+        $customer = Customer::find($id);
        $photo = $customer->photo;
        if ($photo) {
          unlink($photo);
-         DB::table('customers')->where('id',$id)->delete();
-       }else{
-        DB::table('customers')->where('id',$id)->delete();
-       }
+         $customer->delete();
+        }else{
+            $customer->delete();
+        }
     }
 
 

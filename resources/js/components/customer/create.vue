@@ -128,8 +128,8 @@
         email: null,
         phone: null,
         address: null,
-        photo: null
-         
+        photo: null,
+        user_id:null 
       },
       errors:{}
     }
@@ -151,7 +151,8 @@
 
     },
   customerInsert(){
-       axios.post('/api/customer',this.form)
+    this.form.user_id = localStorage.getItem('user_id');
+       axios.post('/api/customers/store',this.form)
        .then(() => {
         this.$router.push({ name: 'customer'})
         Notification.success()

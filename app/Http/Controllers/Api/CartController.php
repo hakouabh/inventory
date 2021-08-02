@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use App\Model\Pos;
+
 
 class CartController extends Controller
 {
@@ -26,14 +28,15 @@ class CartController extends Controller
                 } 
             }else{
                 //add
-                $data = array();
-                $data['pro_id'] = $id;
-                $data['pro_name'] = $product->product_name;
-                $data['pro_quantity'] = 1;
-                $data['product_price'] = $product->selling_price;
-                $data['product_discount'] =0;
-                $data['sub_total'] = $product->selling_price;        
-                DB::table('pos')->insert($data);
+                $pos = new Pos;
+                $pos->pro_id = $id;
+                $pos->pro_name = $product->product_name;
+                $pos->pro_quantity = 1;
+                $pos->product_price = $product->selling_price;
+                $pos->product_discount =0;
+                $pos->user_id =$product->user_id;
+                $pos->sub_total = $product->selling_price;        
+                $pos->save();
             }
         }else{
             return response('error');
@@ -41,8 +44,8 @@ class CartController extends Controller
        
     }
 
-    public function CartProduct(){
-        $cart = DB::table('pos')->get();
+    public function CartProduct($id){
+        $cart = DB::table('pos')->where('user_id',$id)->get();
            return response()->json($cart);
        }
        

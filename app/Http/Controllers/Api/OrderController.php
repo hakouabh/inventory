@@ -9,11 +9,12 @@ use Carbon\Carbon;
 
 class OrderController extends Controller
 {
-    public function TodayOrder(){
+    public function TodayOrder($id){
       $data = date('d/m/Y');
       $order = DB::table('orders')
         ->join('customers','orders.customer_id','customers.id')
         ->where('order_date',$data)
+        ->where('orders.user_id',$id)
         ->select('customers.name','orders.*')
         ->orderBy('orders.id','DESC')->get();
         
@@ -35,7 +36,7 @@ class OrderController extends Controller
         ->select('products.product_name','products.product_code','products.image','order_details.*')->get();
         return response()->json($details);
     }
-    public function stats(){
+    public function stats($user_id){
       $weeks = [0,1,2,3,4,5,6];
       $datenow1 = Carbon::now();
       $datenow2 = Carbon::now();
@@ -52,12 +53,14 @@ class OrderController extends Controller
       $lwendOfWeek = $lw2->endOfWeek()->addDays(-1)->isoFormat('DD/MM/YYYY');
 
       $currentWeekOrders = DB::table('orders')
+      ->where('user_id',$user_id)
       ->whereBetween('order_date', [
         $startOfWeek,
         $endOfWeek
       ])->get();
 
       $lastWeekOrders = DB::table('orders')
+      ->where('user_id',$user_id)
       ->whereBetween('order_date', [
         $lwstartOfWeek,
         $lwendOfWeek

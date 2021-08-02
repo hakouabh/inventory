@@ -93,7 +93,8 @@
  
   methods:{
     allProduct(){
-      axios.get('/api/stock/all')
+
+      axios.get('/api/products/stock/all/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.products = data))
       .catch()
     }   

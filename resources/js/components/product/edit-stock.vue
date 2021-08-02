@@ -76,7 +76,7 @@
   },
   created(){
   	let id = this.$route.params.id
-  	axios.get('/api/product/'+id)
+  	axios.get('/api/products/show/'+id)
   	.then(({data}) => (this.form = data))
   	.catch(console.log('error'))
 
@@ -91,7 +91,7 @@
   },  
   StockUpdate(){
   	  let id = this.$route.params.id
-       axios.post('/api/stock/update/'+id,this.form)
+       axios.put('/api/products/stock/update/'+id,this.form)
        .then(() => {
          this.AlertUpdate(id);
         this.$router.push({ name: 'stock'})
@@ -100,8 +100,6 @@
        .catch(error =>this.errors = error.response.data.errors)
      },
   } 
-
-
   }
    
 </script>

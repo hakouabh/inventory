@@ -87,7 +87,8 @@
     return {
       form:{
         details: '',
-        amount: ''
+        amount: '',
+        user_id:''
         
       },
       errors:{},
@@ -97,7 +98,8 @@
   methods:{
     
   expenseInsert(){
-       axios.post('/api/expense',this.form)
+        this.form.user_id = localStorage.getItem('user_id');
+       axios.post('/api/expenses/store',this.form)
        .then(() => {
         this.$router.push({ name: 'expense'})
         Notification.success()

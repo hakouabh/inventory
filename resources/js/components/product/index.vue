@@ -91,7 +91,7 @@
  
   methods:{
     allProduct(){
-      axios.get('/api/product/')
+      axios.get('/api/products/index/'+localStorage.getItem('user_id'))
       .then(({data}) => (this.products = data))
       .catch()
     },
@@ -106,7 +106,7 @@
               confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
               if (result.value) {
-                axios.delete('/api/product/'+id)
+                axios.get('/api/products/destroy/'+id)
                .then(() => {
                 this.products = this.products.filter(product => {
                   return product.id != id

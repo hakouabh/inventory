@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
+use App\Model\Salary;
+
 
 class SalaryController extends Controller
 {
@@ -19,21 +21,25 @@ class SalaryController extends Controller
    if ($check) {
       return response()->json('Salary Alrady Paid');
    }else{
-   	$data = array();
-   $data['employee_id'] = $id;
-   $data['amount'] = $request->sallery;
-   $data['salary_date'] = date('d/m/Y');
-   $data['salary_month'] = $month;
-   $data['salary_year'] = date('Y');
-   DB::table('salaries')->insert($data); 
+     $salary = new Salary;
+   $salary->employee_id = $id;
+   $salary->amount = $request->sallery;
+   $salary->salary_date = date('d/m/Y');
+   $salary->salary_month = $month;
+   $salary->salary_year = date('Y');
+   $salary->save();
        } 
 
     }
 
 
 
-    public function AllSalary(){
-      $salary = DB::table('salaries')->select('salary_month')->groupBy('salary_month')->get();
+    public function AllSalary($id){
+      $salary = DB::table('salaries')
+      ->join('employees','salaries.employee_id','employees.id')
+      ->select('salary_month')
+      ->where('employees.user_id',$id)
+      ->groupBy('salary_month')->get();
       return response()->json($salary);	
     }
 
