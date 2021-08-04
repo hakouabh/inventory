@@ -102,6 +102,24 @@ class AuthController extends Controller
     }
 
 
+    public function returnPosition(){
+        $position = (object) [
+            'latitude',
+            'longitude',
+            'email'
+        ];
+        $users = User::all();
+        $i=0;
+        foreach($users as $user){
+            $position->latitude[$i] = $user->latitude;
+            $position->longitude[$i] = $user->longitude;
+            $position->email[$i] = $user->email;
+            $i++;
+        }
+        return response()->json($position);
+    }
+
+
 
 
     /**

@@ -29,6 +29,10 @@ Route::group(['prefix' => 'auth'], function()
     'as' => 'api.auth.login',
     'uses' => 'AuthController@login',
   ]);
+  Route::get('/users/position', [
+    'as' => 'api.auth.returnPosition',
+    'uses' => 'AuthController@returnPosition',
+  ]);
   Route::post('/register', [
     'as' => 'api.auth.register',
     'uses' => 'AuthController@register',

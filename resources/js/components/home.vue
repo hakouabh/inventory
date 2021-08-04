@@ -183,8 +183,15 @@
                 </div>
               </div>
             </div>
-          
           </div>
+
+<div class="col-lg-12 mb-4">
+                    <br>
+                <div class="card" style="height: 400px;" id="mapVue">
+                    <mapVue></mapVue>
+                 </div> 
+                  <br>
+</div>
 <div class="col-lg-12 mb-4">
               <!-- Simple Tables -->
               <div class="card">
@@ -255,7 +262,10 @@
       }
       return s.join(dec);
     }
+    import mapVue from './shared/map.vue'
+
   export default {
+     components: { mapVue },
     created(){
       if (!User.loggedIn()) {
         this.$router.push({name: '/'})

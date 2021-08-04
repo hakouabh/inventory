@@ -12,6 +12,16 @@ Vue.use(VueRouter)
  // Router Imported
  import {routes} from './routes';
 
+ //MAP leaflet
+
+ import { LMap, LTileLayer, LMarker,LPopup, LIcon } from 'vue2-leaflet';
+import 'leaflet/dist/leaflet.css';
+
+Vue.component('l-map', LMap);
+Vue.component('l-tile-layer', LTileLayer);
+Vue.component('l-marker', LMarker);
+Vue.component('l-popup', LPopup);
+Vue.component('l-icon', LIcon);
 
  // Import User Class
  import User from './Helpers/User';
@@ -50,12 +60,14 @@ const router = new VueRouter({
   mode: 'history' 
 })
 import topbar from './components/shared/topBar.vue'
+import mapVue from './components/shared/map.vue'
 
 const app = new Vue({
     el: '#app',
     router,
     i18n,
     components:{
-      topbar
+      'topbar' : topbar,
+      'mapVue': mapVue
     }
 });
