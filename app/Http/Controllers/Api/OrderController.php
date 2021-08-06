@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
+use DateTime;
 
 class OrderController extends Controller
 {
@@ -100,5 +101,46 @@ class OrderController extends Controller
       }
       return response()->json($graph);
 
+    }
+    public function StateOrderDate(Request $request){
+      $orderdate_from = $request->date_from;
+      $orderdate_to = $request->date_to;
+      $newdate_from = new DateTime($orderdate_from);
+      $newdate_to = new DateTime($orderdate_to);
+      $done_from = $newdate_from->format('d/m/Y'); 
+      $done_to = $newdate_to->format('d/m/Y'); 
+      $stats = (object) [
+        'sell' => 0,
+        'expense' => 0,
+        'income' => 0
+      ];
+      $sell = DB::table('orders')
+      ->whereBetween('order_date', [
+        $done_from,
+        $done_to
+      ])
+      ->where('user_id',$request->user_id)
+      ->sum('total');
+
+      $income = DB::table('orders')
+      ->whereBetween('order_date', [
+        $done_from,
+        $done_to
+      ])
+      ->where('user_id',$request->user_id)
+      ->sum('pay');
+
+      $expense = DB::table('expenses')
+      ->whereBetween('expense_date', [
+        $done_from,
+        $done_to
+      ])
+      ->where('user_id',$request->user_id)
+      ->sum('amount');
+      
+      $stats->income = $income;
+      $stats->sell = $sell;
+      $stats->expense = $expense;
+      return response()->json($stats);
     }
 }

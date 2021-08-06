@@ -2086,7 +2086,6 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.post('/api/auth/login', this.form).then(function (res) {
-        console.log(res);
         User.responseAfterLogin(res);
         Toast.fire({
           icon: 'success',
@@ -2800,7 +2799,6 @@ __webpack_require__.r(__webpack_exports__);
 
         reader.onload = function (event) {
           _this.form.photo = event.target.result;
-          console.log(event.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -3361,7 +3359,6 @@ __webpack_require__.r(__webpack_exports__);
 
         reader.onload = function (event) {
           _this.form.photo = event.target.result;
-          console.log(event.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -4472,6 +4469,7 @@ function number_format(number, decimals, dec_point, thousands_sep) {
     this.TodayExpense();
     this.StockOut();
     this.GetStats();
+    console.log(localStorage.getItem('token'));
   },
   methods: {
     TodaySell: function TodaySell() {
@@ -4853,6 +4851,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   created: function created() {
     if (!User.loggedIn()) {
@@ -4865,7 +4909,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       date_from: '',
       date_to: '',
-      orders: {}
+      orders: {},
+      total_expense: 0,
+      total_sell: 0,
+      income: 0
     };
   },
   methods: {
@@ -4879,9 +4926,28 @@ __webpack_require__.r(__webpack_exports__);
       };
       axios.post('/api/search/order/', data).then(function (_ref) {
         var data = _ref.data;
-        return _this.orders = data;
+        _this.orders = data;
+
+        _this.getStates();
       })["catch"](function (error) {
         return _this.errors = error.response.data.errors;
+      });
+    },
+    getStates: function getStates() {
+      var _this2 = this;
+
+      var data = {
+        user_id: localStorage.getItem('user_id'),
+        date_from: this.date_from,
+        date_to: this.date_to
+      };
+      axios.post('/api/stats/order/', data).then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.income = data.income;
+        _this2.total_expense = data.expense;
+        _this2.total_sell = data.sell;
+      })["catch"](function (error) {
+        return _this2.errors = error.response.data.errors;
       });
     }
   }
@@ -5371,7 +5437,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var data = _ref3.data;
 
       if (data) {
-        console.log(data);
         Reload.$emit('AfterAdd');
         Notification.success();
       } else {
@@ -5707,7 +5772,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
         reader.onload = function (event) {
           _this.form.image = event.target.result;
-          console.log(event.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -7561,7 +7625,6 @@ __webpack_require__.r(__webpack_exports__);
 
         reader.onload = function (event) {
           _this.form.photo = event.target.result;
-          console.log(event.target.result);
         };
 
         reader.readAsDataURL(file);
@@ -76043,6 +76106,101 @@ var render = function() {
           ])
         ]),
         _vm._v(" "),
+        _c("div", { staticClass: "row mb-3 " }, [
+          _c("div", { staticClass: "col-xl-4 col-md-6 mb-4" }, [
+            _c("div", { staticClass: "card h-100" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c("div", { staticClass: "row align-items-center" }, [
+                  _c("div", { staticClass: "col mr-2" }, [
+                    _c(
+                      "div",
+                      {
+                        staticClass:
+                          "text-xs font-weight-bold text-uppercase mb-1"
+                      },
+                      [_vm._v(_vm._s(_vm.$t("orders.total_sell")))]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "h5 mb-0 font-weight-bold text-gray-800" },
+                      [_vm._v("$ " + _vm._s(_vm.total_sell))]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm._m(0)
+                ])
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xl-4 col-md-6 mb-4" }, [
+            _c("div", { staticClass: "card h-100" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c(
+                  "div",
+                  { staticClass: "row no-gutters align-items-center" },
+                  [
+                    _c("div", { staticClass: "col mr-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-xs font-weight-bold text-uppercase mb-1"
+                        },
+                        [_vm._v(_vm._s(_vm.$t("orders.income")))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "h5 mb-0 font-weight-bold text-gray-800"
+                        },
+                        [_vm._v("$ " + _vm._s(_vm.income) + " ")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(1)
+                  ]
+                )
+              ])
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-xl-4 col-md-6 mb-4" }, [
+            _c("div", { staticClass: "card h-100" }, [
+              _c("div", { staticClass: "card-body" }, [
+                _c(
+                  "div",
+                  { staticClass: "row no-gutters align-items-center" },
+                  [
+                    _c("div", { staticClass: "col mr-2" }, [
+                      _c(
+                        "div",
+                        {
+                          staticClass:
+                            "text-xs font-weight-bold text-uppercase mb-1"
+                        },
+                        [_vm._v(_vm._s(_vm.$t("orders.total_expense")))]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "h5 mb-0 font-weight-bold text-gray-800"
+                        },
+                        [_vm._v("$ " + _vm._s(_vm.total_expense) + " ")]
+                      )
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(2)
+                  ]
+                )
+              ])
+            ])
+          ])
+        ]),
+        _vm._v(" "),
         _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-lg-12 mb-4" }, [
             _c("div", { staticClass: "card" }, [
@@ -76139,7 +76297,32 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-auto" }, [
+      _c("i", { staticClass: "fas fa-calendar fa-2x text-primary" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-auto" }, [
+      _c("i", { staticClass: "fas fa-shopping-cart fa-2x text-success" })
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-auto" }, [
+      _c("i", { staticClass: "fas fa-comments fa-2x text-warning" })
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -99400,7 +99583,7 @@ var __vue_staticRenderFns__ = [];
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashboard","home":"Home","pos":"pos","language":"Language Center","fr":"French","en":"English","product":"Products Sold","available":"Available","stock_out":"Stock Out","paybay":{"HandCash":"Hand Cash","Cheaque":"Cheque","GiftCard":"Gift Card"},"shared":{"today_sell":"Today Sell Amount","income":"Today Income","today_due":"Today Due","today_expense":"Today Expense","repport":"weekly Recap Report","current":"Current Week","last":"Last Week","product":"Products Sold","out_stock":"Out Of Stock Product","alert_center":"Alerts Center","alert":"This product","suit":"is out of stock!","view":"Show All Alerts","logout":"Logout"},"months":{"January":"January","February":"February","March":"March","April":"April","May":"May","Jun":"Jun","July":"July","August":"August","September":"September","October":"October","November":"November","December":"December"},"router":{"expense_insert":"Expense Insert","add_category":"Add Category","all_category":"All Category","all_customer":"All Customer","add_customer":"Add Customer","all_product":"All Product","add_product":"Add Product","all_employee":"All Employee","all_supplier":"All Supplier","add_supplier":"Add Supplier","add_employee":"Add Employee","all_expense":"All Expense","add_expense":"Add Expense","alert":"Alerts","pay_salary":"Pay Salary","auth_forget":"Forget Password","create_account":"Create an Account!","login":"Login","back":"Go Back","register":"Register","account":"Already have an account?"},"cart":{"total_qty":"Total Quantity","total_discount":"Total Discount"},"form":{"label":{"product":"Product Name","employee":"Employee Name","month":"Months","employee_email":"Email","product_code":"Product Code","product_category":"Product Category","product_supplier":"Product Supplier","buying_date":"Buying Date","buying_price":"Buying Price","selling_price":"Selling Price","product_quantity":"Product Quantity","product_stock":"Product Stock","min_quantity":"Minimal Quantity","customer_name":"Customer Name","customer_email":"Customer Email","customer_address":"Customer Address","customer_phone":"Customer Phone","choose_file":"Choose File","expense_details":"Expense Details","expense_amount":"Expense Amount","search_order":"Search Order","datefrom":"Date From","dateto":"Date To","salary":"Salary","amount":"Amount"},"name":{"category":"Add Category","update_category":"Category Update","update_customer":"Customer Update","update_employee":"Employee Update","update_expense":"Expense Update","update_stock":"Stock Update","update_product":"Product Update","update_supplier":"Supplier Update","update_salary":"Update Salary"},"placeholder":{"product":"Enter The Product Name","product_code":"Enter The Product Code","email_forget":"Enter Existing Email Address","email":"Enter Email Address","password":"Password","phone":"Enter The Phone Number","address":"Enter The Address","shop_name":"Enter The Shop Name","confirm_password":"Confirm Password","name":"Enter Your Full Name","category_name":"Enter Your Category Name","search":"Search Here","customer_name":"Enter The Customer Name","customer_email":"Enter The Customer Email","customer_address":"Enter The Customer Adresse","customer_phone":"Enter The Customer Phone","employee_name":"Enter The Employee Name","employee_email":"Enter The Employee Email","employee_phone":"Enter The Employee Phone Number","amount":"Enter Your Amount","employee_address":"Enter The Employee Adresse","employee_salary":"Enter The Employee Salary","employee_joining_date":"Enter The Joining Date","employee_nid":"Enter The NID"},"remember":"Remember Me"},"table":{"name":{"category":"Category List","customer":"Customer List","employee":"Employee List","product":"Product List","supplier":"Supplier List","orders":"Today Orders","orders_details":"Order Details","stock":"Stock","sallary_details":"All Salary Details","sallary_employee":"Employee Salary Details"},"feild":{"category_name":"Category Name","action":"Action","photo":"Photo","image":"Image","name":"Name","email":"Email","sku":"Sku","shop_name":"Shop Name","month":"Month","discount":"Discount","address":"Address","quantity":"Quantity","phone":"Phone","status":"Status","joininig_date":"Joining Date","sallery":"Sallery","details":"Details","amount":"Amount","date":"Date","total_amount":"Total Amount","total":"Total ","pay":"Pay","product":"Product Name","payby":"Pay By","through":"Pay Through","sub_total":"Sub Total","pay_amount":"Pay Amount","category":"Category","buying_price":"Buying Price","selling_price":"Selling Price","price":"Unit Price"},"button":{"edit":"Edit","edit_salary":"Edit Salary","delete":"Delete","view":"View","search":"Search","pay_salary":"Pay Salary"}},"button":{"auth_forget":"Forget Password","back_login":"Back to Login!","login":"Login","register":"Register","submit":"Submit","update":"Update","paynow":"Pay Now"}}');
+module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashboard","home":"Home","pos":"pos","language":"Language Center","fr":"French","en":"English","product":"Products Sold","available":"Available","stock_out":"Stock Out","paybay":{"HandCash":"Hand Cash","Cheaque":"Cheque","GiftCard":"Gift Card"},"orders":{"total_sell":"Total Sell Amount","income":"Total Income","total_expense":"Total Expense"},"shared":{"today_sell":"Today Sell Amount","income":"Today Income","today_due":"Today Due","today_expense":"Today Expense","repport":"weekly Recap Report","current":"Current Week","last":"Last Week","product":"Products Sold","out_stock":"Out Of Stock Product","alert_center":"Alerts Center","alert":"This product","suit":"is out of stock!","view":"Show All Alerts","logout":"Logout"},"months":{"January":"January","February":"February","March":"March","April":"April","May":"May","Jun":"Jun","July":"July","August":"August","September":"September","October":"October","November":"November","December":"December"},"router":{"expense_insert":"Expense Insert","add_category":"Add Category","all_category":"All Category","all_customer":"All Customer","add_customer":"Add Customer","all_product":"All Product","add_product":"Add Product","all_employee":"All Employee","all_supplier":"All Supplier","add_supplier":"Add Supplier","add_employee":"Add Employee","all_expense":"All Expense","add_expense":"Add Expense","alert":"Alerts","pay_salary":"Pay Salary","auth_forget":"Forget Password","create_account":"Create an Account!","login":"Login","back":"Go Back","register":"Register","account":"Already have an account?"},"cart":{"total_qty":"Total Quantity","total_discount":"Total Discount"},"form":{"label":{"product":"Product Name","employee":"Employee Name","month":"Months","employee_email":"Email","product_code":"Product Code","product_category":"Product Category","product_supplier":"Product Supplier","buying_date":"Buying Date","buying_price":"Buying Price","selling_price":"Selling Price","product_quantity":"Product Quantity","product_stock":"Product Stock","min_quantity":"Minimal Quantity","customer_name":"Customer Name","customer_email":"Customer Email","customer_address":"Customer Address","customer_phone":"Customer Phone","choose_file":"Choose File","expense_details":"Expense Details","expense_amount":"Expense Amount","search_order":"Search Order","datefrom":"Date From","dateto":"Date To","salary":"Salary","amount":"Amount"},"name":{"category":"Add Category","update_category":"Category Update","update_customer":"Customer Update","update_employee":"Employee Update","update_expense":"Expense Update","update_stock":"Stock Update","update_product":"Product Update","update_supplier":"Supplier Update","update_salary":"Update Salary"},"placeholder":{"product":"Enter The Product Name","product_code":"Enter The Product Code","email_forget":"Enter Existing Email Address","email":"Enter Email Address","password":"Password","phone":"Enter The Phone Number","address":"Enter The Address","shop_name":"Enter The Shop Name","confirm_password":"Confirm Password","name":"Enter Your Full Name","category_name":"Enter Your Category Name","search":"Search Here","customer_name":"Enter The Customer Name","customer_email":"Enter The Customer Email","customer_address":"Enter The Customer Adresse","customer_phone":"Enter The Customer Phone","employee_name":"Enter The Employee Name","employee_email":"Enter The Employee Email","employee_phone":"Enter The Employee Phone Number","amount":"Enter Your Amount","employee_address":"Enter The Employee Adresse","employee_salary":"Enter The Employee Salary","employee_joining_date":"Enter The Joining Date","employee_nid":"Enter The NID"},"remember":"Remember Me"},"table":{"name":{"category":"Category List","customer":"Customer List","employee":"Employee List","product":"Product List","supplier":"Supplier List","orders":"Today Orders","orders_details":"Order Details","stock":"Stock","sallary_details":"All Salary Details","sallary_employee":"Employee Salary Details"},"feild":{"category_name":"Category Name","action":"Action","photo":"Photo","image":"Image","name":"Name","email":"Email","sku":"Sku","shop_name":"Shop Name","month":"Month","discount":"Discount","address":"Address","quantity":"Quantity","phone":"Phone","status":"Status","joininig_date":"Joining Date","sallery":"Sallery","details":"Details","amount":"Amount","date":"Date","total_amount":"Total Amount","total":"Total ","pay":"Pay","product":"Product Name","payby":"Pay By","through":"Pay Through","sub_total":"Sub Total","pay_amount":"Pay Amount","category":"Category","buying_price":"Buying Price","selling_price":"Selling Price","price":"Unit Price"},"button":{"edit":"Edit","edit_salary":"Edit Salary","delete":"Delete","view":"View","search":"Search","pay_salary":"Pay Salary"}},"button":{"auth_forget":"Forget Password","back_login":"Back to Login!","login":"Login","register":"Register","submit":"Submit","update":"Update","paynow":"Pay Now"}}');
 
 /***/ }),
 
@@ -99411,7 +99594,7 @@ module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashb
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"pos_dashboard":"Tableau de bord POS ","dashboard":"Tableau de bord","home":"Accueil","pos":"pos","language":"Centre de langue","fr":"français","en":"Anglais","product":"Produits vendus","available":"Disponible","stock_out":"Rupture de stock","paybay":{"HandCash":"En espèces","Cheaque":"Chèque","GiftCard":"Carte cadeau"},"shared":{"today_sell":"Total de vente aujourd\'hui","income":"Revenu d\'aujourd\'hui","today_due":"Today Due","today_expense":"Dépenses d\'aujourd\'hui","repport":"rapport de la semaine","current":"Cette semaine","last":"La semaine dernière","product":"Produits vendus","out_stock":"Produit en rupture de stock","alert_center":"Centre d\'alertes","alert":"Ce produit","suit":"Est en rupture de stock!","view":"Afficher toutes les alertes","logout":"Se déconnecter"},"months":{"January":"Janvier","February":"Février","March":"Mars","April":"Avril","May":"May","Jun":"Juin","July":"Juillet","August":"Aout","September":"Séptembre","October":"Octobre","November":"Novembre","December":"Décembre"},"router":{"expense_insert":"Insérer des dépenses","add_category":"Ajouter une Catégorie","all_category":"Toutes les catégories","all_customer":"Toutes les Clients","add_customer":"Ajouter un Client","all_product":"Toutes les Produits","add_product":"Ajouter un Produit","all_employee":"Tous les employés","all_supplier":"Tous les fournisseurs","add_supplier":"Ajouter un fournisseur","add_employee":"Ajouter un employé","all_expense":"Toutes les dépenses","add_expense":"Ajouter une dépense","alert":"Alertes","pay_salary":"Payer le salaire","auth_forget":"Mot de passe oublié","create_account":"Créer un compte!","login":"Se Connecter","back":"Retourner","register":"S\'inscrire","account":"Vous avez déjà un compte?"},"cart":{"total_qty":"la Quantité totale","total_discount":"Remise totale"},"form":{"label":{"product":"Nom du produit","employee":"Nom de l\'employé","month":"Mois","employee_email":"E-mail","product_code":"Code du produit","product_category":"Catégorie de produit","product_supplier":"Fournisseur de produits","buying_date":"Date d\'achat","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de Vente","product_quantity":"Quantité","product_stock":"Stock de produits","min_quantity":"Quantité minimale","customer_name":"Nom du client","customer_email":"E-mail","customer_address":"Adresse du client","customer_phone":"Téléphone du client","choose_file":"Importer le fichier","expense_details":"Détails des dépenses","expense_amount":"Montant","search_order":"Rechercher la commande","datefrom":"Date de","dateto":"Date à","salary":"Salaire","amount":"Montant"},"name":{"category":"Ajouter une catégorie","update_category":"Mettre à jour la catégorie","update_customer":"Mettre à jour le Client","update_employee":"Mettre à jour l\'employée","update_expense":"Mettre à jour la dépense","update_stock":"Mise à jour de stocks","update_product":"Mettre à jour le Produit","update_supplier":"Mettre à jour le fourniseur","update_salary":"Mettre à jour le salaire"},"placeholder":{"product":"Entrez le nom du produit","product_code":"Entrez le Code-barres","email_forget":"Entrez l\'adresse e-mail existante","email":"Entrer l\'adresse e-mail","password":"Mot de passe","phone":"Entrez le numéro de téléphone","address":"Entrez L\'address","shop_name":"Entrez le nom de la boutique","confirm_password":"Confirmez le mot de passe","name":"Entrez votre nom complet","category_name":"Entrez le nom de la catégorie","search":"Cherche ici","customer_name":"Entrez le nom du client","customer_email":"Entrez E-mail du client","customer_address":"Entrez l\'adresse du client","customer_phone":"Entrez le téléphone du client","employee_name":"Entrez le nom de l\'employé","employee_email":"Entrez E-mail de l\'employé","employee_phone":"Entrez le téléphone de l\'employé","amount":"Entrez votre montant","employee_address":"Entrez l\'adresse de l\'employé","employee_salary":"Entrez le salaire de l\'employé","employee_joining_date":"Entrez la date d\'adhésion","employee_nid":"Entrez le NID"},"remember":"Rester connecté"},"table":{"name":{"category":"Liste des catégories","customer":"Liste des Client","employee":"Liste des Employées","product":"Liste des Produits","supplier":"Liste des founiseures","orders":"Vente d\'aujourd\'hui","orders_details":"détails de la commande","stock":"Stock","sallary_details":"Tous les détails du salaire","sallary_employee":"Détails du salaire des employés"},"feild":{"category_name":"Nom de catégorie","action":"Action","photo":"Photo","image":"Image","name":"Nom","email":"E-mail","sku":"Code-Barre","shop_name":"Nom de la boutique","month":"Mois","discount":"Remise","address":"Addresse","quantity":"Quantité","phone":"Téléphone","status":"Status","joininig_date":"Date d\'adhésion","sallery":"Salaires","details":"Détails","amount":"Montant","date":"Date","total_amount":"Montant total","total":"Total ","pay":"Payer","product":"Nom du produit","payby":"Payer Par","through":"Paiement via","sub_total":"SubTotal","pay_amount":"Montant du paiement","category":"Catégorie","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de vente","price":"Prix ​​unitaire"},"button":{"edit":"Modifier","edit_salary":"Modifier le salaire","delete":"Supprimer","view":"Afficher","search":"Rechercher","pay_salary":"Payer le salaire"}},"button":{"auth_forget":"Mot de passe oublié","back_login":"connectez!","login":"connectez","register":"S\'inscrire","submit":"Valider","update":"Modifier","paynow":"Payez maintenant"}}');
+module.exports = JSON.parse('{"pos_dashboard":"Tableau de bord POS ","dashboard":"Tableau de bord","home":"Accueil","pos":"pos","language":"Centre de langue","fr":"français","en":"Anglais","product":"Produits vendus","available":"Disponible","stock_out":"Rupture de stock","paybay":{"HandCash":"En espèces","Cheaque":"Chèque","GiftCard":"Carte cadeau"},"orders":{"total_sell":"Total des vente","income":"Total des Revenu","total_expense":"Total des Dépenses"},"shared":{"today_sell":"Total de vente aujourd\'hui","income":"Revenu d\'aujourd\'hui","today_due":"Today Due","today_expense":"Dépenses d\'aujourd\'hui","repport":"rapport de la semaine","current":"Cette semaine","last":"La semaine dernière","product":"Produits vendus","out_stock":"Produit en rupture de stock","alert_center":"Centre d\'alertes","alert":"Ce produit","suit":"Est en rupture de stock!","view":"Afficher toutes les alertes","logout":"Se déconnecter"},"months":{"January":"Janvier","February":"Février","March":"Mars","April":"Avril","May":"May","Jun":"Juin","July":"Juillet","August":"Aout","September":"Séptembre","October":"Octobre","November":"Novembre","December":"Décembre"},"router":{"expense_insert":"Insérer des dépenses","add_category":"Ajouter une Catégorie","all_category":"Toutes les catégories","all_customer":"Toutes les Clients","add_customer":"Ajouter un Client","all_product":"Toutes les Produits","add_product":"Ajouter un Produit","all_employee":"Tous les employés","all_supplier":"Tous les fournisseurs","add_supplier":"Ajouter un fournisseur","add_employee":"Ajouter un employé","all_expense":"Toutes les dépenses","add_expense":"Ajouter une dépense","alert":"Alertes","pay_salary":"Payer le salaire","auth_forget":"Mot de passe oublié","create_account":"Créer un compte!","login":"Se Connecter","back":"Retourner","register":"S\'inscrire","account":"Vous avez déjà un compte?"},"cart":{"total_qty":"la Quantité totale","total_discount":"Remise totale"},"form":{"label":{"product":"Nom du produit","employee":"Nom de l\'employé","month":"Mois","employee_email":"E-mail","product_code":"Code du produit","product_category":"Catégorie de produit","product_supplier":"Fournisseur de produits","buying_date":"Date d\'achat","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de Vente","product_quantity":"Quantité","product_stock":"Stock de produits","min_quantity":"Quantité minimale","customer_name":"Nom du client","customer_email":"E-mail","customer_address":"Adresse du client","customer_phone":"Téléphone du client","choose_file":"Importer le fichier","expense_details":"Détails des dépenses","expense_amount":"Montant","search_order":"Rechercher la commande","datefrom":"Date de","dateto":"Date à","salary":"Salaire","amount":"Montant"},"name":{"category":"Ajouter une catégorie","update_category":"Mettre à jour la catégorie","update_customer":"Mettre à jour le Client","update_employee":"Mettre à jour l\'employée","update_expense":"Mettre à jour la dépense","update_stock":"Mise à jour de stocks","update_product":"Mettre à jour le Produit","update_supplier":"Mettre à jour le fourniseur","update_salary":"Mettre à jour le salaire"},"placeholder":{"product":"Entrez le nom du produit","product_code":"Entrez le Code-barres","email_forget":"Entrez l\'adresse e-mail existante","email":"Entrer l\'adresse e-mail","password":"Mot de passe","phone":"Entrez le numéro de téléphone","address":"Entrez L\'address","shop_name":"Entrez le nom de la boutique","confirm_password":"Confirmez le mot de passe","name":"Entrez votre nom complet","category_name":"Entrez le nom de la catégorie","search":"Cherche ici","customer_name":"Entrez le nom du client","customer_email":"Entrez E-mail du client","customer_address":"Entrez l\'adresse du client","customer_phone":"Entrez le téléphone du client","employee_name":"Entrez le nom de l\'employé","employee_email":"Entrez E-mail de l\'employé","employee_phone":"Entrez le téléphone de l\'employé","amount":"Entrez votre montant","employee_address":"Entrez l\'adresse de l\'employé","employee_salary":"Entrez le salaire de l\'employé","employee_joining_date":"Entrez la date d\'adhésion","employee_nid":"Entrez le NID"},"remember":"Rester connecté"},"table":{"name":{"category":"Liste des catégories","customer":"Liste des Client","employee":"Liste des Employées","product":"Liste des Produits","supplier":"Liste des founiseures","orders":"Vente d\'aujourd\'hui","orders_details":"détails de la commande","stock":"Stock","sallary_details":"Tous les détails du salaire","sallary_employee":"Détails du salaire des employés"},"feild":{"category_name":"Nom de catégorie","action":"Action","photo":"Photo","image":"Image","name":"Nom","email":"E-mail","sku":"Code-Barre","shop_name":"Nom de la boutique","month":"Mois","discount":"Remise","address":"Addresse","quantity":"Quantité","phone":"Téléphone","status":"Status","joininig_date":"Date d\'adhésion","sallery":"Salaires","details":"Détails","amount":"Montant","date":"Date","total_amount":"Montant total","total":"Total ","pay":"Payer","product":"Nom du produit","payby":"Payer Par","through":"Paiement via","sub_total":"SubTotal","pay_amount":"Montant du paiement","category":"Catégorie","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de vente","price":"Prix ​​unitaire"},"button":{"edit":"Modifier","edit_salary":"Modifier le salaire","delete":"Supprimer","view":"Afficher","search":"Rechercher","pay_salary":"Payer le salaire"}},"button":{"auth_forget":"Mot de passe oublié","back_login":"connectez!","login":"connectez","register":"S\'inscrire","submit":"Valider","update":"Modifier","paynow":"Payez maintenant"}}');
 
 /***/ }),
 

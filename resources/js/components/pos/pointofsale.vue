@@ -278,7 +278,6 @@
   axios.get('/api/increment/'+id)
       .then(({data}) => {
          if(data){
-           console.log(data)
           Reload.$emit('AfterAdd');
         Notification.success()
         }else{

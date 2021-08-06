@@ -288,6 +288,7 @@
  this.TodayExpense();
  this.StockOut();
  this.GetStats();
+         console.log(localStorage.getItem('token'))
  },
   methods:{
     TodaySell(){

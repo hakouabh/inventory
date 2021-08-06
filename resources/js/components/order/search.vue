@@ -58,10 +58,56 @@
             </div>
           </div>
         </div>
-      
-
-
-
+          <div class="row mb-3 ">
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('orders.total_sell') }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ total_sell }}</div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-calendar fa-2x text-primary"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Earnings (Annual) Card Example -->
+            <div class="col-xl-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('orders.income') }}</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ income }} </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-shopping-cart fa-2x text-success"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Pending Requests Card Example -->
+            <div class="col-xl-4 col-md-6 mb-4">
+              <div class="card h-100">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-xs font-weight-bold text-uppercase mb-1">{{ $t('orders.total_expense') }}</div>
+                      <div class="h5 mb-0 font-weight-bold text-gray-800">$ {{ total_expense }} </div>
+                    </div>
+                    <div class="col-auto">
+                      <i class="fas fa-comments fa-2x text-warning"></i>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 <div class="row">
             <div class="col-lg-12 mb-4">
               <!-- Simple Tables -->
@@ -126,7 +172,10 @@
     return {
       date_from:'',
       date_to:'',
-      orders:{}     
+      orders:{},
+      total_expense:0,
+      total_sell:0,
+      income:0     
       
     }
   },
@@ -136,9 +185,22 @@
   searchDate(){ 
       var data = {user_id:localStorage.getItem('user_id'),date_from:this.date_from,date_to:this.date_to}
        axios.post('/api/search/order/',data)
-        .then(({data}) => (this.orders = data))
+        .then(({data}) => {
+          this.orders = data
+          this.getStates()
+          })
         .catch(error =>this.errors = error.response.data.errors)
      },
+     getStates(){
+      var data = {user_id:localStorage.getItem('user_id'),date_from:this.date_from,date_to:this.date_to}
+       axios.post('/api/stats/order/',data)
+        .then(({data}) => {
+          this.income = data.income;
+          this.total_expense = data.expense;
+          this.total_sell = data.sell;
+        })
+        .catch(error =>this.errors = error.response.data.errors) 
+     }
   } 
 
 

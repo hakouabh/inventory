@@ -14,6 +14,11 @@
     "Cheaque":"Chèque",
     "GiftCard":"Carte cadeau"
   },
+  "orders":{
+    "total_sell":"Total des vente",
+    "income":"Total des Revenu",
+    "total_expense":"Total des Dépenses"
+  },
   "shared":{
     "today_sell":"Total de vente aujourd'hui",
     "income":"Revenu d'aujourd'hui",

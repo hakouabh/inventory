@@ -236,6 +236,7 @@ Route::Get('/order/satat/{user_id}', 'Api\OrderController@stats');
 
 
 Route::Post('/search/order', 'Api\PosController@SearchOrderDate');
+Route::Post('/stats/order', 'Api\OrderController@StateOrderDate');
 Route::Get('/getting/product/{id}', 'Api\PosController@GetProduct');
 
 // Admin Dashboard Route

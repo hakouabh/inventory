@@ -76,7 +76,6 @@
     login(){
       axios.post('/api/auth/login',this.form)
       .then(res => {
-        console.log(res)
         User.responseAfterLogin(res)
         Toast.fire({
           icon: 'success',
