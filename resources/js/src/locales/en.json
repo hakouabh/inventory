@@ -119,6 +119,7 @@
     "placeholder":{
       "product":"Enter The Product Name",
       "product_code":"Enter The Product Code",
+      "sku":"sku",
       "email_forget":"Enter Existing Email Address",
       "email":"Enter Email Address",
       "password":"Password",

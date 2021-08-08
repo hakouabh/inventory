@@ -2640,6 +2640,333 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=script&lang=js&":
+/*!**********************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=script&lang=js& ***!
+  \**********************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+var _created$created$data;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_created$created$data = {
+  created: function created() {
+    if (!User.loggedIn()) {
+      this.$router.push({
+        name: '/'
+      });
+    }
+  }
+}, _defineProperty(_created$created$data, "created", function created() {
+  var _this = this;
+
+  this.allCustomer();
+  this.allProduct();
+  this.cartProduct();
+  Reload.$on('AfterAdd', function () {
+    _this.cartProduct();
+  });
+}), _defineProperty(_created$created$data, "data", function data() {
+  return {
+    customer_id: '',
+    pay: '',
+    payby: '',
+    searchTerm: '',
+    getsearchTerm: '',
+    customers: '',
+    products: [],
+    errors: '',
+    carts: []
+  };
+}), _defineProperty(_created$created$data, "computed", {
+  qty: function qty() {
+    var sum = 0;
+
+    for (var i = 0; i < this.carts.length; i++) {
+      sum += parseFloat(this.carts[i].pro_quantity);
+    }
+
+    return sum;
+  },
+  total_discount: function total_discount() {
+    var sum = 0;
+
+    for (var i = 0; i < this.carts.length; i++) {
+      sum += parseFloat(this.carts[i].product_discount) * parseFloat(this.carts[i].pro_quantity);
+    }
+
+    return sum;
+  },
+  subtotal: function subtotal() {
+    var sum = 0;
+
+    for (var i = 0; i < this.carts.length; i++) {
+      sum += parseFloat(this.carts[i].pro_quantity) * (parseFloat(this.carts[i].product_price) - parseFloat(this.carts[i].product_discount));
+    }
+
+    return sum;
+  }
+}), _defineProperty(_created$created$data, "methods", {
+  // Cart Methods Here
+  AddToCart: function AddToCart(id) {
+    axios.get('/api/addToCart/' + id).then(function (_ref) {
+      var data = _ref.data;
+
+      if (data) {
+        Notification.cart_faild();
+      } else {
+        Reload.$emit('AfterAdd');
+        Notification.cart_success();
+      }
+    })["catch"]();
+  },
+  cartProduct: function cartProduct() {
+    var _this2 = this;
+
+    axios.get('/api/cart/product/' + localStorage.getItem('user_id')).then(function (_ref2) {
+      var data = _ref2.data;
+      return _this2.carts = data;
+    })["catch"]();
+  },
+  removeItem: function removeItem(id) {
+    axios.get('/api/remove/cart/' + id).then(function () {
+      Reload.$emit('AfterAdd');
+      Notification.cart_delete();
+    })["catch"]();
+  },
+  increment: function increment(id) {
+    axios.get('/api/increment/' + id).then(function (_ref3) {
+      var data = _ref3.data;
+
+      if (data) {
+        Reload.$emit('AfterAdd');
+        Notification.success();
+      } else {
+        Notification.cart_faild();
+      }
+    })["catch"]();
+  },
+  decrement: function decrement(id) {
+    axios.get('/api/decrement/' + id).then(function () {
+      Reload.$emit('AfterAdd');
+      Notification.success();
+    })["catch"]();
+  },
+  discount: function discount(cart) {
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      var _yield$Swal$fire, text, data;
+
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return Swal.fire({
+                title: 'Discount',
+                input: 'number',
+                inputLabel: 'Value'
+              });
+
+            case 2:
+              _yield$Swal$fire = _context.sent;
+              text = _yield$Swal$fire.value;
+
+              if (text) {
+                data = {
+                  id: cart.id,
+                  discount: text
+                };
+                Swal.fire("Disount : ".concat(text));
+                axios.post('/api/discount/', data).then(function () {
+                  Reload.$emit('AfterAdd');
+                })["catch"]();
+              }
+
+            case 5:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
+  orderdone: function orderdone() {
+    var _this3 = this;
+
+    var total = this.subtotal;
+    var data = {
+      user_id: localStorage.getItem('user_id'),
+      qty: this.qty,
+      subtotal: this.subtotal,
+      customer_id: this.customer_id,
+      payby: this.payby,
+      total_discount: this.total_discount,
+      pay: this.pay,
+      total: total
+    };
+    axios.post('/api/orderdone', data).then(function () {
+      Notification.success();
+
+      _this3.checkAlert();
+
+      _this3.$router.push({
+        name: 'home'
+      });
+    });
+  },
+  checkAlert: function checkAlert() {
+    for (var i = 0; i < this.carts.length; i++) {
+      var data = {
+        product_id: this.carts[i].pro_id,
+        user_id: localStorage.getItem('user_id')
+      };
+      axios.post('/api/AddAlert', data).then()["catch"]();
+    }
+  },
+  // End Cart Methods 
+  allCustomer: function allCustomer() {
+    var _this4 = this;
+
+    axios.get('/api/customers/index/' + localStorage.getItem('user_id')).then(function (_ref4) {
+      var data = _ref4.data;
+      return _this4.customers = data;
+    })["catch"](console.log('error'));
+  },
+  allProduct: function allProduct() {
+    var _this5 = this;
+
+    axios.get('/api/products/index/' + localStorage.getItem('user_id')).then(function (_ref5) {
+      var data = _ref5.data;
+      return _this5.products = data;
+    })["catch"]();
+  },
+  searchProduct: function searchProduct(sku) {
+    var _this6 = this;
+
+    var data = {
+      product_code: sku,
+      user_id: localStorage.getItem('user_id')
+    };
+    axios.post('/api/search/product/', data).then(function (_ref6) {
+      var data = _ref6.data;
+
+      if (data.length) {
+        _this6.AddToCart(data[0].id);
+      } else {
+        Notification.notFound();
+      }
+    })["catch"]();
+  }
+}), _created$created$data);
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/customer/create.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/customer/create.vue?vue&type=script&lang=js& ***!
@@ -8172,6 +8499,16 @@ var Notification = /*#__PURE__*/function () {
       }).show();
     }
   }, {
+    key: "notFound",
+    value: function notFound() {
+      new Noty({
+        type: 'error',
+        layout: 'topRight',
+        text: 'product not found !',
+        timeout: 1000
+      }).show();
+    }
+  }, {
     key: "cart_delete",
     value: function cart_delete() {
       new Noty({
@@ -8531,6 +8868,8 @@ var editcustomer = __webpack_require__(/*! ./components/customer/edit.vue */ "./
 
 var pos = __webpack_require__(/*! ./components/pos/pointofsale.vue */ "./resources/js/components/pos/pointofsale.vue").default;
 
+var counter = __webpack_require__(/*! ./components/counter/counter.vue */ "./resources/js/components/counter/counter.vue").default;
+
 var order = __webpack_require__(/*! ./components/order/order.vue */ "./resources/js/components/order/order.vue").default;
 
 var vieworder = __webpack_require__(/*! ./components/order/vieworder.vue */ "./resources/js/components/order/vieworder.vue").default;
@@ -8689,6 +9028,10 @@ var routes = [{
   path: '/alert',
   component: _alert,
   name: 'alert'
+}, {
+  path: '/counter',
+  component: counter,
+  name: 'counter'
 }];
 
 /***/ }),
@@ -13253,6 +13596,30 @@ __webpack_require__.r(__webpack_exports__);
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
 ___CSS_LOADER_EXPORT___.push([module.id, "\n#em_photo{\n  height: 40px;\n  width: 40px;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css&":
+/*!******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css& ***!
+  \******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n#em_photo[data-v-0ef85624]{\n  height: 100px;\n  width: 135px;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -62724,6 +63091,36 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_style_index_0_id_0ef85624_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_style_index_0_id_0ef85624_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__.default, options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_style_index_0_id_0ef85624_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__.default.locals || {});
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/customer/index.vue?vue&type=style&index=0&lang=css&":
 /*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/customer/index.vue?vue&type=style&index=0&lang=css& ***!
@@ -69063,6 +69460,47 @@ component.options.__file = "resources/js/components/category/index.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/counter/counter.vue":
+/*!*****************************************************!*\
+  !*** ./resources/js/components/counter/counter.vue ***!
+  \*****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _counter_vue_vue_type_template_id_0ef85624_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./counter.vue?vue&type=template&id=0ef85624&scoped=true& */ "./resources/js/components/counter/counter.vue?vue&type=template&id=0ef85624&scoped=true&");
+/* harmony import */ var _counter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./counter.vue?vue&type=script&lang=js& */ "./resources/js/components/counter/counter.vue?vue&type=script&lang=js&");
+/* harmony import */ var _counter_vue_vue_type_style_index_0_id_0ef85624_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css& */ "./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__.default)(
+  _counter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__.default,
+  _counter_vue_vue_type_template_id_0ef85624_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _counter_vue_vue_type_template_id_0ef85624_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "0ef85624",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/counter/counter.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/customer/create.vue":
 /*!*****************************************************!*\
   !*** ./resources/js/components/customer/create.vue ***!
@@ -70352,6 +70790,22 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/counter/counter.vue?vue&type=script&lang=js&":
+/*!******************************************************************************!*\
+  !*** ./resources/js/components/counter/counter.vue?vue&type=script&lang=js& ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./counter.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__.default); 
+
+/***/ }),
+
 /***/ "./resources/js/components/customer/create.vue?vue&type=script&lang=js&":
 /*!******************************************************************************!*\
   !*** ./resources/js/components/customer/create.vue?vue&type=script&lang=js& ***!
@@ -70842,6 +71296,19 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css&":
+/*!**************************************************************************************************************!*\
+  !*** ./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css& ***!
+  \**************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_style_index_0_id_0ef85624_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader/dist/cjs.js!../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=style&index=0&id=0ef85624&scoped=true&lang=css&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/customer/index.vue?vue&type=style&index=0&lang=css&":
 /*!*************************************************************************************!*\
   !*** ./resources/js/components/customer/index.vue?vue&type=style&index=0&lang=css& ***!
@@ -71143,6 +71610,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_8e3009e8___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_index_vue_vue_type_template_id_8e3009e8___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./index.vue?vue&type=template&id=8e3009e8& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/category/index.vue?vue&type=template&id=8e3009e8&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/counter/counter.vue?vue&type=template&id=0ef85624&scoped=true&":
+/*!************************************************************************************************!*\
+  !*** ./resources/js/components/counter/counter.vue?vue&type=template&id=0ef85624&scoped=true& ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_template_id_0ef85624_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_template_id_0ef85624_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_counter_vue_vue_type_template_id_0ef85624_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./counter.vue?vue&type=template&id=0ef85624&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=template&id=0ef85624&scoped=true&");
 
 
 /***/ }),
@@ -72707,6 +73191,414 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "card-footer" })
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=template&id=0ef85624&scoped=true&":
+/*!***************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/counter/counter.vue?vue&type=template&id=0ef85624&scoped=true& ***!
+  \***************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "col-xl-12 col-lg-12" }, [
+      _c("div", { staticClass: "card mb-4" }, [
+        _c(
+          "div",
+          {
+            staticClass:
+              "card-header align-items-center justify-content-between"
+          },
+          [
+            _c("div", { staticClass: "form-row" }, [
+              _c("div", { staticClass: "col-md-4" }, [
+                _c("input", {
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    autofocus: "",
+                    id: "exampleFormsku",
+                    placeholder: _vm.$t("form.placeholder.sku")
+                  },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !$event.type.indexOf("key") &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.searchProduct($event.target.value)
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col-md-4" }, [
+                _c(
+                  "select",
+                  {
+                    staticClass: "form-control",
+                    attrs: {
+                      type: "text",
+                      size: "10",
+                      id: "exampleFormsku",
+                      placeholder: _vm.$t("form.placeholder.product")
+                    }
+                  },
+                  _vm._l(_vm.products, function(product) {
+                    return _c("option", { domProps: { value: product.id } }, [
+                      _vm._v(_vm._s(product.product_name) + " ")
+                    ])
+                  }),
+                  0
+                )
+              ]),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "col-md-4" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-sm btn-info",
+                      attrs: { to: "/store-customer" }
+                    },
+                    [
+                      _c("font", { attrs: { color: "#ffffff" } }, [
+                        _vm._v(_vm._s(_vm.$t("router.add_customer")))
+                      ])
+                    ],
+                    1
+                  )
+                ],
+                1
+              )
+            ])
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "table-responsive",
+            staticStyle: { "font-size": "16px" }
+          },
+          [
+            _c(
+              "table",
+              { staticClass: "table align-items-center table-flush" },
+              [
+                _c("thead", { staticClass: "thead-light" }, [
+                  _c("tr", [
+                    _c("th", [_vm._v(_vm._s(_vm.$t("table.feild.name")))]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v(_vm._s(_vm.$t("table.feild.quantity")))]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v(_vm._s(_vm.$t("table.feild.discount")))]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v(_vm._s(_vm.$t("table.feild.price")))]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v(_vm._s(_vm.$t("table.feild.total")))]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v(_vm._s(_vm.$t("table.feild.action")))])
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.carts, function(cart) {
+                    return _c("tr", { key: cart.id }, [
+                      _c("td", [_vm._v(_vm._s(cart.pro_name))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c("input", {
+                          staticStyle: { width: "35px" },
+                          attrs: { type: "text", readonly: "" },
+                          domProps: { value: cart.pro_quantity }
+                        }),
+                        _vm._v(" "),
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-success",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.increment(cart.id)
+                              }
+                            }
+                          },
+                          [_vm._v("+")]
+                        ),
+                        _vm._v(" "),
+                        cart.pro_quantity >= 2
+                          ? _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-danger",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.decrement(cart.id)
+                                  }
+                                }
+                              },
+                              [_vm._v("-")]
+                            )
+                          : _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-sm btn-danger",
+                                attrs: { disabled: "" }
+                              },
+                              [_vm._v("-")]
+                            )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-sm btn-danger",
+                            on: {
+                              click: function($event) {
+                                $event.preventDefault()
+                                return _vm.discount(cart)
+                              }
+                            }
+                          },
+                          [_vm._v("%")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(cart.product_price))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(cart.sub_total))]),
+                      _vm._v(" "),
+                      _c("td", [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "btn btn-sm btn-primary",
+                            on: {
+                              click: function($event) {
+                                return _vm.removeItem(cart.id)
+                              }
+                            }
+                          },
+                          [
+                            _c("font", { attrs: { color: "#ffffff" } }, [
+                              _vm._v("X")
+                            ])
+                          ],
+                          1
+                        )
+                      ])
+                    ])
+                  }),
+                  0
+                )
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "card-footer" }, [
+          _c("ul", { staticClass: "list-group" }, [
+            _c(
+              "li",
+              {
+                staticClass:
+                  "list-group-item d-flex justify-content-between align-items-center"
+              },
+              [
+                _vm._v(
+                  _vm._s(_vm.$t("cart.total_qty")) + ":\n                      "
+                ),
+                _c("strong", [_vm._v(_vm._s(_vm.qty))])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                staticClass:
+                  "list-group-item d-flex justify-content-between align-items-center"
+              },
+              [
+                _vm._v(
+                  _vm._s(_vm.$t("cart.total_discount")) +
+                    ":\n                      "
+                ),
+                _c("strong", [_vm._v(_vm._s(_vm.total_discount) + " $")])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                staticClass:
+                  "list-group-item d-flex justify-content-between align-items-center"
+              },
+              [
+                _vm._v(
+                  _vm._s(_vm.$t("table.feild.total")) + " :\n                  "
+                ),
+                _c("strong", [_vm._v(_vm._s(_vm.subtotal) + " $")])
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("br"),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.orderdone.apply(null, arguments)
+                }
+              }
+            },
+            [
+              _c("label", [_vm._v(_vm._s(_vm.$t("form.label.customer_name")))]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.customer_id,
+                      expression: "customer_id"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.customer_id = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                _vm._l(_vm.customers, function(customer) {
+                  return _c("option", { domProps: { value: customer.id } }, [
+                    _vm._v(_vm._s(customer.name) + " ")
+                  ])
+                }),
+                0
+              ),
+              _vm._v(" "),
+              _c("label", [_vm._v(_vm._s(_vm.$t("table.feild.pay")))]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.pay,
+                    expression: "pay"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", required: "" },
+                domProps: { value: _vm.pay },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.pay = $event.target.value
+                  }
+                }
+              }),
+              _vm._v(" "),
+              _c("label", [_vm._v(_vm._s(_vm.$t("table.feild.payby")))]),
+              _vm._v(" "),
+              _c(
+                "select",
+                {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.payby,
+                      expression: "payby"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  on: {
+                    change: function($event) {
+                      var $$selectedVal = Array.prototype.filter
+                        .call($event.target.options, function(o) {
+                          return o.selected
+                        })
+                        .map(function(o) {
+                          var val = "_value" in o ? o._value : o.value
+                          return val
+                        })
+                      _vm.payby = $event.target.multiple
+                        ? $$selectedVal
+                        : $$selectedVal[0]
+                    }
+                  }
+                },
+                [
+                  _c("option", { attrs: { value: "HandCash" } }, [
+                    _vm._v(_vm._s(_vm.$t("paybay.HandCash")))
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "Cheaque" } }, [
+                    _vm._v(_vm._s(_vm.$t("paybay.Cheaque")) + " ")
+                  ]),
+                  _vm._v(" "),
+                  _c("option", { attrs: { value: "GiftCard" } }, [
+                    _vm._v(_vm._s(_vm.$t("paybay.GiftCard")))
+                  ])
+                ]
+              ),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c(
+                "button",
+                { staticClass: "btn btn-success", attrs: { type: "submit" } },
+                [_vm._v(_vm._s(_vm.$t("button.submit")))]
+              )
+            ]
+          )
         ])
       ])
     ])
@@ -99583,7 +100475,7 @@ var __vue_staticRenderFns__ = [];
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashboard","home":"Home","pos":"pos","language":"Language Center","fr":"French","en":"English","product":"Products Sold","available":"Available","stock_out":"Stock Out","paybay":{"HandCash":"Hand Cash","Cheaque":"Cheque","GiftCard":"Gift Card"},"orders":{"total_sell":"Total Sell Amount","income":"Total Income","total_expense":"Total Expense"},"shared":{"today_sell":"Today Sell Amount","income":"Today Income","today_due":"Today Due","today_expense":"Today Expense","repport":"weekly Recap Report","current":"Current Week","last":"Last Week","product":"Products Sold","out_stock":"Out Of Stock Product","alert_center":"Alerts Center","alert":"This product","suit":"is out of stock!","view":"Show All Alerts","logout":"Logout"},"months":{"January":"January","February":"February","March":"March","April":"April","May":"May","Jun":"Jun","July":"July","August":"August","September":"September","October":"October","November":"November","December":"December"},"router":{"expense_insert":"Expense Insert","add_category":"Add Category","all_category":"All Category","all_customer":"All Customer","add_customer":"Add Customer","all_product":"All Product","add_product":"Add Product","all_employee":"All Employee","all_supplier":"All Supplier","add_supplier":"Add Supplier","add_employee":"Add Employee","all_expense":"All Expense","add_expense":"Add Expense","alert":"Alerts","pay_salary":"Pay Salary","auth_forget":"Forget Password","create_account":"Create an Account!","login":"Login","back":"Go Back","register":"Register","account":"Already have an account?"},"cart":{"total_qty":"Total Quantity","total_discount":"Total Discount"},"form":{"label":{"product":"Product Name","employee":"Employee Name","month":"Months","employee_email":"Email","product_code":"Product Code","product_category":"Product Category","product_supplier":"Product Supplier","buying_date":"Buying Date","buying_price":"Buying Price","selling_price":"Selling Price","product_quantity":"Product Quantity","product_stock":"Product Stock","min_quantity":"Minimal Quantity","customer_name":"Customer Name","customer_email":"Customer Email","customer_address":"Customer Address","customer_phone":"Customer Phone","choose_file":"Choose File","expense_details":"Expense Details","expense_amount":"Expense Amount","search_order":"Search Order","datefrom":"Date From","dateto":"Date To","salary":"Salary","amount":"Amount"},"name":{"category":"Add Category","update_category":"Category Update","update_customer":"Customer Update","update_employee":"Employee Update","update_expense":"Expense Update","update_stock":"Stock Update","update_product":"Product Update","update_supplier":"Supplier Update","update_salary":"Update Salary"},"placeholder":{"product":"Enter The Product Name","product_code":"Enter The Product Code","email_forget":"Enter Existing Email Address","email":"Enter Email Address","password":"Password","phone":"Enter The Phone Number","address":"Enter The Address","shop_name":"Enter The Shop Name","confirm_password":"Confirm Password","name":"Enter Your Full Name","category_name":"Enter Your Category Name","search":"Search Here","customer_name":"Enter The Customer Name","customer_email":"Enter The Customer Email","customer_address":"Enter The Customer Adresse","customer_phone":"Enter The Customer Phone","employee_name":"Enter The Employee Name","employee_email":"Enter The Employee Email","employee_phone":"Enter The Employee Phone Number","amount":"Enter Your Amount","employee_address":"Enter The Employee Adresse","employee_salary":"Enter The Employee Salary","employee_joining_date":"Enter The Joining Date","employee_nid":"Enter The NID"},"remember":"Remember Me"},"table":{"name":{"category":"Category List","customer":"Customer List","employee":"Employee List","product":"Product List","supplier":"Supplier List","orders":"Today Orders","orders_details":"Order Details","stock":"Stock","sallary_details":"All Salary Details","sallary_employee":"Employee Salary Details"},"feild":{"category_name":"Category Name","action":"Action","photo":"Photo","image":"Image","name":"Name","email":"Email","sku":"Sku","shop_name":"Shop Name","month":"Month","discount":"Discount","address":"Address","quantity":"Quantity","phone":"Phone","status":"Status","joininig_date":"Joining Date","sallery":"Sallery","details":"Details","amount":"Amount","date":"Date","total_amount":"Total Amount","total":"Total ","pay":"Pay","product":"Product Name","payby":"Pay By","through":"Pay Through","sub_total":"Sub Total","pay_amount":"Pay Amount","category":"Category","buying_price":"Buying Price","selling_price":"Selling Price","price":"Unit Price"},"button":{"edit":"Edit","edit_salary":"Edit Salary","delete":"Delete","view":"View","search":"Search","pay_salary":"Pay Salary"}},"button":{"auth_forget":"Forget Password","back_login":"Back to Login!","login":"Login","register":"Register","submit":"Submit","update":"Update","paynow":"Pay Now"}}');
+module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashboard","home":"Home","pos":"pos","language":"Language Center","fr":"French","en":"English","product":"Products Sold","available":"Available","stock_out":"Stock Out","paybay":{"HandCash":"Hand Cash","Cheaque":"Cheque","GiftCard":"Gift Card"},"orders":{"total_sell":"Total Sell Amount","income":"Total Income","total_expense":"Total Expense"},"shared":{"today_sell":"Today Sell Amount","income":"Today Income","today_due":"Today Due","today_expense":"Today Expense","repport":"weekly Recap Report","current":"Current Week","last":"Last Week","product":"Products Sold","out_stock":"Out Of Stock Product","alert_center":"Alerts Center","alert":"This product","suit":"is out of stock!","view":"Show All Alerts","logout":"Logout"},"months":{"January":"January","February":"February","March":"March","April":"April","May":"May","Jun":"Jun","July":"July","August":"August","September":"September","October":"October","November":"November","December":"December"},"router":{"expense_insert":"Expense Insert","add_category":"Add Category","all_category":"All Category","all_customer":"All Customer","add_customer":"Add Customer","all_product":"All Product","add_product":"Add Product","all_employee":"All Employee","all_supplier":"All Supplier","add_supplier":"Add Supplier","add_employee":"Add Employee","all_expense":"All Expense","add_expense":"Add Expense","alert":"Alerts","pay_salary":"Pay Salary","auth_forget":"Forget Password","create_account":"Create an Account!","login":"Login","back":"Go Back","register":"Register","account":"Already have an account?"},"cart":{"total_qty":"Total Quantity","total_discount":"Total Discount"},"form":{"label":{"product":"Product Name","employee":"Employee Name","month":"Months","employee_email":"Email","product_code":"Product Code","product_category":"Product Category","product_supplier":"Product Supplier","buying_date":"Buying Date","buying_price":"Buying Price","selling_price":"Selling Price","product_quantity":"Product Quantity","product_stock":"Product Stock","min_quantity":"Minimal Quantity","customer_name":"Customer Name","customer_email":"Customer Email","customer_address":"Customer Address","customer_phone":"Customer Phone","choose_file":"Choose File","expense_details":"Expense Details","expense_amount":"Expense Amount","search_order":"Search Order","datefrom":"Date From","dateto":"Date To","salary":"Salary","amount":"Amount"},"name":{"category":"Add Category","update_category":"Category Update","update_customer":"Customer Update","update_employee":"Employee Update","update_expense":"Expense Update","update_stock":"Stock Update","update_product":"Product Update","update_supplier":"Supplier Update","update_salary":"Update Salary"},"placeholder":{"product":"Enter The Product Name","product_code":"Enter The Product Code","sku":"sku","email_forget":"Enter Existing Email Address","email":"Enter Email Address","password":"Password","phone":"Enter The Phone Number","address":"Enter The Address","shop_name":"Enter The Shop Name","confirm_password":"Confirm Password","name":"Enter Your Full Name","category_name":"Enter Your Category Name","search":"Search Here","customer_name":"Enter The Customer Name","customer_email":"Enter The Customer Email","customer_address":"Enter The Customer Adresse","customer_phone":"Enter The Customer Phone","employee_name":"Enter The Employee Name","employee_email":"Enter The Employee Email","employee_phone":"Enter The Employee Phone Number","amount":"Enter Your Amount","employee_address":"Enter The Employee Adresse","employee_salary":"Enter The Employee Salary","employee_joining_date":"Enter The Joining Date","employee_nid":"Enter The NID"},"remember":"Remember Me"},"table":{"name":{"category":"Category List","customer":"Customer List","employee":"Employee List","product":"Product List","supplier":"Supplier List","orders":"Today Orders","orders_details":"Order Details","stock":"Stock","sallary_details":"All Salary Details","sallary_employee":"Employee Salary Details"},"feild":{"category_name":"Category Name","action":"Action","photo":"Photo","image":"Image","name":"Name","email":"Email","sku":"Sku","shop_name":"Shop Name","month":"Month","discount":"Discount","address":"Address","quantity":"Quantity","phone":"Phone","status":"Status","joininig_date":"Joining Date","sallery":"Sallery","details":"Details","amount":"Amount","date":"Date","total_amount":"Total Amount","total":"Total ","pay":"Pay","product":"Product Name","payby":"Pay By","through":"Pay Through","sub_total":"Sub Total","pay_amount":"Pay Amount","category":"Category","buying_price":"Buying Price","selling_price":"Selling Price","price":"Unit Price"},"button":{"edit":"Edit","edit_salary":"Edit Salary","delete":"Delete","view":"View","search":"Search","pay_salary":"Pay Salary"}},"button":{"auth_forget":"Forget Password","back_login":"Back to Login!","login":"Login","register":"Register","submit":"Submit","update":"Update","paynow":"Pay Now"}}');
 
 /***/ }),
 
@@ -99594,7 +100486,7 @@ module.exports = JSON.parse('{"pos_dashboard":"POS Dashboard","dashboard":"Dashb
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"pos_dashboard":"Tableau de bord POS ","dashboard":"Tableau de bord","home":"Accueil","pos":"pos","language":"Centre de langue","fr":"français","en":"Anglais","product":"Produits vendus","available":"Disponible","stock_out":"Rupture de stock","paybay":{"HandCash":"En espèces","Cheaque":"Chèque","GiftCard":"Carte cadeau"},"orders":{"total_sell":"Total des vente","income":"Total des Revenu","total_expense":"Total des Dépenses"},"shared":{"today_sell":"Total de vente aujourd\'hui","income":"Revenu d\'aujourd\'hui","today_due":"Today Due","today_expense":"Dépenses d\'aujourd\'hui","repport":"rapport de la semaine","current":"Cette semaine","last":"La semaine dernière","product":"Produits vendus","out_stock":"Produit en rupture de stock","alert_center":"Centre d\'alertes","alert":"Ce produit","suit":"Est en rupture de stock!","view":"Afficher toutes les alertes","logout":"Se déconnecter"},"months":{"January":"Janvier","February":"Février","March":"Mars","April":"Avril","May":"May","Jun":"Juin","July":"Juillet","August":"Aout","September":"Séptembre","October":"Octobre","November":"Novembre","December":"Décembre"},"router":{"expense_insert":"Insérer des dépenses","add_category":"Ajouter une Catégorie","all_category":"Toutes les catégories","all_customer":"Toutes les Clients","add_customer":"Ajouter un Client","all_product":"Toutes les Produits","add_product":"Ajouter un Produit","all_employee":"Tous les employés","all_supplier":"Tous les fournisseurs","add_supplier":"Ajouter un fournisseur","add_employee":"Ajouter un employé","all_expense":"Toutes les dépenses","add_expense":"Ajouter une dépense","alert":"Alertes","pay_salary":"Payer le salaire","auth_forget":"Mot de passe oublié","create_account":"Créer un compte!","login":"Se Connecter","back":"Retourner","register":"S\'inscrire","account":"Vous avez déjà un compte?"},"cart":{"total_qty":"la Quantité totale","total_discount":"Remise totale"},"form":{"label":{"product":"Nom du produit","employee":"Nom de l\'employé","month":"Mois","employee_email":"E-mail","product_code":"Code du produit","product_category":"Catégorie de produit","product_supplier":"Fournisseur de produits","buying_date":"Date d\'achat","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de Vente","product_quantity":"Quantité","product_stock":"Stock de produits","min_quantity":"Quantité minimale","customer_name":"Nom du client","customer_email":"E-mail","customer_address":"Adresse du client","customer_phone":"Téléphone du client","choose_file":"Importer le fichier","expense_details":"Détails des dépenses","expense_amount":"Montant","search_order":"Rechercher la commande","datefrom":"Date de","dateto":"Date à","salary":"Salaire","amount":"Montant"},"name":{"category":"Ajouter une catégorie","update_category":"Mettre à jour la catégorie","update_customer":"Mettre à jour le Client","update_employee":"Mettre à jour l\'employée","update_expense":"Mettre à jour la dépense","update_stock":"Mise à jour de stocks","update_product":"Mettre à jour le Produit","update_supplier":"Mettre à jour le fourniseur","update_salary":"Mettre à jour le salaire"},"placeholder":{"product":"Entrez le nom du produit","product_code":"Entrez le Code-barres","email_forget":"Entrez l\'adresse e-mail existante","email":"Entrer l\'adresse e-mail","password":"Mot de passe","phone":"Entrez le numéro de téléphone","address":"Entrez L\'address","shop_name":"Entrez le nom de la boutique","confirm_password":"Confirmez le mot de passe","name":"Entrez votre nom complet","category_name":"Entrez le nom de la catégorie","search":"Cherche ici","customer_name":"Entrez le nom du client","customer_email":"Entrez E-mail du client","customer_address":"Entrez l\'adresse du client","customer_phone":"Entrez le téléphone du client","employee_name":"Entrez le nom de l\'employé","employee_email":"Entrez E-mail de l\'employé","employee_phone":"Entrez le téléphone de l\'employé","amount":"Entrez votre montant","employee_address":"Entrez l\'adresse de l\'employé","employee_salary":"Entrez le salaire de l\'employé","employee_joining_date":"Entrez la date d\'adhésion","employee_nid":"Entrez le NID"},"remember":"Rester connecté"},"table":{"name":{"category":"Liste des catégories","customer":"Liste des Client","employee":"Liste des Employées","product":"Liste des Produits","supplier":"Liste des founiseures","orders":"Vente d\'aujourd\'hui","orders_details":"détails de la commande","stock":"Stock","sallary_details":"Tous les détails du salaire","sallary_employee":"Détails du salaire des employés"},"feild":{"category_name":"Nom de catégorie","action":"Action","photo":"Photo","image":"Image","name":"Nom","email":"E-mail","sku":"Code-Barre","shop_name":"Nom de la boutique","month":"Mois","discount":"Remise","address":"Addresse","quantity":"Quantité","phone":"Téléphone","status":"Status","joininig_date":"Date d\'adhésion","sallery":"Salaires","details":"Détails","amount":"Montant","date":"Date","total_amount":"Montant total","total":"Total ","pay":"Payer","product":"Nom du produit","payby":"Payer Par","through":"Paiement via","sub_total":"SubTotal","pay_amount":"Montant du paiement","category":"Catégorie","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de vente","price":"Prix ​​unitaire"},"button":{"edit":"Modifier","edit_salary":"Modifier le salaire","delete":"Supprimer","view":"Afficher","search":"Rechercher","pay_salary":"Payer le salaire"}},"button":{"auth_forget":"Mot de passe oublié","back_login":"connectez!","login":"connectez","register":"S\'inscrire","submit":"Valider","update":"Modifier","paynow":"Payez maintenant"}}');
+module.exports = JSON.parse('{"pos_dashboard":"Tableau de bord POS ","dashboard":"Tableau de bord","home":"Accueil","pos":"pos","language":"Centre de langue","fr":"français","en":"Anglais","product":"Produits vendus","available":"Disponible","stock_out":"Rupture de stock","paybay":{"HandCash":"En espèces","Cheaque":"Chèque","GiftCard":"Carte cadeau"},"orders":{"total_sell":"Total des vente","income":"Total des Revenu","total_expense":"Total des Dépenses"},"shared":{"today_sell":"Total de vente aujourd\'hui","income":"Revenu d\'aujourd\'hui","today_due":"Today Due","today_expense":"Dépenses d\'aujourd\'hui","repport":"rapport de la semaine","current":"Cette semaine","last":"La semaine dernière","product":"Produits vendus","out_stock":"Produit en rupture de stock","alert_center":"Centre d\'alertes","alert":"Ce produit","suit":"Est en rupture de stock!","view":"Afficher toutes les alertes","logout":"Se déconnecter"},"months":{"January":"Janvier","February":"Février","March":"Mars","April":"Avril","May":"May","Jun":"Juin","July":"Juillet","August":"Aout","September":"Séptembre","October":"Octobre","November":"Novembre","December":"Décembre"},"router":{"expense_insert":"Insérer des dépenses","add_category":"Ajouter une Catégorie","all_category":"Toutes les catégories","all_customer":"Toutes les Clients","add_customer":"Ajouter un Client","all_product":"Toutes les Produits","add_product":"Ajouter un Produit","all_employee":"Tous les employés","all_supplier":"Tous les fournisseurs","add_supplier":"Ajouter un fournisseur","add_employee":"Ajouter un employé","all_expense":"Toutes les dépenses","add_expense":"Ajouter une dépense","alert":"Alertes","pay_salary":"Payer le salaire","auth_forget":"Mot de passe oublié","create_account":"Créer un compte!","login":"Se Connecter","back":"Retourner","register":"S\'inscrire","account":"Vous avez déjà un compte?"},"cart":{"total_qty":"la Quantité totale","total_discount":"Remise totale"},"form":{"label":{"product":"Nom du produit","employee":"Nom de l\'employé","month":"Mois","employee_email":"E-mail","product_code":"Code du produit","product_category":"Catégorie de produit","product_supplier":"Fournisseur de produits","buying_date":"Date d\'achat","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de Vente","product_quantity":"Quantité","product_stock":"Stock de produits","min_quantity":"Quantité minimale","customer_name":"Nom du client","customer_email":"E-mail","customer_address":"Adresse du client","customer_phone":"Téléphone du client","choose_file":"Importer le fichier","expense_details":"Détails des dépenses","expense_amount":"Montant","search_order":"Rechercher la commande","datefrom":"Date de","dateto":"Date à","salary":"Salaire","amount":"Montant"},"name":{"category":"Ajouter une catégorie","update_category":"Mettre à jour la catégorie","update_customer":"Mettre à jour le Client","update_employee":"Mettre à jour l\'employée","update_expense":"Mettre à jour la dépense","update_stock":"Mise à jour de stocks","update_product":"Mettre à jour le Produit","update_supplier":"Mettre à jour le fourniseur","update_salary":"Mettre à jour le salaire"},"placeholder":{"product":"Entrez le nom du produit","product_code":"Entrez le Code-barres","sku":"Code-Barre","email_forget":"Entrez l\'adresse e-mail existante","email":"Entrer l\'adresse e-mail","password":"Mot de passe","phone":"Entrez le numéro de téléphone","address":"Entrez L\'address","shop_name":"Entrez le nom de la boutique","confirm_password":"Confirmez le mot de passe","name":"Entrez votre nom complet","category_name":"Entrez le nom de la catégorie","search":"Cherche ici","customer_name":"Entrez le nom du client","customer_email":"Entrez E-mail du client","customer_address":"Entrez l\'adresse du client","customer_phone":"Entrez le téléphone du client","employee_name":"Entrez le nom de l\'employé","employee_email":"Entrez E-mail de l\'employé","employee_phone":"Entrez le téléphone de l\'employé","amount":"Entrez votre montant","employee_address":"Entrez l\'adresse de l\'employé","employee_salary":"Entrez le salaire de l\'employé","employee_joining_date":"Entrez la date d\'adhésion","employee_nid":"Entrez le NID"},"remember":"Rester connecté"},"table":{"name":{"category":"Liste des catégories","customer":"Liste des Client","employee":"Liste des Employées","product":"Liste des Produits","supplier":"Liste des founiseures","orders":"Vente d\'aujourd\'hui","orders_details":"détails de la commande","stock":"Stock","sallary_details":"Tous les détails du salaire","sallary_employee":"Détails du salaire des employés"},"feild":{"category_name":"Nom de catégorie","action":"Action","photo":"Photo","image":"Image","name":"Nom","email":"E-mail","sku":"Code-Barre","shop_name":"Nom de la boutique","month":"Mois","discount":"Remise","address":"Addresse","quantity":"Quantité","phone":"Téléphone","status":"Status","joininig_date":"Date d\'adhésion","sallery":"Salaires","details":"Détails","amount":"Montant","date":"Date","total_amount":"Montant total","total":"Total ","pay":"Payer","product":"Nom du produit","payby":"Payer Par","through":"Paiement via","sub_total":"SubTotal","pay_amount":"Montant du paiement","category":"Catégorie","buying_price":"Prix ​​d\'achat","selling_price":"Prix ​​de vente","price":"Prix ​​unitaire"},"button":{"edit":"Modifier","edit_salary":"Modifier le salaire","delete":"Supprimer","view":"Afficher","search":"Rechercher","pay_salary":"Payer le salaire"}},"button":{"auth_forget":"Mot de passe oublié","back_login":"connectez!","login":"connectez","register":"S\'inscrire","submit":"Valider","update":"Modifier","paynow":"Payez maintenant"}}');
 
 /***/ }),
 

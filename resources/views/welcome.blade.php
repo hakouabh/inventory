@@ -41,8 +41,14 @@
 
      <li class="nav-item bg-info">
         <router-link class="nav-link" to="/pos">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <i class="fas fa-fw fa-cart-plus"></i>
           <span>POS</span></router-link>
+      </li>
+
+      <li class="nav-item bg-info">
+        <router-link class="nav-link" to="/counter">
+          <i class="fas fa-fw fa-desktop"></i>
+          <span>Counter</span></router-link>
       </li>
 
       <hr class="sidebar-divider">

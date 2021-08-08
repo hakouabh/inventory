@@ -62,6 +62,15 @@ cart_faild(){
 
     }).show();
 }
+notFound(){
+    new Noty({
+        type:'error',
+        layout:'topRight',
+        text: 'product not found !',
+        timeout: 1000,
+
+    }).show();
+}
 cart_delete(){
     new Noty({
         type:'success',

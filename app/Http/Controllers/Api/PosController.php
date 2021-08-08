@@ -128,4 +128,10 @@ class PosController extends Controller
   return response()->json($product);
 
  }
+ public function searchProduct(Request $request){
+        $product = DB::table('products')
+        ->where('product_code',$request->product_code)
+        ->where('user_id',$request->user_id)->get();
+        return response()->json($product);
+ }
 }

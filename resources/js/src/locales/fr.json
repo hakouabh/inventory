@@ -119,6 +119,7 @@
     "placeholder":{
       "product":"Entrez le nom du produit",
       "product_code":"Entrez le Code-barres",
+      "sku":"Code-Barre",
       "email_forget":"Entrez l'adresse e-mail existante",
       "email":"Entrer l'adresse e-mail",
       "password":"Mot de passe",

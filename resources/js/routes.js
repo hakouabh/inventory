@@ -49,6 +49,8 @@ let editcustomer = require('./components/customer/edit.vue').default;
 
 let pos = require('./components/pos/pointofsale.vue').default;
 
+let counter = require('./components/counter/counter.vue').default;
+
 let order = require('./components/order/order.vue').default;
 let vieworder = require('./components/order/vieworder.vue').default;
 let searchorder = require('./components/order/search.vue').default;
@@ -111,6 +113,8 @@ export const routes = [
 { path: '/searchorder', component: searchorder, name:'searchorder'},
 
 { path: '/alert', component: _alert, name:'alert'},
+
+{ path: '/counter', component: counter, name:'counter'},
 
   
 
