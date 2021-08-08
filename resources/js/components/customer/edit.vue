@@ -47,18 +47,26 @@
          <div class="form-group">
 
           <div class="form-row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                <label for="exampleFormControlTextarea1"><b>{{$t('form.label.customer_address')}}</b></label>
          <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder="$t('form.placeholder.customer_address')" v-model="form.address">
          <small class="text-danger" v-if="errors.address"> {{ errors.address[0] }} </small>
             </div>
 
 
-     <div class="col-md-6">
+     <div class="col-md-4">
        <label for="exampleFormControlTextarea1"><b>{{$t('form.label.customer_phone')}}</b></label>
          <input type="text" class="form-control" id="exampleInputFirstName" v-bind:placeholder="$t('form.placeholder.customer_phone')" v-model="form.phone">
          <small class="text-danger" v-if="errors.phone"> {{ errors.phone[0] }} </small>
-            </div>     
+            </div> 
+            <div class="col-md-4">
+            <label>{{ $t('select.type.name') }}</label>
+              <select class="form-control" v-model="form.type">
+                    <option value="Loyal customer">{{ $t('select.type.loyal') }}</option>
+                    <option value="New customer">{{ $t('select.type.new') }} </option>
+                    <option value="Dissatisfied Customer">{{ $t('select.type.dissatisfied') }}</option>
+              </select>    
+          </div>    
             
           </div>
         </div>
@@ -130,7 +138,8 @@
         phone: '',
         address: '',
         photo: '',
-        newphoto: ''
+        newphoto: '',
+        type:''
        
       },
       errors:{}

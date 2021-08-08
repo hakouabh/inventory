@@ -16,7 +16,8 @@
     "sweetalert2": "^11.0.18",
     "vue-i18n": "^8.25.0",
     "vue-router": "^3.5.2",
-    "vue2-leaflet": "^2.7.1"
+    "vue2-leaflet": "^2.7.1",
+    "vue2-leaflet-markercluster": "^3.1.0"
   },
   "devDependencies": {
     "axios": "^0.21",

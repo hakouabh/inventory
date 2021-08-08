@@ -11,7 +11,7 @@ class Customer extends Model
   use Uuids;
   
     protected $fillable = [
-        'name', 'email', 'phone','address','photo','user_id'
+        'name', 'email', 'phone','address','photo','user_id','latitude','longitude','type'
     ];
 
     public function company()

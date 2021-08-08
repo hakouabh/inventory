@@ -19,6 +19,14 @@
     "income":"Total Income",
     "total_expense":"Total Expense"
   },
+  "select":{
+    "type":{
+      "name":"Enter Type Customer",
+      "loyal":"Loyal Customer",
+      "new":"New Customer",
+      "dissatisfied":"Dissatisfied Customer"
+    }
+  },
   "shared":{
     "today_sell":"Today Sell Amount",
     "income":"Today Income",

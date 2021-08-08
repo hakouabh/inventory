@@ -93,6 +93,8 @@ class AuthController extends Controller
         'name' => $request->input('name'),
         'email' => $request->input('email'),
         'password' => bcrypt($request->input('password')),
+        'latitude' => rand(35*10000,36*10000)/10000,
+        'longitude' => -1*(rand(0,1*10000)/10000)
     ]);
 
      return $this->login($request);
@@ -100,28 +102,6 @@ class AuthController extends Controller
 
 
     }
-
-
-    public function returnPosition(){
-        $position = (object) [
-            'latitude',
-            'longitude',
-            'email'
-        ];
-        $users = User::all();
-        $i=0;
-        foreach($users as $user){
-            $position->latitude[$i] = $user->latitude;
-            $position->longitude[$i] = $user->longitude;
-            $position->email[$i] = $user->email;
-            $i++;
-        }
-        return response()->json($position);
-    }
-
-
-
-
     /**
      * Get the token array structure.
      *

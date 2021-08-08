@@ -19,6 +19,14 @@
     "income":"Total des Revenu",
     "total_expense":"Total des Dépenses"
   },
+  "select":{
+    "type":{
+      "name":"Entrez Type de client",
+      "loyal":"Client fidèle",
+      "new":" Nouveau client",
+      "dissatisfied":"Client insatisfait"
+    }
+  },
   "shared":{
     "today_sell":"Total de vente aujourd'hui",
     "income":"Revenu d'aujourd'hui",

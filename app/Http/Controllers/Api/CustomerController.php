@@ -33,6 +33,7 @@ class CustomerController extends Controller
         $validateData = $request->validate([
          'name' => 'required|max:255',
          'email' => 'required',
+         'type' => 'required',
          'phone' => 'required|unique:customers',
 
         ]);
@@ -53,8 +54,11 @@ class CustomerController extends Controller
          $customer->email = $request->email;
          $customer->phone = $request->phone;
          $customer->address = $request->address;
+         $customer->type = $request->type;
          $customer->photo = $image_url;
          $customer->user_id = $request->user_id;
+         $customer->latitude = '35,'.(rand(6600,7200));
+         $customer->longitude = '-0,'.(rand(5600,6500));
          $customer->save(); 
      }else{
          $customer = new Customer;
@@ -62,8 +66,10 @@ class CustomerController extends Controller
          $customer->email = $request->email;
          $customer->phone = $request->phone;
          $customer->address = $request->address;
+         $customer->type = $request->type;
          $customer->user_id = $request->user_id;
-
+         $customer->latitude = '35,'.(rand(6600,7200));
+         $customer->longitude = '-0,'.(rand(5600,6500));
          $customer->save(); 
 
      } 
@@ -99,6 +105,7 @@ class CustomerController extends Controller
         $data['email'] = $request->email;
         $data['phone'] = $request->phone;
         $data['address'] = $request->address;
+        $data['type'] = $request->type;
         $image = $request->newphoto;
 
         if ($image) {
@@ -126,6 +133,26 @@ class CustomerController extends Controller
             $user = DB::table('customers')->where('id',$id)->update($data);
         }
     }
+    public function position(){
+        $position = (object) [
+            'latitude',
+            'longitude',
+            'email',
+            'name',
+            'type'
+        ];
+        $customers = Customer::all();
+        $i=0;
+        foreach($customers as $customer){
+            $position->latitude[$i] = $customer->latitude;
+            $position->longitude[$i] = $customer->longitude;
+            $position->email[$i] = $customer->email;
+            $position->name[$i] = $customer->name;
+            $position->type[$i] = $customer->type;
+            $i++;
+        }
+        return response()->json($position);
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -144,6 +171,4 @@ class CustomerController extends Controller
             $customer->delete();
         }
     }
-
-
 }

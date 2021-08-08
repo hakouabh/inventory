@@ -15,13 +15,17 @@ Vue.use(VueRouter)
  //MAP leaflet
 
  import { LMap, LTileLayer, LMarker,LPopup, LIcon } from 'vue2-leaflet';
-import 'leaflet/dist/leaflet.css';
+ import Vue2LeafletMarkerCluster from 'vue2-leaflet-markercluster'
+ import 'leaflet/dist/leaflet.css';
+ import 'leaflet.markercluster/dist/MarkerCluster.css';
+ import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
 
 Vue.component('l-map', LMap);
 Vue.component('l-tile-layer', LTileLayer);
 Vue.component('l-marker', LMarker);
 Vue.component('l-popup', LPopup);
 Vue.component('l-icon', LIcon);
+Vue.component('v-marker-cluster', Vue2LeafletMarkerCluster)
 
  // Import User Class
  import User from './Helpers/User';

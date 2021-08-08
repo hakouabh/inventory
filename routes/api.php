@@ -29,10 +29,6 @@ Route::group(['prefix' => 'auth'], function()
     'as' => 'api.auth.login',
     'uses' => 'AuthController@login',
   ]);
-  Route::get('/users/position', [
-    'as' => 'api.auth.returnPosition',
-    'uses' => 'AuthController@returnPosition',
-  ]);
   Route::post('/register', [
     'as' => 'api.auth.register',
     'uses' => 'AuthController@register',
@@ -80,6 +76,10 @@ Route::group(['prefix' => 'customers'], function()
   Route::post('/store', [
     'as' => 'api.customers.store',
     'uses' => 'Api\CustomerController@store',
+  ]);
+  Route::get('/position', [
+    'as' => 'api.customers.position',
+    'uses' => 'Api\CustomerController@position',
   ]);
   Route::get('/index/{user_id}', [
     'as' => 'api.customers.index',
@@ -226,6 +226,7 @@ Route::Get('/addToCart/{id}', 'Api\CartController@AddToCart');
 Route::Get('/cart/product/{id}', 'Api\CartController@CartProduct');
 Route::Get('/remove/cart/{id}', 'Api\CartController@removeCart');
 Route::Get('/increment/{id}', 'Api\CartController@increment');
+Route::Post('/checkquantity', 'Api\CartController@checkquantity');
 Route::Get('/decrement/{id}', 'Api\CartController@decrement');
 Route::Post('/discount', 'Api\CartController@discount');
 //-----------------------------------------------------------

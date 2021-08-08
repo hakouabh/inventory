@@ -8,11 +8,26 @@
                             <div class="col-md-4">
                                 <input type="text" class="form-control" autofocus id="exampleFormsku" @keyup.enter="searchProduct($event.target.value)" :placeholder=" $t('form.placeholder.sku') ">
                             </div>
-                            <div class="col-md-4">
-                                <select type="text" size="10" class="form-control"  id="exampleFormsku" :placeholder=" $t('form.placeholder.product') ">
+                            <!--<div class="col-md-4">
+                                <select type="text" @change="switchSelect($event)" class="form-control" id="exampleFormsku" :placeholder=" $t('form.placeholder.product') ">
                                   <option :value="product.id" v-for="product in products">{{product.product_name}} </option>
-                                </select>
-                            </div>
+                                </select>-->
+                                <div class="col-md-4">
+                                  <div class="input-group mb-3">
+                                    <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      {{ $t('table.feild.category') }}
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                      <a class="dropdown-item" @click=" allProduct() ">{{ $t('router.all_product') }}</a>                                     
+                                      <hr class="dropdown-divider">
+                                      <a class="dropdown-item" v-for="category in categories" :key="category.id" @click="subproduct(category.id)">{{ category.category_name }}</a>
+                                    </div>
+                                    <select type="text" @change="switchSelect($event)" class="form-control" id="exampleFormsku" :placeholder=" $t('form.placeholder.product') ">
+                                    <option></option>
+                                    <option :value="product.id" v-for="product in products">{{product.product_name}} </option>
+                                   </select>                                  
+                                </div>
+                              </div>
                             <div class="col-md-4">
                                 <router-link class="btn btn-sm btn-info" to="/store-customer"><font color="#ffffff">{{ $t('router.add_customer') }}</font></router-link>
                             </div>
@@ -34,7 +49,7 @@
 
                         <tr v-for="cart in carts" :key="cart.id">
                             <td>{{ cart.pro_name }}</td>
-                            <td><input type="text" readonly="" style="width: 35px;" :value="cart.pro_quantity">
+                            <td><input type="number" @change="checkquantity($event,cart.id)" style="width: 35px;" :value="cart.pro_quantity">
                             <button @click.prevent="increment(cart.id)" class="btn btn-sm btn-success">+</button>
                             <button  @click.prevent="decrement(cart.id)" class="btn btn-sm btn-danger" v-if="cart.pro_quantity >= 2">-</button>
                             <button class="btn btn-sm btn-danger" v-else="" disabled="">-</button>
@@ -100,8 +115,9 @@
     },
     created(){
     this.allCustomer();
-    this.allProduct();
+    //this.allProduct();
     this.cartProduct();
+    this.allCategory();
     Reload.$on('AfterAdd',() =>{
       this.cartProduct();
     })
@@ -115,6 +131,7 @@
         getsearchTerm:'',
         customers:'',
         products:[],
+        categories:'',
         errors:'',
         carts:[],
         
@@ -195,6 +212,28 @@
       })
       .catch() 
   },
+  checkquantity(e,id){
+    axios.post('/api/checkquantity/',{quantity:e.target.value, id:id})
+      .then(({data}) => {
+         if(data){
+          Reload.$emit('AfterAdd');
+          Notification.success()
+        }else{
+        Notification.cart_faild()
+        }
+      })
+      .catch() 
+  },
+     allCategory(){
+      axios.get('/api/categories/index/'+localStorage.getItem('user_id'))
+      .then(({data}) => (this.categories = data))
+      .catch()
+    },
+    subproduct(id){
+      axios.get('/api/getting/product/'+id)
+      .then(({data}) => (this.products = data))
+      .catch()
+    }, 
   async discount(cart){
 	
 const { value: text } = await Swal.fire({
@@ -252,6 +291,9 @@ if (text) {
       .then(({data}) => (this.products = data))
       .catch()
     },
+    switchSelect(e){
+      this.AddToCart(e.target.value)
+    },
     searchProduct(sku){
         let data ={
         product_code:sku,
@@ -278,4 +320,14 @@ if (text) {
     height: 100px;
     width: 135px;
   }
+  input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
 </style>
