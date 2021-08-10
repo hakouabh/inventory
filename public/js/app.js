@@ -7561,10 +7561,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
 var _created$data$created;
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -7598,6 +7608,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_created$data$created = {
   created: function created() {
     if (!User.loggedIn()) {
@@ -7611,12 +7634,51 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
       center: [35.6983, -0.6424],
       zoom: 12,
-      markers: []
+      positions: [],
+      users: '',
+      userMarkers: [],
+      markers: [],
+      myip: '',
+      tileProviders: []
     };
   }
 }, _defineProperty(_created$data$created, "created", function created() {
-  this.getUserPosition();
+  this.getUserPosition(); //this.getIpInfo();
 }), _defineProperty(_created$data$created, "methods", {
+  getIpInfo: function getIpInfo() {
+    var _this = this;
+
+    return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              // get current ip address
+              fetch('https://api.ipify.org?format=json').then(function (x) {
+                return x.json();
+              }).then(function (_ref) {
+                var ip = _ref.ip;
+                _this.myip = ip; // get locatiob
+
+                (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.common["Access-Control-Allow-Origin"]) = '*';
+                axios__WEBPACK_IMPORTED_MODULE_1___default().get("https://cors-anywhere.herokuapp.com/https://geo.ipify.org/api/v1?apiKey=at_yahGHonr8XT6LMlgMcLoUHZbzRTdn&ipAddress=".concat(_this.myip), {
+                  headers: {// remove headers
+                  }
+                }).then(function (res) {
+                  console.log(_this.positions.location);
+                })["catch"](function (err) {
+                  console.log(err.response);
+                });
+              });
+
+            case 1:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }))();
+  },
   centerUpdated: function centerUpdated(center) {
     this.center = center;
   },
@@ -7624,26 +7686,49 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     this.zoom = zoom;
   },
   getUserPosition: function getUserPosition() {
-    var _this = this;
+    var _this2 = this;
 
-    axios.get('/api/customers/position').then(function (res) {
-      for (var i = 0; i < res.data.latitude.length; i++) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/customers/position').then(function (_ref2) {
+      var data = _ref2.data;
+      _this2.positions = data.data.position;
+      _this2.users = data.data.users;
+
+      for (var i = 0; i < _this2.positions.name.length; i++) {
         var iconUrl;
 
-        if (res.data.type[i] == 'New customer') {
+        if (_this2.positions.type[i] == 'New customer') {
           iconUrl = 'images/vendor/leaflet/dist/marker-icon.png';
-        } else if (res.data.type[i] == 'Loyal customer') {
+        } else if (_this2.positions.type[i] == 'Loyal customer') {
           iconUrl = 'images/vendor/leaflet/dist/marker-icon-gold.png';
         } else {
           iconUrl = 'images/vendor/leaflet/dist/marker-icon-red.png';
         }
 
-        _this.markers.push({
+        _this2.markers.push({
           id: i,
-          name: res.data.name[i],
+          user: _this2.positions.user_email[i],
+          name: _this2.positions.name[i],
           iconUrl: iconUrl,
-          email: res.data.email[i],
-          coords: [parseFloat(res.data.latitude[i]), parseFloat(res.data.longitude[i])]
+          email: _this2.positions.email[i],
+          coords: [parseFloat(_this2.positions.latitude[i]), parseFloat(_this2.positions.longitude[i])]
+        });
+      }
+
+      var _loop = function _loop(_i) {
+        _this2.userMarkers[_i] = _this2.markers.filter(function (product) {
+          return product.user.match(_this2.users[_i].email);
+        });
+      };
+
+      for (var _i = 0; _i < _this2.users.length; _i++) {
+        _loop(_i);
+      }
+
+      for (var _i2 = 0; _i2 < _this2.userMarkers.length; _i2++) {
+        _this2.tileProviders.push({
+          markers: _this2.userMarkers[_i2],
+          name: _this2.users[_i2].email,
+          visible: true
         });
       }
     })["catch"]();
@@ -8761,21 +8846,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./src/i18n */ "./resources/js/src/i18n.js");
 /* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
 /* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LMap.js");
-/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LTileLayer.js");
-/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LMarker.js");
-/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LPopup.js");
-/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LIcon.js");
+/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LControlLayers.js");
+/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LLayerGroup.js");
+/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LTileLayer.js");
+/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LMarker.js");
+/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LPopup.js");
+/* harmony import */ var vue2_leaflet__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! vue2-leaflet */ "./node_modules/vue2-leaflet/dist/components/LIcon.js");
 /* harmony import */ var vue2_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue2-leaflet-markercluster */ "./node_modules/vue2-leaflet-markercluster/dist/Vue2LeafletMarkercluster.js");
 /* harmony import */ var vue2_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vue2_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_4__);
 /* harmony import */ var leaflet_dist_leaflet_css__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! leaflet/dist/leaflet.css */ "./node_modules/leaflet/dist/leaflet.css");
 /* harmony import */ var leaflet_markercluster_dist_MarkerCluster_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! leaflet.markercluster/dist/MarkerCluster.css */ "./node_modules/leaflet.markercluster/dist/MarkerCluster.css");
 /* harmony import */ var leaflet_markercluster_dist_MarkerCluster_Default_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! leaflet.markercluster/dist/MarkerCluster.Default.css */ "./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css");
-/* harmony import */ var _Helpers_User__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./Helpers/User */ "./resources/js/Helpers/User.js");
-/* harmony import */ var _Helpers_Notification__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./Helpers/Notification */ "./resources/js/Helpers/Notification.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
-/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _components_shared_topBar_vue__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./components/shared/topBar.vue */ "./resources/js/components/shared/topBar.vue");
-/* harmony import */ var _components_shared_map_vue__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./components/shared/map.vue */ "./resources/js/components/shared/map.vue");
+/* harmony import */ var _Helpers_User__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./Helpers/User */ "./resources/js/Helpers/User.js");
+/* harmony import */ var _Helpers_Notification__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Helpers/Notification */ "./resources/js/Helpers/Notification.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js");
+/* harmony import */ var sweetalert2__WEBPACK_IMPORTED_MODULE_17___default = /*#__PURE__*/__webpack_require__.n(sweetalert2__WEBPACK_IMPORTED_MODULE_17__);
+/* harmony import */ var _components_shared_topBar_vue__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./components/shared/topBar.vue */ "./resources/js/components/shared/topBar.vue");
+/* harmony import */ var _components_shared_map_vue__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./components/shared/map.vue */ "./resources/js/components/shared/map.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 
@@ -8791,29 +8878,31 @@ vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vue_router__WEBPACK_IMPORTED_MODULE
 
 
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-map', vue2_leaflet__WEBPACK_IMPORTED_MODULE_8__.default);
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-tile-layer', vue2_leaflet__WEBPACK_IMPORTED_MODULE_9__.default);
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-marker', vue2_leaflet__WEBPACK_IMPORTED_MODULE_10__.default);
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-popup', vue2_leaflet__WEBPACK_IMPORTED_MODULE_11__.default);
-vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-icon', vue2_leaflet__WEBPACK_IMPORTED_MODULE_12__.default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-control-layers', vue2_leaflet__WEBPACK_IMPORTED_MODULE_9__.default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-layer-group', vue2_leaflet__WEBPACK_IMPORTED_MODULE_10__.default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-tile-layer', vue2_leaflet__WEBPACK_IMPORTED_MODULE_11__.default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-marker', vue2_leaflet__WEBPACK_IMPORTED_MODULE_12__.default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-popup', vue2_leaflet__WEBPACK_IMPORTED_MODULE_13__.default);
+vue__WEBPACK_IMPORTED_MODULE_1__.default.component('l-icon', vue2_leaflet__WEBPACK_IMPORTED_MODULE_14__.default);
 vue__WEBPACK_IMPORTED_MODULE_1__.default.component('v-marker-cluster', (vue2_leaflet_markercluster__WEBPACK_IMPORTED_MODULE_4___default())); // Import User Class
 
 
-window.User = _Helpers_User__WEBPACK_IMPORTED_MODULE_13__.default; // Import Notification Class
+window.User = _Helpers_User__WEBPACK_IMPORTED_MODULE_15__.default; // Import Notification Class
 
 
-window.Notification = _Helpers_Notification__WEBPACK_IMPORTED_MODULE_14__.default; // Sweet Alert start 
+window.Notification = _Helpers_Notification__WEBPACK_IMPORTED_MODULE_16__.default; // Sweet Alert start 
 
 
-window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_15___default());
-var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_15___default().mixin({
+window.Swal = (sweetalert2__WEBPACK_IMPORTED_MODULE_17___default());
+var Toast = sweetalert2__WEBPACK_IMPORTED_MODULE_17___default().mixin({
   toast: true,
   position: 'top-end',
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
   onOpen: function onOpen(toast) {
-    toast.addEventListener('mouseenter', (sweetalert2__WEBPACK_IMPORTED_MODULE_15___default().stopTimer));
-    toast.addEventListener('mouseleave', (sweetalert2__WEBPACK_IMPORTED_MODULE_15___default().resumeTimer));
+    toast.addEventListener('mouseenter', (sweetalert2__WEBPACK_IMPORTED_MODULE_17___default().stopTimer));
+    toast.addEventListener('mouseleave', (sweetalert2__WEBPACK_IMPORTED_MODULE_17___default().resumeTimer));
   }
 });
 window.Toast = Toast; // Sweet Alert End 
@@ -8830,8 +8919,8 @@ var app = new vue__WEBPACK_IMPORTED_MODULE_1__.default({
   router: router,
   i18n: _src_i18n__WEBPACK_IMPORTED_MODULE_0__.default,
   components: {
-    'topbar': _components_shared_topBar_vue__WEBPACK_IMPORTED_MODULE_16__.default,
-    'mapVue': _components_shared_map_vue__WEBPACK_IMPORTED_MODULE_17__.default
+    'topbar': _components_shared_topBar_vue__WEBPACK_IMPORTED_MODULE_18__.default,
+    'mapVue': _components_shared_map_vue__WEBPACK_IMPORTED_MODULE_19__.default
   }
 });
 
@@ -79482,7 +79571,7 @@ var render = function() {
           "div",
           {
             staticClass: "card",
-            staticStyle: { height: "400px" },
+            staticStyle: { height: "500px" },
             attrs: { id: "mapVue" }
           },
           [_c("mapVue")],
@@ -84440,40 +84529,60 @@ var render = function() {
           }
         },
         [
-          _c("l-tile-layer", { attrs: { url: _vm.url } }),
+          _c("l-control-layers", { attrs: { position: "topright" } }),
           _vm._v(" "),
-          _c(
-            "v-marker-cluster",
-            _vm._l(_vm.markers, function(marker) {
-              return _c(
-                "l-marker",
-                { key: marker.id, attrs: { "lat-lng": marker.coords } },
-                [
-                  _c("l-icon", [
-                    _c("img", {
-                      attrs: { src: marker.iconUrl, alt: "marker-icon" }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("l-popup", [
-                    _c("ul", { staticClass: "list-group" }, [
-                      _c("li", { staticClass: "list-group-item" }, [
-                        _c("b", [_vm._v(_vm._s(marker.name))])
-                      ]),
-                      _vm._v(" "),
-                      _c("li", { staticClass: "list-group-item" }, [
-                        _c("b", [_vm._v(_vm._s(marker.email))])
-                      ])
-                    ])
-                  ])
-                ],
-                1
-              )
-            }),
-            1
-          )
+          _c("l-tile-layer", {
+            attrs: { url: _vm.url, name: "Mymap", "layer-type": "base" }
+          }),
+          _vm._v(" "),
+          _vm._l(_vm.tileProviders, function(provider) {
+            return _c(
+              "l-layer-group",
+              {
+                key: provider.name,
+                attrs: {
+                  visible: provider.visible,
+                  layerType: "overlay",
+                  name: provider.name
+                }
+              },
+              [
+                _c(
+                  "v-marker-cluster",
+                  _vm._l(provider.markers, function(marker) {
+                    return _c(
+                      "l-marker",
+                      { key: marker.id, attrs: { "lat-lng": marker.coords } },
+                      [
+                        _c("l-icon", [
+                          _c("img", {
+                            attrs: { src: marker.iconUrl, alt: "marker-icon" }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("l-popup", [
+                          _c("ul", { staticClass: "list-group" }, [
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _c("b", [_vm._v(_vm._s(marker.name))])
+                            ]),
+                            _vm._v(" "),
+                            _c("li", { staticClass: "list-group-item" }, [
+                              _c("b", [_vm._v(_vm._s(marker.email))])
+                            ])
+                          ])
+                        ])
+                      ],
+                      1
+                    )
+                  }),
+                  1
+                )
+              ],
+              1
+            )
+          })
         ],
-        1
+        2
       )
     ],
     1

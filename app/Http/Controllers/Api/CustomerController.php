@@ -6,10 +6,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use DB;
 use App\Model\Customer;
+use App\User;
 use Image;
 
 class CustomerController extends Controller
 {
+    public function __construct(){
+        $this->content = array();
+    }
     /**
      * Display a listing of the resource.
      *
@@ -139,9 +143,14 @@ class CustomerController extends Controller
             'longitude',
             'email',
             'name',
-            'type'
+            'type',
+            'user_email'
         ];
-        $customers = Customer::all();
+        $users = User::all();
+        $customers = DB::table('customers')
+        ->join('users','customers.user_id','users.id')
+        ->select('customers.*','users.email as user_email')
+        ->get();
         $i=0;
         foreach($customers as $customer){
             $position->latitude[$i] = $customer->latitude;
@@ -149,9 +158,14 @@ class CustomerController extends Controller
             $position->email[$i] = $customer->email;
             $position->name[$i] = $customer->name;
             $position->type[$i] = $customer->type;
+            $position->user_email[$i] = $customer->user_email;
             $i++;
         }
-        return response()->json($position);
+        $this->content['data']= [
+            'users' => $users,
+            'position' => $position
+          ];
+        return response()->json($this->content);
     }
 
     /**

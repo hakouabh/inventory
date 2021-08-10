@@ -187,7 +187,7 @@
 
 <div class="col-lg-12 mb-4">
                     <br>
-                <div class="card" style="height: 400px;" id="mapVue">
+                <div class="card" style="height: 500px;" id="mapVue">
                     <mapVue></mapVue>
                  </div> 
                   <br>
