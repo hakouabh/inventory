@@ -7618,8 +7618,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_created$data$created = {
   created: function created() {
@@ -7679,12 +7677,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }, _callee);
     }))();
   },
-  centerUpdated: function centerUpdated(center) {
-    this.center = center;
-  },
-  zoomUpdated: function zoomUpdated(zoom) {
-    this.zoom = zoom;
-  },
   getUserPosition: function getUserPosition() {
     var _this2 = this;
 
@@ -7692,42 +7684,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var data = _ref2.data;
       _this2.positions = data.data.position;
       _this2.users = data.data.users;
+      _this2.markers = _this2.positions.map(function (position) {
+        return {
+          user: position.user_email,
+          name: position.name,
+          iconUrl: position.type == 'New customer' ? 'images/vendor/leaflet/dist/marker-icon.png' : position.type == 'Loyal customer' ? 'images/vendor/leaflet/dist/marker-icon-gold.png' : 'images/vendor/leaflet/dist/marker-icon-red.png',
+          email: position.email,
+          coords: [parseFloat(position.latitude), parseFloat(position.longitude)]
+        };
+      });
 
-      for (var i = 0; i < _this2.positions.name.length; i++) {
-        var iconUrl;
-
-        if (_this2.positions.type[i] == 'New customer') {
-          iconUrl = 'images/vendor/leaflet/dist/marker-icon.png';
-        } else if (_this2.positions.type[i] == 'Loyal customer') {
-          iconUrl = 'images/vendor/leaflet/dist/marker-icon-gold.png';
-        } else {
-          iconUrl = 'images/vendor/leaflet/dist/marker-icon-red.png';
-        }
-
-        _this2.markers.push({
-          id: i,
-          user: _this2.positions.user_email[i],
-          name: _this2.positions.name[i],
-          iconUrl: iconUrl,
-          email: _this2.positions.email[i],
-          coords: [parseFloat(_this2.positions.latitude[i]), parseFloat(_this2.positions.longitude[i])]
-        });
-      }
-
-      var _loop = function _loop(_i) {
-        _this2.userMarkers[_i] = _this2.markers.filter(function (product) {
-          return product.user.match(_this2.users[_i].email);
+      var _loop = function _loop(i) {
+        _this2.userMarkers[i] = _this2.markers.filter(function (marker) {
+          return marker.user.match(_this2.users[i].email);
         });
       };
 
-      for (var _i = 0; _i < _this2.users.length; _i++) {
-        _loop(_i);
+      for (var i = 0; i < _this2.users.length; i++) {
+        _loop(i);
       }
 
-      for (var _i2 = 0; _i2 < _this2.userMarkers.length; _i2++) {
+      for (var _i = 0; _i < _this2.userMarkers.length; _i++) {
         _this2.tileProviders.push({
-          markers: _this2.userMarkers[_i2],
-          name: _this2.users[_i2].email,
+          markers: _this2.userMarkers[_i],
+          name: _this2.users[_i].email,
           visible: true
         });
       }
@@ -84522,67 +84502,16 @@ var render = function() {
         {
           ref: "map",
           staticClass: "map",
-          attrs: { center: _vm.center, zoom: _vm.zoom },
-          on: {
-            "update:center": _vm.centerUpdated,
-            "update:zoom": _vm.zoomUpdated
-          }
+          attrs: { center: _vm.center, zoom: _vm.zoom }
         },
         [
           _c("l-control-layers", { attrs: { position: "topright" } }),
           _vm._v(" "),
           _c("l-tile-layer", {
             attrs: { url: _vm.url, name: "Mymap", "layer-type": "base" }
-          }),
-          _vm._v(" "),
-          _vm._l(_vm.tileProviders, function(provider) {
-            return _c(
-              "l-layer-group",
-              {
-                key: provider.name,
-                attrs: {
-                  visible: provider.visible,
-                  layerType: "overlay",
-                  name: provider.name
-                }
-              },
-              [
-                _c(
-                  "v-marker-cluster",
-                  _vm._l(provider.markers, function(marker) {
-                    return _c(
-                      "l-marker",
-                      { key: marker.id, attrs: { "lat-lng": marker.coords } },
-                      [
-                        _c("l-icon", [
-                          _c("img", {
-                            attrs: { src: marker.iconUrl, alt: "marker-icon" }
-                          })
-                        ]),
-                        _vm._v(" "),
-                        _c("l-popup", [
-                          _c("ul", { staticClass: "list-group" }, [
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("b", [_vm._v(_vm._s(marker.name))])
-                            ]),
-                            _vm._v(" "),
-                            _c("li", { staticClass: "list-group-item" }, [
-                              _c("b", [_vm._v(_vm._s(marker.email))])
-                            ])
-                          ])
-                        ])
-                      ],
-                      1
-                    )
-                  }),
-                  1
-                )
-              ],
-              1
-            )
           })
         ],
-        2
+        1
       )
     ],
     1

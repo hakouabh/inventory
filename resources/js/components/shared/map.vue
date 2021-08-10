@@ -5,8 +5,6 @@
                   :zoom="zoom"
                   class="map"
                   ref="map"
-                  @update:center="centerUpdated"
-                  @update:zoom="zoomUpdated"
                   >
                   <l-control-layers
                   position="topright"
@@ -16,7 +14,7 @@
                   name="Mymap"
                   layer-type="base">
                   </l-tile-layer>
-                  <l-layer-group 
+                  <!--<l-layer-group 
                   v-for="provider in tileProviders"
                   :key="provider.name"
                   :visible="provider.visible"
@@ -25,7 +23,7 @@
                   <v-marker-cluster>
                   <l-marker
                   v-for="marker in provider.markers"
-                  :key="marker.id" 
+                  :key="marker.name" 
                   :lat-lng="marker.coords"
                   >
                   <l-icon>
@@ -39,7 +37,7 @@
                   </l-popup>
                   </l-marker>
                   </v-marker-cluster>
-                  </l-layer-group>
+                  </l-layer-group>-->
                   </l-map>
    </div>
 </template>
@@ -91,39 +89,26 @@ import axios from 'axios';
       });
       });
     },
-    centerUpdated(center){
-     this.center= center;
-   },
-      zoomUpdated(zoom){
-        this.zoom= zoom;
-      },
       getUserPosition(){
         axios.get('/api/customers/position')
         .then(({data}) => {
+          
           this.positions = data.data.position;
           this.users = data.data.users;
-          for(let i = 0; i < this.positions.name.length; i++){
-              var iconUrl;
-                if(this.positions.type[i] == 'New customer'){
-                  iconUrl='images/vendor/leaflet/dist/marker-icon.png'
-                }else if(this.positions.type[i] == 'Loyal customer'){
-                  iconUrl='images/vendor/leaflet/dist/marker-icon-gold.png'
-                }else{
-                  iconUrl='images/vendor/leaflet/dist/marker-icon-red.png'
-                }
-                this.markers.push({
-                  id:i,
-                  user: this.positions.user_email[i],
-                  name: this.positions.name[i], 
-                  iconUrl:iconUrl, 
-                  email:this.positions.email[i], 
-                  coords:[parseFloat(this.positions.latitude[i]), 
-                  parseFloat(this.positions.longitude[i])]
-                })            
+          this.markers = this.positions.map(position => 
+          (
+            {
+              user: position.user_email,
+              name: position.name,
+              iconUrl:position.type == 'New customer' ? 'images/vendor/leaflet/dist/marker-icon.png': position.type == 'Loyal customer'?'images/vendor/leaflet/dist/marker-icon-gold.png':'images/vendor/leaflet/dist/marker-icon-red.png',
+              email:position.email,
+              coords:[parseFloat(position.latitude), 
+                            parseFloat(position.longitude)]
           }
+          ));
         for(let i = 0; i < this.users.length; i++){
-          this.userMarkers[i] = this.markers.filter(product => {
-            return product.user.match(this.users[i].email)
+          this.userMarkers[i] = this.markers.filter(marker => {
+            return marker.user.match(this.users[i].email)
                })
             
           }

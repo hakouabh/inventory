@@ -138,32 +138,15 @@ class CustomerController extends Controller
         }
     }
     public function position(){
-        $position = (object) [
-            'latitude',
-            'longitude',
-            'email',
-            'name',
-            'type',
-            'user_email'
-        ];
         $users = User::all();
         $customers = DB::table('customers')
         ->join('users','customers.user_id','users.id')
-        ->select('customers.*','users.email as user_email')
+        ->select('customers.latitude','customers.longitude','customers.email',
+        'customers.name','customers.type','users.email as user_email')
         ->get();
-        $i=0;
-        foreach($customers as $customer){
-            $position->latitude[$i] = $customer->latitude;
-            $position->longitude[$i] = $customer->longitude;
-            $position->email[$i] = $customer->email;
-            $position->name[$i] = $customer->name;
-            $position->type[$i] = $customer->type;
-            $position->user_email[$i] = $customer->user_email;
-            $i++;
-        }
         $this->content['data']= [
             'users' => $users,
-            'position' => $position
+            'position' => $customers
           ];
         return response()->json($this->content);
     }

@@ -38,7 +38,7 @@ class CustomerSeeder extends Seeder
 'Tipasa','Illizi','Naama','Aïn Temouchent','Aïn Defla','Mila'
         ];
         $users = ['0053736b-a41a-464f-b571-cdf1137716c9','5f5ab45b-2505-443a-8bf8-ca7bb8a91f82','166af13b-ed7b-4c0d-b5cd-0d6e32bc43ad'];
-        for ($i=0; $i < 10000; $i++) {
+        for ($i=0; $i < 1000000; $i++) {
         $number = rand(0,47);
         $customer = new Customer;
          $customer->name = Str::random(10);
