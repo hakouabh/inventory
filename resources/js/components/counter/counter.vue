@@ -30,6 +30,9 @@
                               </div>
                             <div class="col-md-4">
                                 <router-link class="btn btn-sm btn-info" to="/store-customer"><font color="#ffffff">{{ $t('router.add_customer') }}</font></router-link>
+                                <button class="btn btn-info" @click=" freefire() " type="button">
+                                      FreeFire
+                                    </button>
                             </div>
                     </div>           
                   </div>
@@ -165,6 +168,14 @@
     },
  
   methods:{
+
+    freefire(){
+      axios.get('/api/freefire/')
+      .then(({data}) => {
+        console.log(data)
+      })
+      .catch()
+    },
     // Cart Methods Here
   AddToCart(id){
    axios.get('/api/addToCart/'+id)

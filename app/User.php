@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
       return $this->hasMany('\App\OauthAccessToken');
     }
+
+    public function sector()
+    {
+      return $this->hasMany('\App\Model\Sector');
+    }
 }

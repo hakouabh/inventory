@@ -9,6 +9,7 @@ use DateTime;
 use App\Model\Order;
 use App\Model\OrderDetails;
 use App\Model\Product;
+use App\Model\FreeFire;
 
 class PosController extends Controller
 {
@@ -133,5 +134,10 @@ class PosController extends Controller
         ->where('product_code',$request->product_code)
         ->where('user_id',$request->user_id)->get();
         return response()->json($product);
+ }
+ public function getFreeFire(){
+  $ff = new FreeFire();
+  $open_id = 3514595828;
+  return response()->json($ff->Login($open_id));
  }
 }

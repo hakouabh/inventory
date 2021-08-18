@@ -1,56 +1,22 @@
 <template>
    <div id="container">
      <div id="mapContainer">
-
      </div>
-    <!-- Map 2
-      <l-map
-                  :center="center"
-                  :zoom="zoom"
-                  class="map"
-                  ref="map"
-                  >
-                  <l-control-layers
-                  position="topright"
-                  ></l-control-layers>
-                  <l-tile-layer
-                  :url="url"
-                  name="Mymap"
-                  layer-type="base">
-                  </l-tile-layer>
-                  <l-layer-group 
-                  v-for="provider in tileProviders"
-                  :key="provider.name"
-                  :visible="provider.visible"
-                  layerType="overlay"
-                  :name="provider.name">
-                  <v-marker-cluster>
-                  
-                  <l-marker
-                  v-for="marker in provider.markers"
-                  :key="marker.name" 
-                  :lat-lng="marker.coords"
-                  >
-                  <l-icon>
-                    <img :src="marker.iconUrl" alt="marker-icon">
-                  </l-icon>
-                  <l-popup> 
-                    <ul class="list-group">
-                      <li class="list-group-item"><b>{{ marker.name }}</b></li>
-                      <li class="list-group-item"><b>{{ marker.email }}</b></li>
-                    </ul>
-                  </l-popup>
-                  </l-marker>
-                  </v-marker-cluster>
-                  </l-layer-group>
-                  </l-map>-->
    </div>
 </template>
 <script type="text/javascript">
 import axios from 'axios';
 import L from "leaflet";
+import "leaflet-draw";
+import "leaflet-draw/dist/leaflet.draw-src.css";
 import "leaflet.featuregroup.subgroup";
 import "leaflet/dist/leaflet.css";
+
+import { bireldjir } from './streets/bireldjir'
+import { merselkbir } from './streets/merselkbir'
+import { ainturk } from './streets/ainturk'
+import { statesData } from './streets/states'
+var pointInPolygon = require('point-in-polygon');
 
   export default {
     name: "Map",
@@ -69,13 +35,64 @@ import "leaflet/dist/leaflet.css";
             userMarkers:[],
             markers:[],
             myip:'',
-            group:[]
+            group:[],
+            geojson:'',
+            info:''
         }
     },
     mounted(){
       this.setupMap();
     },
     methods:{
+    getColor(density) {
+    return density > 25 ? '#800026' :
+           density > 20  ? '#BD0026' :
+           density > 17  ? '#E31A1C' :
+           density > 15  ? '#FC4E2A' :
+           density > 10   ? '#FD8D3C' :
+           density > 5   ? '#FEB24C' :
+           density > 1   ? '#FED976' :
+                      '#FFEDA0';
+      },
+    highlightFeature(e) {
+    var layer = e.target;
+
+    layer.setStyle({
+        weight: 5,
+        color: '#666',
+        dashArray: '',
+        fillOpacity: 0.7
+    });
+
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+        layer.bringToFront();
+    }
+    //this.info.update(layer.feature.properties);
+},
+ resetHighlight(e) {
+    this.geojson.resetStyle(e.target);
+    //this.info.update();
+},
+ zoomToFeature(e) {
+    mapdiv.fitBounds(e.target.getBounds());
+},
+ onEachFeature(feature, layer) {
+    layer.on({
+        mouseover: this.highlightFeature,
+        mouseout: this.resetHighlight,
+        click: this.zoomToFeature
+    });
+},
+      style(feature) {
+        return {
+            fillColor: this.getColor(feature.properties.density),
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+        };
+    },
       setupMap(){
         axios.get('/api/customers/position')
         .then(({data}) => {
@@ -90,7 +107,6 @@ import "leaflet/dist/leaflet.css";
          accessToken:"pk.eyJ1IjoiYWJkZWxoYWstbWVnaGVyYmkiLCJhIjoiY2tydzQ2ZjV0MGN1MzJxczczdnpkNjQ0YyJ9.PsRF0t-e6kjbL37sryRMlg",
        }
      );
-
       var mapDiv =L.map("mapContainer",{
         center: this.center,
         zoom: this.zoom,
@@ -99,6 +115,7 @@ import "leaflet/dist/leaflet.css";
       var mcgLayerSupportGroup = L.markerClusterGroup(),
           control = L.control.layers(null, null, { position: "topright" });
           mcgLayerSupportGroup.addTo(mapDiv);
+      var bireldjirdensity=0,ainturkdensity=0,merselkbirdensity=0;    
       for(let i = 0; i < this.users.length; i++){
           this.group[i] = L.featureGroup.subGroup(mcgLayerSupportGroup)
           this.userMarkers[i] = this.positions.filter(marker => {
@@ -107,9 +124,11 @@ import "leaflet/dist/leaflet.css";
                //create markers 
                 this.markers[i] = this.userMarkers[i].map(position => 
 
-                (
+                {
+                  return(
                   L.marker([parseFloat(position.latitude), 
                     parseFloat(position.longitude)],
+                    //set Icon
                       {icon:
                             position.type == 'New customer' ?  L.icon({
                                 iconUrl: 'images/vendor/leaflet/dist/marker-icon.png',
@@ -124,12 +143,50 @@ import "leaflet/dist/leaflet.css";
                       })
           .bindPopup(position.email)
           .addTo(this.group[i])
-          ));
+          )
+          });
           control.addOverlay(this.group[i], this.users[i].email);
           this.group[i].addTo(mapDiv)
-        }         
-          control.addTo(mapDiv);
+        }   
+        control.addTo(mapDiv);     
+        //Start of L Draw
+          // Initialise the FeatureGroup to store editable layers
+          var drawnItems = new L.FeatureGroup();
+          mapDiv.addLayer(drawnItems);
 
+        // Initialise the draw control and pass it the FeatureGroup of editable layers
+        var drawControl = new L.Control.Draw({
+          edit: {
+            featureGroup: drawnItems
+          }
+        });
+
+        mapDiv.addControl(drawControl);
+
+        mapDiv.on(L.Draw.Event.CREATED, function (e) {
+          //var type = e.layerType
+          var sector = e.layer;
+
+          drawnItems.addLayer(sector);
+          // Save To DB .
+          //sector
+          var shape = sector.toGeoJSON()
+          var shape_for_db = JSON.stringify(shape);
+          console.log(shape)
+          console.log(shape_for_db)
+
+        });
+        mapDiv.on(L.Draw.Event.EDITED, function (e) {
+          // Edit  DB .
+          var editeddsector = e.layers;
+          console.log(editeddsector)
+          //console.log(drawnItems._layers)
+        });
+        mapDiv.on(L.Draw.Event.DELETED, function (e) {
+          // Delete from DB .
+          var deletedsector = e.layers;
+          console.log(deletedsector)
+        });
         })
         .catch()
       },
@@ -156,39 +213,6 @@ import "leaflet/dist/leaflet.css";
       });
       });
     },
-      // getUserPosition(){
-      //   axios.get('/api/customers/position')
-      //   .then(({data}) => {
-          
-      //     this.positions = data.data.position;
-      //     this.users = data.data.users;
-      //     this.markers = this.positions.map(position => 
-      //     (
-      //       {
-      //         user: position.user_email,
-      //         name: position.name,
-      //         iconUrl:position.type == 'New customer' ? 'images/vendor/leaflet/dist/marker-icon.png': position.type == 'Loyal customer'?'images/vendor/leaflet/dist/marker-icon-gold.png':'images/vendor/leaflet/dist/marker-icon-red.png',
-      //         email:position.email,
-      //         coords:[parseFloat(position.latitude), 
-      //                       parseFloat(position.longitude)]
-      //     }
-      //     ));
-      //   for(let i = 0; i < this.users.length; i++){
-      //     this.userMarkers[i] = this.markers.filter(marker => {
-      //       return marker.user.match(this.users[i].email)
-      //          })
-            
-      //     }
-      //     for(let i = 0; i < this.userMarkers.length; i++){
-      //         this.tileProviders.push({
-      //           markers:this.userMarkers[i],
-      //           name:this.users[i].email,
-      //           visible:true
-      //         })            
-      //     }
-      //   })
-      //   .catch()
-      // },
     }
   }
 </script>
@@ -199,5 +223,17 @@ import "leaflet/dist/leaflet.css";
     height: 100%;
     overflow: hidden;
   }
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
 
 </style>

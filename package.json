@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "leaflet": "^1.7.1",
+    "leaflet-draw": "^1.0.4",
     "leaflet.featuregroup.subgroup": "^1.0.2",
     "noty": "^3.2.0-beta-deprecated",
+    "point-in-polygon": "^1.1.0",
     "sweetalert2": "^11.0.18",
     "vue-i18n": "^8.25.0",
     "vue-router": "^3.5.2",
