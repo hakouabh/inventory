@@ -4,12 +4,13 @@ namespace App\Model;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\Uuids;
 
 class Sector extends Model
 {
     use HasFactory, Uuids;
      protected $fillable = [
-        'name', 'type', 'user_id'
+        'name', 'type', 'user_id','data'
     ];
 
 

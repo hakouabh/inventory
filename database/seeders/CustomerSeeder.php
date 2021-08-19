@@ -45,8 +45,17 @@ class CustomerSeeder extends Seeder
         ];
         
         $users = [
-            '02059ac2-a685-4a82-8cbe-0a472b0b391b','2c4d4cc1-b93e-472c-9208-d2fae9712744','7148964f-8cee-4202-8bab-c8045d976050','a6907f56-5185-400f-9fff-5ab4776a4517','9f16ad7c-e567-43bb-be8c-5b054ad97af7',
-            '44736232-f2ba-43b8-a68a-28720113fd26','7d97084d-6834-49c2-99bf-d00f570bb493','6028b934-c6ee-48e6-a58f-d13dcaf769fd','ae43331f-bfcb-4a60-9317-880953f85208','4d38def4-f9a5-476c-9f26-1c22cb0b12ea'
+            '5aaf9076-410f-4654-aedd-914119078d4e',
+'4fe71583-d1ca-45d2-a186-915b1b03c517',
+'93726d14-df62-45b9-ab0b-3675eb112a88',
+'b0f22f3a-cf6d-4bf9-bcc7-b6ba77644cdc',
+'8a96f948-12cd-4853-bd81-aa9cb063c1ee',
+'2663d324-491f-4824-a61f-a3e18c2056b4',
+'04f7f004-cc47-4805-9fb5-ffefafd1d0d3',
+'8397d83b-c1d8-4dc2-a655-2c845985aac4',
+'d8b245a5-8493-4090-8400-706ea49ecfd0',
+'e197c29d-4171-40f3-a14b-6550ce682389'
+
         ]; 
         for ($i=0; $i < 100; $i++) {
         // $number = rand(0,1);

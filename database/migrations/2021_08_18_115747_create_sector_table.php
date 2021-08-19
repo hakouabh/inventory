@@ -13,7 +13,7 @@ class CreateSectorTable extends Migration
      */
     public function up()
     {
-        Schema::create('sector', function (Blueprint $table) {
+        Schema::create('sectors', function (Blueprint $table) {
             $table->uuid('id');
             $table->text('name'); 
             $table->text('type');

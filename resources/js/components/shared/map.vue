@@ -36,14 +36,39 @@ var pointInPolygon = require('point-in-polygon');
             markers:[],
             myip:'',
             group:[],
+            sector:[],
             geojson:'',
-            info:''
+            info:'',
+            mapDiv:''
         }
     },
     mounted(){
       this.setupMap();
     },
+    created(){
+      this.getSector();
+    },
     methods:{
+    getSector(){
+      axios.get('/api/sector/index/'+localStorage.getItem('user_id'))
+        .then(({data}) => {
+          this.sector = data
+          })
+        .catch()
+    }, 
+    insertSector(data,type){
+    var form ={
+    user_id:localStorage.getItem('user_id'),
+    type:type,
+    data:data
+      }
+    axios.post('/api/sector/store/',form)
+      .then(() => {
+        //Reload.$emit('AfterAdd');
+      })
+      .catch() 
+
+    },
     getColor(density) {
     return density > 25 ? '#800026' :
            density > 20  ? '#BD0026' :
@@ -74,7 +99,7 @@ var pointInPolygon = require('point-in-polygon');
     //this.info.update();
 },
  zoomToFeature(e) {
-    mapdiv.fitBounds(e.target.getBounds());
+    this.mapDiv.fitBounds(e.target.getBounds());
 },
  onEachFeature(feature, layer) {
     layer.on({
@@ -107,14 +132,14 @@ var pointInPolygon = require('point-in-polygon');
          accessToken:"pk.eyJ1IjoiYWJkZWxoYWstbWVnaGVyYmkiLCJhIjoiY2tydzQ2ZjV0MGN1MzJxczczdnpkNjQ0YyJ9.PsRF0t-e6kjbL37sryRMlg",
        }
      );
-      var mapDiv =L.map("mapContainer",{
+      this.mapDiv =L.map("mapContainer",{
         center: this.center,
         zoom: this.zoom,
         layers: tileProvider
       });
       var mcgLayerSupportGroup = L.markerClusterGroup(),
           control = L.control.layers(null, null, { position: "topright" });
-          mcgLayerSupportGroup.addTo(mapDiv);
+          mcgLayerSupportGroup.addTo(this.mapDiv);
       var bireldjirdensity=0,ainturkdensity=0,merselkbirdensity=0;    
       for(let i = 0; i < this.users.length; i++){
           this.group[i] = L.featureGroup.subGroup(mcgLayerSupportGroup)
@@ -125,10 +150,14 @@ var pointInPolygon = require('point-in-polygon');
                 this.markers[i] = this.userMarkers[i].map(position => 
 
                 {
+                  // if (pointInPolygon([ parseFloat(position.longitude) ,parseFloat(position.latitude)], 
+                  // statesData.features[0].geometry.coordinates[0])){
+                  //   bireldjirdensity++;
+                  // }
                   return(
                   L.marker([parseFloat(position.latitude), 
                     parseFloat(position.longitude)],
-                    //set Icon
+                     //set Icon
                       {icon:
                             position.type == 'New customer' ?  L.icon({
                                 iconUrl: 'images/vendor/leaflet/dist/marker-icon.png',
@@ -146,13 +175,45 @@ var pointInPolygon = require('point-in-polygon');
           )
           });
           control.addOverlay(this.group[i], this.users[i].email);
-          this.group[i].addTo(mapDiv)
+          this.group[i].addTo(this.mapDiv)
         }   
-        control.addTo(mapDiv);     
+        control.addTo(this.mapDiv);
+        for(let i = 0; i < this.sector.length; i++){
+          statesData.features.push(JSON.parse(this.sector[i].data))
+        }
+        this.geojson = L.geoJson(statesData.features,{
+          pointToLayer: (feature, latlng) => {
+                if (feature.properties.radius) {
+                  return new L.Circle(latlng, feature.properties.radius);
+                } else {
+                  //insert new marker
+                  return new L.Marker(latlng,{icon:
+                  L.icon({
+                                    iconUrl: 'images/vendor/leaflet/dist/marker-icon.png',
+                      })
+                  });
+                }
+              },
+          style: this.style,
+          onEachFeature: this.onEachFeature}).addTo(this.mapDiv)
+      // this.info.onAdd = function () {
+      //     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+      //     this.update();
+      //     return this._div;
+      // };
+
+// method that we will use to update the control based on feature properties passed
+      // this.info.update = function (props) {
+      //     this._div.innerHTML = '<h5>Client Density</h5>' +  (props ?
+      //         '<b>' + props.name + '</b><br />' + props.density + 'client'
+      //         : 'Hover !!');
+      // };
+
+      //this.info.addTo(this.mapDiv); 
         //Start of L Draw
           // Initialise the FeatureGroup to store editable layers
           var drawnItems = new L.FeatureGroup();
-          mapDiv.addLayer(drawnItems);
+          this.mapDiv.addLayer(drawnItems);
 
         // Initialise the draw control and pass it the FeatureGroup of editable layers
         var drawControl = new L.Control.Draw({
@@ -161,28 +222,39 @@ var pointInPolygon = require('point-in-polygon');
           }
         });
 
-        mapDiv.addControl(drawControl);
+        this.mapDiv.addControl(drawControl);
 
-        mapDiv.on(L.Draw.Event.CREATED, function (e) {
-          //var type = e.layerType
+        this.mapDiv.on(L.Draw.Event.CREATED, function (e) {
+          var type = e.layerType
           var sector = e.layer;
-
+          
           drawnItems.addLayer(sector);
-          // Save To DB .
-          //sector
-          var shape = sector.toGeoJSON()
-          var shape_for_db = JSON.stringify(shape);
-          console.log(shape)
-          console.log(shape_for_db)
-
+            const json = sector.toGeoJSON();
+            json.properties.density = 0;
+            if (sector instanceof L.Circle) {
+              json.properties.radius = sector.getRadius();
+            }
+            var shape_for_db = JSON.stringify(json);
+            console.log(shape_for_db)
+            //store To db
+            axios.post('/api/sector/store/',{
+            user_id:localStorage.getItem('user_id'),
+            type:type,
+            leaflet_id:sector._leaflet_id,
+            data:shape_for_db
+              })
+              .then(() => {
+                //Reload.$emit('AfterAdd');
+              })
+              .catch() 
         });
-        mapDiv.on(L.Draw.Event.EDITED, function (e) {
+        this.mapDiv.on(L.Draw.Event.EDITED, function (e) {
           // Edit  DB .
           var editeddsector = e.layers;
           console.log(editeddsector)
           //console.log(drawnItems._layers)
         });
-        mapDiv.on(L.Draw.Event.DELETED, function (e) {
+        this.mapDiv.on(L.Draw.Event.DELETED, function (e) {
           // Delete from DB .
           var deletedsector = e.layers;
           console.log(deletedsector)

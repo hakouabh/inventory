@@ -48,7 +48,7 @@ class FreeFire
 		$this->open_id = $result["open_id"];
 		return $result;
 	}
-
+//https://shop2game.com/api/shop/pay/init?language=en&region=ME
 	public function BuyDiamond($card = null){
 		if(is_null($this->open_id) || is_null($card)) return false;
 		$result = $this->request("POST", "https://termgame.com/api/shop/pay/init?language=th&region=IN.TH", array(

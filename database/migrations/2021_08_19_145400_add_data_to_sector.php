@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSectorToCustomer extends Migration
+class AddDataToSector extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddSectorToCustomer extends Migration
      */
     public function up()
     {
-        Schema::table('customers', function (Blueprint $table) {
-            $table->uuid('sector_id')->nullable()->index();
-            $table->foreign('sector_id')->references('id')->on('sectors');
+        Schema::table('sectors', function (Blueprint $table) {
+            $table->text('data');
         });
     }
 
@@ -26,8 +25,8 @@ class AddSectorToCustomer extends Migration
      */
     public function down()
     {
-        Schema::table('customer', function (Blueprint $table) {
-            $table->dropColumn('sector_id');
+        Schema::table('sectors', function (Blueprint $table) {
+            $table->dropColumn('data');
         });
     }
 }
