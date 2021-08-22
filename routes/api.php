@@ -254,6 +254,9 @@ Route::Get('/today/stockout/{user_id}', 'Api\PosController@Stockout');
 Route::Post('/AddAlert', 'Api\AlertController@AddAlert');
 Route::Get('/alert/product/{user_id}', 'Api\AlertController@AlertProduct');
 Route::Get('/remove/alert/{id}', 'Api\AlertController@removeAlert');
+
 //Sector
 Route::Post('/sector/store', 'Api\SectorController@store');
 Route::Get('/sector/index/{user_id}', 'Api\SectorController@index');
+Route::Post('/sector/edit', 'Api\SectorController@edit');
+Route::Post('/sector/delete', 'Api\SectorController@destroy');

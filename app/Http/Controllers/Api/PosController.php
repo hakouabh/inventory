@@ -13,6 +13,9 @@ use App\Model\FreeFire;
 
 class PosController extends Controller
 {
+  public function __construct(){
+    $this->content = array();
+}
    public function GetProduct($id){
 
    	$product = DB::table('products')
@@ -43,7 +46,8 @@ class PosController extends Controller
     $order->save();
     $_id = $order->id;
 
-    $contents = DB::table('pos')->get();
+    $contents = DB::table('pos')->where('user_id',$request->user_id)
+    ->get();
 
     foreach ($contents as $content) {
     $order_details = new OrderDetails;
@@ -134,10 +138,5 @@ class PosController extends Controller
         ->where('product_code',$request->product_code)
         ->where('user_id',$request->user_id)->get();
         return response()->json($product);
- }
- public function getFreeFire(){
-  $ff = new FreeFire();
-  $open_id = 3514595828;
-  return response()->json($ff->Login($open_id));
  }
 }

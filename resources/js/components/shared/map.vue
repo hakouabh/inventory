@@ -12,9 +12,6 @@ import "leaflet-draw/dist/leaflet.draw-src.css";
 import "leaflet.featuregroup.subgroup";
 import "leaflet/dist/leaflet.css";
 
-import { bireldjir } from './streets/bireldjir'
-import { merselkbir } from './streets/merselkbir'
-import { ainturk } from './streets/ainturk'
 import { statesData } from './streets/states'
 var pointInPolygon = require('point-in-polygon');
 
@@ -56,19 +53,19 @@ var pointInPolygon = require('point-in-polygon');
           })
         .catch()
     }, 
-    insertSector(data,type){
-    var form ={
-    user_id:localStorage.getItem('user_id'),
-    type:type,
-    data:data
-      }
-    axios.post('/api/sector/store/',form)
-      .then(() => {
-        //Reload.$emit('AfterAdd');
-      })
-      .catch() 
+    // insertSector(data,type){
+    // var form ={
+    // user_id:localStorage.getItem('user_id'),
+    // type:type,
+    // data:data
+    //   }
+    // axios.post('/api/sector/store/',form)
+    //   .then(() => {
+    //     //Reload.$emit('AfterAdd');
+    //   })
+    //   .catch() 
 
-    },
+    // },
     getColor(density) {
     return density > 25 ? '#800026' :
            density > 20  ? '#BD0026' :
@@ -227,7 +224,6 @@ var pointInPolygon = require('point-in-polygon');
         this.mapDiv.on(L.Draw.Event.CREATED, function (e) {
           var type = e.layerType
           var sector = e.layer;
-          
           drawnItems.addLayer(sector);
             const json = sector.toGeoJSON();
             json.properties.density = 0;
@@ -235,7 +231,6 @@ var pointInPolygon = require('point-in-polygon');
               json.properties.radius = sector.getRadius();
             }
             var shape_for_db = JSON.stringify(json);
-            console.log(shape_for_db)
             //store To db
             axios.post('/api/sector/store/',{
             user_id:localStorage.getItem('user_id'),
@@ -251,13 +246,34 @@ var pointInPolygon = require('point-in-polygon');
         this.mapDiv.on(L.Draw.Event.EDITED, function (e) {
           // Edit  DB .
           var editeddsector = e.layers;
-          console.log(editeddsector)
-          //console.log(drawnItems._layers)
+          editeddsector.eachLayer(function (layer) {
+              const json = layer.toGeoJSON();
+              json.properties.density = 0;
+              if (layer instanceof L.Circle) {
+              json.properties.radius = layer.getRadius();
+                 }
+              console.log(layer._leaflet_id)
+              var shape_for_db = JSON.stringify(json);
+            axios.post('/api/sector/edit/',{
+            user_id:localStorage.getItem('user_id'),
+            leaflet_id:layer._leaflet_id,
+            data:shape_for_db
+              })
+              .then()
+              .catch()
+            }); 
         });
         this.mapDiv.on(L.Draw.Event.DELETED, function (e) {
           // Delete from DB .
           var deletedsector = e.layers;
-          console.log(deletedsector)
+          deletedsector.eachLayer(function (layer) {
+            axios.post('/api/sector/delete/',{
+            user_id:localStorage.getItem('user_id'),
+            leaflet_id:layer._leaflet_id
+            })
+              .then()
+              .catch()
+            });          
         });
         })
         .catch()

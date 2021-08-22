@@ -24,4 +24,19 @@ class SectorController extends Controller
 
         return response()->json($sectors);
     }
+    public function edit(Request $request){
+        $data = array();
+        $data['data'] = $request->data;
+        DB::table('sectors')
+        ->where('user_id',$request->user_id)
+        ->where('leaflet_id',$request->leaflet_id)
+        ->update($data);
+    }
+    public function destroy(Request $request)
+    {
+        DB::table('sectors')
+        ->where('user_id',$request->user_id)
+        ->where('leaflet_id',$request->leaflet_id)
+        ->delete();
+  }
 }
