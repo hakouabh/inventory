@@ -7623,7 +7623,8 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
       sector: [],
       geojson: '',
       info: '',
-      mapDiv: ''
+      mapDiv: '',
+      selectedFeature: null
     };
   },
   mounted: function mounted() {
@@ -7666,14 +7667,37 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
 
     if (!(leaflet__WEBPACK_IMPORTED_MODULE_2___default().Browser.ie) && !(leaflet__WEBPACK_IMPORTED_MODULE_2___default().Browser.opera) && !(leaflet__WEBPACK_IMPORTED_MODULE_2___default().Browser.edge)) {
       layer.bringToFront();
-    } //this.info.update(layer.feature.properties);
+    }
 
+    this.info.update(layer.feature.properties);
   },
   resetHighlight: function resetHighlight(e) {
-    this.geojson.resetStyle(e.target); //this.info.update();
+    this.geojson.resetStyle(e.target);
+    this.info.update();
   },
   zoomToFeature: function zoomToFeature(e) {
     this.mapDiv.fitBounds(e.target.getBounds());
+
+    if (this.selectedFeature) {
+      this.selectedFeature.editing.disable(); //store to db
+
+      var json = this.selectedFeature.toGeoJSON();
+
+      if (this.selectedFeature instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
+        json.properties.radius = this.selectedFeature.getRadius();
+      }
+
+      var shape_for_db = JSON.stringify(json);
+      console.log(shape_for_db);
+      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/edit/', {
+        user_id: localStorage.getItem('user_id'),
+        leaflet_id: this.selectedFeature.feature.properties.leaflet_id,
+        data: shape_for_db
+      }).then()["catch"]();
+    }
+
+    this.selectedFeature = e.target;
+    e.target.editing.enable();
   },
   onEachFeature: function onEachFeature(feature, layer) {
     layer.on({
@@ -7714,9 +7738,6 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
         position: "topright"
       });
       mcgLayerSupportGroup.addTo(_this2.mapDiv);
-      var bireldjirdensity = 0,
-          ainturkdensity = 0,
-          merselkbirdensity = 0;
 
       var _loop = function _loop(i) {
         _this2.group[i] = leaflet__WEBPACK_IMPORTED_MODULE_2___default().featureGroup.subGroup(mcgLayerSupportGroup);
@@ -7770,20 +7791,26 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
         },
         style: _this2.style,
         onEachFeature: _this2.onEachFeature
-      }).addTo(_this2.mapDiv); // this.info.onAdd = function () {
-      //     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-      //     this.update();
-      //     return this._div;
-      // };
-      // method that we will use to update the control based on feature properties passed
-      // this.info.update = function (props) {
-      //     this._div.innerHTML = '<h5>Client Density</h5>' +  (props ?
-      //         '<b>' + props.name + '</b><br />' + props.density + 'client'
-      //         : 'Hover !!');
-      // };
-      //this.info.addTo(this.mapDiv); 
-      //Start of L Draw
+      }).addTo(_this2.mapDiv);
+      _this2.info = leaflet__WEBPACK_IMPORTED_MODULE_2___default().control();
+
+      _this2.info.onAdd = function () {
+        this._div = leaflet__WEBPACK_IMPORTED_MODULE_2___default().DomUtil.create('div', 'info'); // create a div with a class "info"
+
+        var container = leaflet__WEBPACK_IMPORTED_MODULE_2___default().DomUtil.create('input');
+        container.type = "button"; // this.update();
+
+        return this._div;
+      }; // method that we will use to update the control based on feature properties passed
+
+
+      _this2.info.update = function (props) {
+        this._div.innerHTML = '<h5>Client Density</h5>' + (props ? '<b>' + props.name + '</b><br />' + props.density + 'client' : 'Hover !!');
+      };
+
+      _this2.info.addTo(_this2.mapDiv); //Start of L Draw
       // Initialise the FeatureGroup to store editable layers
+
 
       var drawnItems = new (leaflet__WEBPACK_IMPORTED_MODULE_2___default().FeatureGroup)();
 
@@ -7804,6 +7831,7 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
         drawnItems.addLayer(sector);
         var json = sector.toGeoJSON();
         json.properties.density = 0;
+        json.properties.leaflet_id = sector._leaflet_id;
 
         if (sector instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
           json.properties.radius = sector.getRadius();
@@ -7831,7 +7859,6 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
             json.properties.radius = layer.getRadius();
           }
 
-          console.log(layer._leaflet_id);
           var shape_for_db = JSON.stringify(json);
           axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/edit/', {
             user_id: localStorage.getItem('user_id'),

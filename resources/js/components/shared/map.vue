@@ -36,7 +36,8 @@ var pointInPolygon = require('point-in-polygon');
             sector:[],
             geojson:'',
             info:'',
-            mapDiv:''
+            mapDiv:'',
+            selectedFeature:null
         }
     },
     mounted(){
@@ -89,14 +90,33 @@ var pointInPolygon = require('point-in-polygon');
     if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
         layer.bringToFront();
     }
-    //this.info.update(layer.feature.properties);
+    this.info.update(layer.feature.properties);
 },
  resetHighlight(e) {
     this.geojson.resetStyle(e.target);
-    //this.info.update();
+    this.info.update();
 },
  zoomToFeature(e) {
     this.mapDiv.fitBounds(e.target.getBounds());
+    if(this.selectedFeature){
+      this.selectedFeature.editing.disable();
+      //store to db
+      const json = this.selectedFeature.toGeoJSON();
+      if (this.selectedFeature instanceof L.Circle) {
+              json.properties.radius = this.selectedFeature.getRadius();
+            }
+      var shape_for_db = JSON.stringify(json);
+      console.log(shape_for_db)
+      axios.post('/api/sector/edit/',{
+            user_id:localStorage.getItem('user_id'),
+            leaflet_id:this.selectedFeature.feature.properties.leaflet_id,
+            data:shape_for_db
+        })
+        .then()
+      .catch()
+      }
+    this.selectedFeature = e.target;
+    e.target.editing.enable();
 },
  onEachFeature(feature, layer) {
     layer.on({
@@ -137,7 +157,6 @@ var pointInPolygon = require('point-in-polygon');
       var mcgLayerSupportGroup = L.markerClusterGroup(),
           control = L.control.layers(null, null, { position: "topright" });
           mcgLayerSupportGroup.addTo(this.mapDiv);
-      var bireldjirdensity=0,ainturkdensity=0,merselkbirdensity=0;    
       for(let i = 0; i < this.users.length; i++){
           this.group[i] = L.featureGroup.subGroup(mcgLayerSupportGroup)
           this.userMarkers[i] = this.positions.filter(marker => {
@@ -193,20 +212,24 @@ var pointInPolygon = require('point-in-polygon');
               },
           style: this.style,
           onEachFeature: this.onEachFeature}).addTo(this.mapDiv)
-      // this.info.onAdd = function () {
-      //     this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-      //     this.update();
-      //     return this._div;
-      // };
+          this.info = L.control();
+          
+      this.info.onAdd = function () {
+          this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+          var container = L.DomUtil.create('input');
+          container.type="button";
+          // this.update();
+          return this._div;
+      };
 
 // method that we will use to update the control based on feature properties passed
-      // this.info.update = function (props) {
-      //     this._div.innerHTML = '<h5>Client Density</h5>' +  (props ?
-      //         '<b>' + props.name + '</b><br />' + props.density + 'client'
-      //         : 'Hover !!');
-      // };
+      this.info.update = function (props) {
+          this._div.innerHTML = '<h5>Client Density</h5>' +  (props ?
+              '<b>' + props.name + '</b><br />' + props.density + 'client'
+              : 'Hover !!');
+      };
 
-      //this.info.addTo(this.mapDiv); 
+      this.info.addTo(this.mapDiv); 
         //Start of L Draw
           // Initialise the FeatureGroup to store editable layers
           var drawnItems = new L.FeatureGroup();
@@ -227,6 +250,7 @@ var pointInPolygon = require('point-in-polygon');
           drawnItems.addLayer(sector);
             const json = sector.toGeoJSON();
             json.properties.density = 0;
+            json.properties.leaflet_id = sector._leaflet_id;
             if (sector instanceof L.Circle) {
               json.properties.radius = sector.getRadius();
             }
@@ -252,7 +276,6 @@ var pointInPolygon = require('point-in-polygon');
               if (layer instanceof L.Circle) {
               json.properties.radius = layer.getRadius();
                  }
-              console.log(layer._leaflet_id)
               var shape_for_db = JSON.stringify(json);
             axios.post('/api/sector/edit/',{
             user_id:localStorage.getItem('user_id'),
