@@ -7623,6 +7623,7 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
       sector: [],
       geojson: '',
       info: '',
+      deleteButton: '',
       mapDiv: '',
       selectedFeature: null
     };
@@ -7631,28 +7632,21 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
     this.setupMap();
   }
 }, _defineProperty(_name$created$data$mo, "created", function created() {
+  var _this = this;
+
   this.getSector();
+  Reload.$on('AfterAdd', function () {
+    _this.cartProduct();
+  });
 }), _defineProperty(_name$created$data$mo, "methods", {
   getSector: function getSector() {
-    var _this = this;
+    var _this2 = this;
 
     axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/sector/index/' + localStorage.getItem('user_id')).then(function (_ref) {
       var data = _ref.data;
-      _this.sector = data;
+      _this2.sector = data;
     })["catch"]();
   },
-  // insertSector(data,type){
-  // var form ={
-  // user_id:localStorage.getItem('user_id'),
-  // type:type,
-  // data:data
-  //   }
-  // axios.post('/api/sector/store/',form)
-  //   .then(() => {
-  //     //Reload.$emit('AfterAdd');
-  //   })
-  //   .catch() 
-  // },
   getColor: function getColor(density) {
     return density > 25 ? '#800026' : density > 20 ? '#BD0026' : density > 17 ? '#E31A1C' : density > 15 ? '#FC4E2A' : density > 10 ? '#FD8D3C' : density > 5 ? '#FEB24C' : density > 1 ? '#FED976' : '#FFEDA0';
   },
@@ -7681,23 +7675,82 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
     if (this.selectedFeature) {
       this.selectedFeature.editing.disable(); //store to db
 
-      var json = this.selectedFeature.toGeoJSON();
-
-      if (this.selectedFeature instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
-        json.properties.radius = this.selectedFeature.getRadius();
-      }
-
-      var shape_for_db = JSON.stringify(json);
-      console.log(shape_for_db);
-      axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/edit/', {
-        user_id: localStorage.getItem('user_id'),
-        leaflet_id: this.selectedFeature.feature.properties.leaflet_id,
-        data: shape_for_db
-      }).then()["catch"]();
+      this.updatesector(this.selectedFeature);
+    } else {
+      this.deleteButton.remove(this.mapDiv);
     }
 
     this.selectedFeature = e.target;
     e.target.editing.enable();
+    this.deleteButton.addTo(this.mapDiv);
+  },
+  updatesector: function updatesector(layer) {
+    var json = layer.toGeoJSON();
+    json.properties.density = this.countdensity(layer);
+
+    if (layer instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
+      json.properties.radius = layer.getRadius();
+    }
+
+    var shape_for_db = JSON.stringify(json);
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/edit/', {
+      user_id: localStorage.getItem('user_id'),
+      leaflet_id: layer.feature.properties.leaflet_id,
+      data: shape_for_db
+    }).then()["catch"]();
+  },
+  insertSector: function insertSector(layer, type) {
+    var json = layer.toGeoJSON();
+    json.properties.density = this.countdensity(layer);
+    json.properties.leaflet_id = layer._leaflet_id;
+
+    if (layer instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
+      json.properties.radius = layer.getRadius();
+    }
+
+    var shape_for_db = JSON.stringify(json);
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/store/', {
+      user_id: localStorage.getItem('user_id'),
+      type: type,
+      leaflet_id: layer._leaflet_id,
+      data: shape_for_db
+    }).then(function () {//Reload.$emit('AfterAdd');
+    })["catch"]();
+  },
+  deletesector: function deletesector(leaflet_id) {
+    axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/delete/', {
+      user_id: localStorage.getItem('user_id'),
+      leaflet_id: leaflet_id
+    }).then(function () {// Reload.$emit('AfterAdd');
+    })["catch"]();
+  },
+  countdensity: function countdensity(layer) {
+    var _this3 = this;
+
+    var density = 0;
+    var json = layer.toGeoJSON();
+
+    if (layer instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
+      var theCenterPt = layer.getLatLng();
+      var theRadius = layer.getRadius();
+    }
+
+    this.positions.map(function (position) {
+      if (layer instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
+        //calcule in circle 
+        var point = leaflet__WEBPACK_IMPORTED_MODULE_2___default().point(parseFloat(position.latitude), parseFloat(position.longitude)); // x=0,y=0
+
+        var latlng = _this3.mapDiv.layerPointToLatLng(point);
+
+        if (latlng.distanceTo(theCenterPt) <= theRadius) {
+          density++;
+        }
+      } else {
+        //calcule 
+        if (pointInPolygon([parseFloat(position.longitude), parseFloat(position.latitude)], json.geometry.coordinates[0])) density++;
+      }
+    });
+    return density;
   },
   onEachFeature: function onEachFeature(feature, layer) {
     layer.on({
@@ -7717,39 +7770,36 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
     };
   },
   setupMap: function setupMap() {
-    var _this2 = this;
+    var _this4 = this;
 
     axios__WEBPACK_IMPORTED_MODULE_1___default().get('/api/customers/position').then(function (_ref2) {
       var data = _ref2.data;
-      _this2.positions = data.data.position;
-      _this2.users = data.data.users;
+      _this4.positions = data.data.position;
+      _this4.users = data.data.users;
+      var _global = _this4;
       var tileProvider = leaflet__WEBPACK_IMPORTED_MODULE_2___default().tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYWJkZWxoYWstbWVnaGVyYmkiLCJhIjoiY2tydzQ2ZjV0MGN1MzJxczczdnpkNjQ0YyJ9.PsRF0t-e6kjbL37sryRMlg", {
         attribution: 'Map data (c) <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
         id: "mapbox/streets-v11",
         accessToken: "pk.eyJ1IjoiYWJkZWxoYWstbWVnaGVyYmkiLCJhIjoiY2tydzQ2ZjV0MGN1MzJxczczdnpkNjQ0YyJ9.PsRF0t-e6kjbL37sryRMlg"
       });
-      _this2.mapDiv = leaflet__WEBPACK_IMPORTED_MODULE_2___default().map("mapContainer", {
-        center: _this2.center,
-        zoom: _this2.zoom,
+      _this4.mapDiv = leaflet__WEBPACK_IMPORTED_MODULE_2___default().map("mapContainer", {
+        center: _this4.center,
+        zoom: _this4.zoom,
         layers: tileProvider
       });
       var mcgLayerSupportGroup = leaflet__WEBPACK_IMPORTED_MODULE_2___default().markerClusterGroup(),
           control = leaflet__WEBPACK_IMPORTED_MODULE_2___default().control.layers(null, null, {
         position: "topright"
       });
-      mcgLayerSupportGroup.addTo(_this2.mapDiv);
+      mcgLayerSupportGroup.addTo(_this4.mapDiv);
 
       var _loop = function _loop(i) {
-        _this2.group[i] = leaflet__WEBPACK_IMPORTED_MODULE_2___default().featureGroup.subGroup(mcgLayerSupportGroup);
-        _this2.userMarkers[i] = _this2.positions.filter(function (marker) {
-          return marker.user_email.match(_this2.users[i].email);
+        _this4.group[i] = leaflet__WEBPACK_IMPORTED_MODULE_2___default().featureGroup.subGroup(mcgLayerSupportGroup);
+        _this4.userMarkers[i] = _this4.positions.filter(function (marker) {
+          return marker.user_email.match(_this4.users[i].email);
         }); //create markers 
 
-        _this2.markers[i] = _this2.userMarkers[i].map(function (position) {
-          // if (pointInPolygon([ parseFloat(position.longitude) ,parseFloat(position.latitude)], 
-          // statesData.features[0].geometry.coordinates[0])){
-          //   bireldjirdensity++;
-          // }
+        _this4.markers[i] = _this4.userMarkers[i].map(function (position) {
           return leaflet__WEBPACK_IMPORTED_MODULE_2___default().marker([parseFloat(position.latitude), parseFloat(position.longitude)], //set Icon
           {
             icon: position.type == 'New customer' ? leaflet__WEBPACK_IMPORTED_MODULE_2___default().icon({
@@ -7759,24 +7809,24 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
             }) : leaflet__WEBPACK_IMPORTED_MODULE_2___default().icon({
               iconUrl: 'images/vendor/leaflet/dist/marker-icon-red.png'
             })
-          }).bindPopup(position.email).addTo(_this2.group[i]);
+          }).bindPopup(position.email).addTo(_this4.group[i]);
         });
-        control.addOverlay(_this2.group[i], _this2.users[i].email);
+        control.addOverlay(_this4.group[i], _this4.users[i].email);
 
-        _this2.group[i].addTo(_this2.mapDiv);
+        _this4.group[i].addTo(_this4.mapDiv);
       };
 
-      for (var i = 0; i < _this2.users.length; i++) {
+      for (var i = 0; i < _this4.users.length; i++) {
         _loop(i);
       }
 
-      control.addTo(_this2.mapDiv);
+      control.addTo(_this4.mapDiv);
 
-      for (var _i = 0; _i < _this2.sector.length; _i++) {
-        _streets_states__WEBPACK_IMPORTED_MODULE_7__.statesData.features.push(JSON.parse(_this2.sector[_i].data));
+      for (var _i = 0; _i < _this4.sector.length; _i++) {
+        _streets_states__WEBPACK_IMPORTED_MODULE_7__.statesData.features.push(JSON.parse(_this4.sector[_i].data));
       }
 
-      _this2.geojson = leaflet__WEBPACK_IMPORTED_MODULE_2___default().geoJson(_streets_states__WEBPACK_IMPORTED_MODULE_7__.statesData.features, {
+      _this4.geojson = leaflet__WEBPACK_IMPORTED_MODULE_2___default().geoJson(_streets_states__WEBPACK_IMPORTED_MODULE_7__.statesData.features, {
         pointToLayer: function pointToLayer(feature, latlng) {
           if (feature.properties.radius) {
             return new (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)(latlng, feature.properties.radius);
@@ -7789,32 +7839,42 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
             });
           }
         },
-        style: _this2.style,
-        onEachFeature: _this2.onEachFeature
-      }).addTo(_this2.mapDiv);
-      _this2.info = leaflet__WEBPACK_IMPORTED_MODULE_2___default().control();
+        style: _this4.style,
+        onEachFeature: _this4.onEachFeature
+      }).addTo(_this4.mapDiv); //info part
 
-      _this2.info.onAdd = function () {
-        this._div = leaflet__WEBPACK_IMPORTED_MODULE_2___default().DomUtil.create('div', 'info'); // create a div with a class "info"
+      _this4.deleteButton = leaflet__WEBPACK_IMPORTED_MODULE_2___default().control();
+      _this4.info = leaflet__WEBPACK_IMPORTED_MODULE_2___default().control();
 
-        var container = leaflet__WEBPACK_IMPORTED_MODULE_2___default().DomUtil.create('input');
-        container.type = "button"; // this.update();
-
+      _this4.info.onAdd = function () {
+        this._div = leaflet__WEBPACK_IMPORTED_MODULE_2___default().DomUtil.create('div', 'info');
+        this.update();
         return this._div;
+      };
+
+      _this4.deleteButton.onAdd = function () {
+        this._container = leaflet__WEBPACK_IMPORTED_MODULE_2___default().DomUtil.create('div', 'info');
+        this._container.innerHTML = "<a class='far fa-trash-alt'></a>";
+
+        this._container.onclick = function () {
+          _global.deletesector(_global.selectedFeature.feature.properties.leaflet_id);
+        };
+
+        return this._container;
       }; // method that we will use to update the control based on feature properties passed
 
 
-      _this2.info.update = function (props) {
-        this._div.innerHTML = '<h5>Client Density</h5>' + (props ? '<b>' + props.name + '</b><br />' + props.density + 'client' : 'Hover !!');
+      _this4.info.update = function (props) {
+        this._div.innerHTML = '<h5>Client Density</h5>' + (props ? '<b>' + props.density + 'client' : 'Hover !!');
       };
 
-      _this2.info.addTo(_this2.mapDiv); //Start of L Draw
+      _this4.info.addTo(_this4.mapDiv); //Start of L Draw
       // Initialise the FeatureGroup to store editable layers
 
 
       var drawnItems = new (leaflet__WEBPACK_IMPORTED_MODULE_2___default().FeatureGroup)();
 
-      _this2.mapDiv.addLayer(drawnItems); // Initialise the draw control and pass it the FeatureGroup of editable layers
+      _this4.mapDiv.addLayer(drawnItems); // Initialise the draw control and pass it the FeatureGroup of editable layers
 
 
       var drawControl = new (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Control.Draw)({
@@ -7823,66 +7883,36 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
         }
       });
 
-      _this2.mapDiv.addControl(drawControl);
+      _this4.mapDiv.addControl(drawControl);
 
-      _this2.mapDiv.on((leaflet__WEBPACK_IMPORTED_MODULE_2___default().Draw.Event.CREATED), function (e) {
+      _this4.mapDiv.on((leaflet__WEBPACK_IMPORTED_MODULE_2___default().Draw.Event.CREATED), function (e) {
         var type = e.layerType;
         var sector = e.layer;
-        drawnItems.addLayer(sector);
-        var json = sector.toGeoJSON();
-        json.properties.density = 0;
-        json.properties.leaflet_id = sector._leaflet_id;
+        drawnItems.addLayer(sector); //store To db
 
-        if (sector instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
-          json.properties.radius = sector.getRadius();
-        }
-
-        var shape_for_db = JSON.stringify(json); //store To db
-
-        axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/store/', {
-          user_id: localStorage.getItem('user_id'),
-          type: type,
-          leaflet_id: sector._leaflet_id,
-          data: shape_for_db
-        }).then(function () {//Reload.$emit('AfterAdd');
-        })["catch"]();
+        _global.insertSector(sector, type);
       });
 
-      _this2.mapDiv.on((leaflet__WEBPACK_IMPORTED_MODULE_2___default().Draw.Event.EDITED), function (e) {
+      _this4.mapDiv.on((leaflet__WEBPACK_IMPORTED_MODULE_2___default().Draw.Event.EDITED), function (e) {
         // Edit  DB .
         var editeddsector = e.layers;
         editeddsector.eachLayer(function (layer) {
-          var json = layer.toGeoJSON();
-          json.properties.density = 0;
-
-          if (layer instanceof (leaflet__WEBPACK_IMPORTED_MODULE_2___default().Circle)) {
-            json.properties.radius = layer.getRadius();
-          }
-
-          var shape_for_db = JSON.stringify(json);
-          axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/edit/', {
-            user_id: localStorage.getItem('user_id'),
-            leaflet_id: layer._leaflet_id,
-            data: shape_for_db
-          }).then()["catch"]();
+          _global.updatesector(layer);
         });
       });
 
-      _this2.mapDiv.on((leaflet__WEBPACK_IMPORTED_MODULE_2___default().Draw.Event.DELETED), function (e) {
+      _this4.mapDiv.on((leaflet__WEBPACK_IMPORTED_MODULE_2___default().Draw.Event.DELETED), function (e) {
         // Delete from DB .
         var deletedsector = e.layers;
         deletedsector.eachLayer(function (layer) {
-          axios__WEBPACK_IMPORTED_MODULE_1___default().post('/api/sector/delete/', {
-            user_id: localStorage.getItem('user_id'),
-            leaflet_id: layer._leaflet_id
-          }).then()["catch"]();
+          _global.deletesector(layer._leaflet_id);
         });
       });
     })["catch"]();
   },
   //get user Position
   getIpInfo: function getIpInfo() {
-    var _this3 = this;
+    var _this5 = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
@@ -7894,14 +7924,14 @@ var pointInPolygon = __webpack_require__(/*! point-in-polygon */ "./node_modules
                 return x.json();
               }).then(function (_ref3) {
                 var ip = _ref3.ip;
-                _this3.myip = ip; // get locatiob
+                _this5.myip = ip; // get locatiob
 
                 (axios__WEBPACK_IMPORTED_MODULE_1___default().defaults.headers.common["Access-Control-Allow-Origin"]) = '*';
-                axios__WEBPACK_IMPORTED_MODULE_1___default().get("https://cors-anywhere.herokuapp.com/https://geo.ipify.org/api/v1?apiKey=at_yahGHonr8XT6LMlgMcLoUHZbzRTdn&ipAddress=".concat(_this3.myip), {
+                axios__WEBPACK_IMPORTED_MODULE_1___default().get("https://cors-anywhere.herokuapp.com/https://geo.ipify.org/api/v1?apiKey=at_yahGHonr8XT6LMlgMcLoUHZbzRTdn&ipAddress=".concat(_this5.myip), {
                   headers: {// remove headers
                   }
                 }).then(function (res) {
-                  console.log(_this3.positions.location);
+                  console.log(_this5.positions.location);
                 })["catch"](function (err) {
                   console.log(err.response);
                 });
@@ -25359,7 +25389,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_laravel_mix_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n#mapContainer{\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    overflow: hidden;\n}\n.info {\n    padding: 6px 8px;\n    font: 14px/16px Arial, Helvetica, sans-serif;\n    background: white;\n    background: rgba(255,255,255,0.8);\n    box-shadow: 0 0 15px rgba(0,0,0,0.2);\n    border-radius: 5px;\n}\n.info h4 {\n    margin: 0 0 5px;\n    color: #777;\n}\n\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n#mapContainer{\n    position: absolute;\n    width: 100%;\n    height: 100%;\n    overflow: hidden;\n}\n.info {\n    padding: 6px 8px;\n    font: 14px/16px Arial, Helvetica, sans-serif;\n    background: white;\n    background: rgba(255,255,255,0.8);\n    box-shadow: 0 0 15px rgba(0,0,0,0.2);\n    border-radius: 5px;\n}\n.info h4 {\n    margin: 0 0 5px;\n    color: #777;\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
