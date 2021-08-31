@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCustomersTable extends Migration
+class CreateCustomerTable extends Migration
 {
     /**
      * Run the migrations.
@@ -21,8 +21,15 @@ class CreateCustomersTable extends Migration
             $table->string('address');
             $table->string('photo')->nullable();
             $table->uuid('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users'); 
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->uuid('sector_id')->nullable()->index();
+            $table->foreign('sector_id')->references('id')->on('sectors');
+            $table->text('type');
+            $table->text('latitude');
+            $table->text('longitude'); 
             $table->timestamps();
+
+            $table->primary('id');
         });
     }
 

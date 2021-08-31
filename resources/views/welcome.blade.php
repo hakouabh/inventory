@@ -66,7 +66,6 @@
            
    <router-link class="collapse-item" to="/store-employee">Add Employee</router-link>
    <router-link class="collapse-item" to="/employee">All Employee</router-link>
-            
           </div>
         </div>
       </li>

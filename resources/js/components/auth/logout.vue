@@ -12,6 +12,7 @@ export default {
    created(){
     localStorage.removeItem('token')
     localStorage.removeItem('user')
+    localStorage.removeItem('user_id')
     Toast.fire({
           icon: 'success',
           title: 'Logout successfully'
