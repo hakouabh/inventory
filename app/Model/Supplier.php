@@ -9,6 +9,9 @@ use App\Traits\Uuids;
 class Supplier extends Model
 {
   use Uuids;
+
+  public $incrementing = false;
+
   
     protected $fillable = [
         'name', 'email', 'phone','address','shopname','photo','user_id'

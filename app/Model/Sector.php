@@ -9,6 +9,9 @@ use App\Traits\Uuids;
 class Sector extends Model
 {
     use HasFactory, Uuids;
+
+    public $incrementing = false;
+
      protected $fillable = [
         'name', 'type', 'user_id','data'
     ];

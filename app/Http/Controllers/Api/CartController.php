@@ -10,21 +10,22 @@ use App\Model\Pos;
 
 class CartController extends Controller
 {
-    public function AddToCart(Request $request, $id){
+    public function AddToCart($id){
         $product = DB::table('products')->where('id',$id)->first();
         if($product->product_quantity >=1){
             //check to increment or add
             $check = DB::table('pos')->where('pro_id',$id)->first();
             if($check){ 
                 //increment
-                if($check->pro_quantity >=$product->product_quantity){
+                if($check->pro_quantity >= $product->product_quantity){
                     // out of stock
-                    return response()->json('out of stock');
+                    return response()->json('out of stock',404);
                 }else{
                     DB::table('pos')->where('pro_id',$id)->increment('pro_quantity');
                     $product = DB::table('pos')->where('pro_id',$id)->first();
                     $subtotal = $product->pro_quantity * ($product->product_price-$product->product_discount);
                     DB::table('pos')->where('pro_id',$id)->update(['sub_total'=>$subtotal]);
+                    return response()->json('null',200);
                 } 
             }else{
                 //add
@@ -37,9 +38,10 @@ class CartController extends Controller
                 $pos->user_id =$product->user_id;
                 $pos->sub_total = $product->selling_price;        
                 $pos->save();
+                return response()->json('null',201);
             }
         }else{
-            return response('error');
+            return response()->json('out of stock',404);
         }
        
     }

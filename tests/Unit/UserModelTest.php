@@ -3,13 +3,15 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 use App\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
 
 class UserModelTest extends TestCase
 {
-    use DatabaseMigrations;
+
+    use DatabaseTransactions;
     /**
      * A basic unit test example.
      *

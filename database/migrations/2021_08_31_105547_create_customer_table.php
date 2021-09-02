@@ -24,9 +24,9 @@ class CreateCustomerTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->uuid('sector_id')->nullable()->index();
             $table->foreign('sector_id')->references('id')->on('sectors');
-            $table->text('type');
-            $table->text('latitude');
-            $table->text('longitude'); 
+            $table->text('type')->nullable();
+            $table->text('latitude')->nullable();
+            $table->text('longitude')->nullable(); 
             $table->timestamps();
 
             $table->primary('id');

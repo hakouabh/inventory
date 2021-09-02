@@ -8,11 +8,19 @@ use App\Traits\Uuids;
 
 class Product extends Model
 {
-  use Uuids;
+
+  use Uuids, HasFactory ;
+
+  public $incrementing = false;
+
+
     protected $fillable = [
+
         'category_id', 'product_name', 'product_code','buying_price','selling_price'
         ,'supplier_id','buying_date','image','product_quantity','min_quantity','user_id'
+
     ];
+
     public function company()
     {
       return $this->belongsTo('\App\User');

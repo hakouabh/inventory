@@ -10,6 +10,8 @@ class Category extends Model
 {
   use Uuids;
   
+  public $incrementing = false;
+
     protected $fillable = [
         'category_name','user_id'
     ];

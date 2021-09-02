@@ -9,6 +9,9 @@ use App\Traits\Uuids;
 class OrderDetails extends Model
 {
   use Uuids;
+
+  public $incrementing = false;
+
   
     protected $fillable = [
         'order_id', 'product_id', 'pro_quantity','product_price','discount','sub_total'

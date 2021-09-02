@@ -9,6 +9,9 @@ use App\Traits\Uuids;
 class Salary extends Model
 {
   use Uuids;
+
+  public $incrementing = false;
+
   
     protected $fillable = [
         'employee_id', 'amount', 'salary_date','salary_month','salary_year'

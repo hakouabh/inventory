@@ -10,6 +10,8 @@ class Customer extends Model
 {
   use Uuids;
   
+  public $incrementing = false;
+
     protected $fillable = [
         'name', 'email', 'phone','address','photo','user_id','latitude','longitude','type','sector_id'
     ];

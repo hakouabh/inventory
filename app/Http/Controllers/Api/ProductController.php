@@ -26,7 +26,7 @@ class ProductController extends Controller
                      ->where('products.user_id',$user_id)
                      ->orderBy('products.id','DESC')
                      ->get();
-        return response()->json($product);
+        return response()->json($product,200);
 
     }
 

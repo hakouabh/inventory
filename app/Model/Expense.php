@@ -8,6 +8,9 @@ use App\Traits\Uuids;
 class Expense extends Model
 {
   use Uuids;
+  
+  public $incrementing = false;
+
     protected $fillable = [
         'details', 'amount','user_id'
     ];
